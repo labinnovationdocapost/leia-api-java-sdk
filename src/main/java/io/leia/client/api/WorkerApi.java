@@ -65,8 +65,8 @@ public class WorkerApi {
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> The retrieved worker information </td><td>  -  </td></tr>
-        <tr><td> 401 </td><td> Not logged in </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Not running in worker mode </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Not logged in </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> No worker running </td><td>  -  </td></tr>
      </table>
      */
@@ -134,8 +134,8 @@ public class WorkerApi {
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> The retrieved worker information </td><td>  -  </td></tr>
-        <tr><td> 401 </td><td> Not logged in </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Not running in worker mode </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Not logged in </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> No worker running </td><td>  -  </td></tr>
      </table>
      */
@@ -155,8 +155,8 @@ public class WorkerApi {
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> The retrieved worker information </td><td>  -  </td></tr>
-        <tr><td> 401 </td><td> Not logged in </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Not running in worker mode </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Not logged in </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> No worker running </td><td>  -  </td></tr>
      </table>
      */
@@ -178,8 +178,8 @@ public class WorkerApi {
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> The retrieved worker information </td><td>  -  </td></tr>
-        <tr><td> 401 </td><td> Not logged in </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Not running in worker mode </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Not logged in </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> No worker running </td><td>  -  </td></tr>
      </table>
      */
@@ -200,8 +200,8 @@ public class WorkerApi {
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> The retrieved worker information </td><td>  -  </td></tr>
-        <tr><td> 401 </td><td> Not logged in </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Not running in worker mode </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Not logged in </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> No worker running </td><td>  -  </td></tr>
      </table>
      */
@@ -262,8 +262,8 @@ public class WorkerApi {
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> The retrieved worker information </td><td>  -  </td></tr>
-        <tr><td> 401 </td><td> Not logged in </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Not running in worker mode </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Not logged in </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> No worker running </td><td>  -  </td></tr>
      </table>
      */
@@ -282,8 +282,8 @@ public class WorkerApi {
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> The retrieved worker information </td><td>  -  </td></tr>
-        <tr><td> 401 </td><td> Not logged in </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Not running in worker mode </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Not logged in </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> No worker running </td><td>  -  </td></tr>
      </table>
      */
@@ -304,8 +304,8 @@ public class WorkerApi {
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> The retrieved worker information </td><td>  -  </td></tr>
-        <tr><td> 401 </td><td> Not logged in </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Not running in worker mode </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Not logged in </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> No worker running </td><td>  -  </td></tr>
      </table>
      */

@@ -31,60 +31,60 @@ import java.util.List;
 /**
  * Annotation
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-11-22T11:39:43.225+01:00[Europe/Paris]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-11-26T15:53:43.006+01:00[Europe/Paris]")
 public class Annotation {
-  public static final String SERIALIZED_NAME_ID = "id";
-  @SerializedName(SERIALIZED_NAME_ID)
-  private String id;
+  public static final String SERIALIZED_NAME_ANNOTATION_TYPE = "annotation_type";
+  @SerializedName(SERIALIZED_NAME_ANNOTATION_TYPE)
+  private AnnotationTypes annotationType;
 
   public static final String SERIALIZED_NAME_APPLICATION_ID = "application_id";
   @SerializedName(SERIALIZED_NAME_APPLICATION_ID)
   private String applicationId;
 
-  public static final String SERIALIZED_NAME_NAME = "name";
-  @SerializedName(SERIALIZED_NAME_NAME)
-  private String name;
-
-  public static final String SERIALIZED_NAME_ANNOTATION_TYPE = "annotation_type";
-  @SerializedName(SERIALIZED_NAME_ANNOTATION_TYPE)
-  private AnnotationTypes annotationType;
+  public static final String SERIALIZED_NAME_CREATION_TIME = "creation_time";
+  @SerializedName(SERIALIZED_NAME_CREATION_TIME)
+  private OffsetDateTime creationTime;
 
   public static final String SERIALIZED_NAME_DOCUMENT_IDS = "document_ids";
   @SerializedName(SERIALIZED_NAME_DOCUMENT_IDS)
   private String documentIds;
 
+  public static final String SERIALIZED_NAME_ID = "id";
+  @SerializedName(SERIALIZED_NAME_ID)
+  private String id;
+
+  public static final String SERIALIZED_NAME_NAME = "name";
+  @SerializedName(SERIALIZED_NAME_NAME)
+  private String name;
+
   public static final String SERIALIZED_NAME_PREDICTION = "prediction";
   @SerializedName(SERIALIZED_NAME_PREDICTION)
   private Object prediction;
-
-  public static final String SERIALIZED_NAME_CREATION_TIME = "creation_time";
-  @SerializedName(SERIALIZED_NAME_CREATION_TIME)
-  private OffsetDateTime creationTime;
 
   public static final String SERIALIZED_NAME_TAGS = "tags";
   @SerializedName(SERIALIZED_NAME_TAGS)
   private List<String> tags = null;
 
 
-  public Annotation id(String id) {
+  public Annotation annotationType(AnnotationTypes annotationType) {
     
-    this.id = id;
+    this.annotationType = annotationType;
     return this;
   }
 
    /**
-   * Get id
-   * @return id
+   * Get annotationType
+   * @return annotationType
   **/
-  @ApiModelProperty(example = "507f191e810c19729de860ea", required = true, value = "")
+  @ApiModelProperty(required = true, value = "")
 
-  public String getId() {
-    return id;
+  public AnnotationTypes getAnnotationType() {
+    return annotationType;
   }
 
 
-  public void setId(String id) {
-    this.id = id;
+  public void setAnnotationType(AnnotationTypes annotationType) {
+    this.annotationType = annotationType;
   }
 
 
@@ -110,48 +110,25 @@ public class Annotation {
   }
 
 
-  public Annotation name(String name) {
+  public Annotation creationTime(OffsetDateTime creationTime) {
     
-    this.name = name;
+    this.creationTime = creationTime;
     return this;
   }
 
    /**
-   * Get name
-   * @return name
+   * Get creationTime
+   * @return creationTime
   **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(example = "My annotation", value = "")
+  @ApiModelProperty(example = "2018-11-07T16:02:29.761Z", required = true, value = "")
 
-  public String getName() {
-    return name;
+  public OffsetDateTime getCreationTime() {
+    return creationTime;
   }
 
 
-  public void setName(String name) {
-    this.name = name;
-  }
-
-
-  public Annotation annotationType(AnnotationTypes annotationType) {
-    
-    this.annotationType = annotationType;
-    return this;
-  }
-
-   /**
-   * Get annotationType
-   * @return annotationType
-  **/
-  @ApiModelProperty(required = true, value = "")
-
-  public AnnotationTypes getAnnotationType() {
-    return annotationType;
-  }
-
-
-  public void setAnnotationType(AnnotationTypes annotationType) {
-    this.annotationType = annotationType;
+  public void setCreationTime(OffsetDateTime creationTime) {
+    this.creationTime = creationTime;
   }
 
 
@@ -178,6 +155,51 @@ public class Annotation {
   }
 
 
+  public Annotation id(String id) {
+    
+    this.id = id;
+    return this;
+  }
+
+   /**
+   * Get id
+   * @return id
+  **/
+  @ApiModelProperty(example = "507f191e810c19729de860ea", required = true, value = "")
+
+  public String getId() {
+    return id;
+  }
+
+
+  public void setId(String id) {
+    this.id = id;
+  }
+
+
+  public Annotation name(String name) {
+    
+    this.name = name;
+    return this;
+  }
+
+   /**
+   * Get name
+   * @return name
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(example = "My annotation", value = "")
+
+  public String getName() {
+    return name;
+  }
+
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+
   public Annotation prediction(Object prediction) {
     
     this.prediction = prediction;
@@ -198,28 +220,6 @@ public class Annotation {
 
   public void setPrediction(Object prediction) {
     this.prediction = prediction;
-  }
-
-
-  public Annotation creationTime(OffsetDateTime creationTime) {
-    
-    this.creationTime = creationTime;
-    return this;
-  }
-
-   /**
-   * Get creationTime
-   * @return creationTime
-  **/
-  @ApiModelProperty(example = "2018-11-07T16:02:29.761Z", required = true, value = "")
-
-  public OffsetDateTime getCreationTime() {
-    return creationTime;
-  }
-
-
-  public void setCreationTime(OffsetDateTime creationTime) {
-    this.creationTime = creationTime;
   }
 
 
@@ -263,19 +263,19 @@ public class Annotation {
       return false;
     }
     Annotation annotation = (Annotation) o;
-    return Objects.equals(this.id, annotation.id) &&
+    return Objects.equals(this.annotationType, annotation.annotationType) &&
         Objects.equals(this.applicationId, annotation.applicationId) &&
-        Objects.equals(this.name, annotation.name) &&
-        Objects.equals(this.annotationType, annotation.annotationType) &&
-        Objects.equals(this.documentIds, annotation.documentIds) &&
-        Objects.equals(this.prediction, annotation.prediction) &&
         Objects.equals(this.creationTime, annotation.creationTime) &&
+        Objects.equals(this.documentIds, annotation.documentIds) &&
+        Objects.equals(this.id, annotation.id) &&
+        Objects.equals(this.name, annotation.name) &&
+        Objects.equals(this.prediction, annotation.prediction) &&
         Objects.equals(this.tags, annotation.tags);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, applicationId, name, annotationType, documentIds, prediction, creationTime, tags);
+    return Objects.hash(annotationType, applicationId, creationTime, documentIds, id, name, prediction, tags);
   }
 
 
@@ -283,13 +283,13 @@ public class Annotation {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class Annotation {\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    applicationId: ").append(toIndentedString(applicationId)).append("\n");
-    sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    annotationType: ").append(toIndentedString(annotationType)).append("\n");
-    sb.append("    documentIds: ").append(toIndentedString(documentIds)).append("\n");
-    sb.append("    prediction: ").append(toIndentedString(prediction)).append("\n");
+    sb.append("    applicationId: ").append(toIndentedString(applicationId)).append("\n");
     sb.append("    creationTime: ").append(toIndentedString(creationTime)).append("\n");
+    sb.append("    documentIds: ").append(toIndentedString(documentIds)).append("\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    prediction: ").append(toIndentedString(prediction)).append("\n");
     sb.append("    tags: ").append(toIndentedString(tags)).append("\n");
     sb.append("}");
     return sb.toString();

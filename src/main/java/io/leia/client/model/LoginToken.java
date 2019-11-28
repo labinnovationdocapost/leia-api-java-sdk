@@ -28,37 +28,15 @@ import java.io.IOException;
 /**
  * LoginToken
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-11-22T11:39:43.225+01:00[Europe/Paris]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-11-26T15:53:43.006+01:00[Europe/Paris]")
 public class LoginToken {
-  public static final String SERIALIZED_NAME_TOKEN = "token";
-  @SerializedName(SERIALIZED_NAME_TOKEN)
-  private String token;
-
   public static final String SERIALIZED_NAME_APPLICATION = "application";
   @SerializedName(SERIALIZED_NAME_APPLICATION)
   private Application application;
 
-
-  public LoginToken token(String token) {
-    
-    this.token = token;
-    return this;
-  }
-
-   /**
-   * Get token
-   * @return token
-  **/
-  @ApiModelProperty(example = "507f191e810c19729de860ea", required = true, value = "")
-
-  public String getToken() {
-    return token;
-  }
-
-
-  public void setToken(String token) {
-    this.token = token;
-  }
+  public static final String SERIALIZED_NAME_TOKEN = "token";
+  @SerializedName(SERIALIZED_NAME_TOKEN)
+  private String token;
 
 
   public LoginToken application(Application application) {
@@ -83,6 +61,28 @@ public class LoginToken {
   }
 
 
+  public LoginToken token(String token) {
+    
+    this.token = token;
+    return this;
+  }
+
+   /**
+   * Get token
+   * @return token
+  **/
+  @ApiModelProperty(example = "507f191e810c19729de860ea", required = true, value = "")
+
+  public String getToken() {
+    return token;
+  }
+
+
+  public void setToken(String token) {
+    this.token = token;
+  }
+
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -92,13 +92,13 @@ public class LoginToken {
       return false;
     }
     LoginToken loginToken = (LoginToken) o;
-    return Objects.equals(this.token, loginToken.token) &&
-        Objects.equals(this.application, loginToken.application);
+    return Objects.equals(this.application, loginToken.application) &&
+        Objects.equals(this.token, loginToken.token);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(token, application);
+    return Objects.hash(application, token);
   }
 
 
@@ -106,8 +106,8 @@ public class LoginToken {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class LoginToken {\n");
-    sb.append("    token: ").append(toIndentedString(token)).append("\n");
     sb.append("    application: ").append(toIndentedString(application)).append("\n");
+    sb.append("    token: ").append(toIndentedString(token)).append("\n");
     sb.append("}");
     return sb.toString();
   }

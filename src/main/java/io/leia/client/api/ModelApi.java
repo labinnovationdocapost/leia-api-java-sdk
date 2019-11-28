@@ -68,6 +68,7 @@ public class ModelApi {
      * @param tag The tag of the documents to process. If tag is present, document_ids should contain a single value, and the documents processed will be those where original_id&#x3D;document_ids[0] and that contain the specified tag (optional)
      * @param formatType The format in which the data should be returned. If empty, will return an array of key-value items. If it is classification, the result will be a Classification object. (optional)
      * @param executeAfterId The id of a job that must be in PROCESSED status before this one can be started (used to chain jobs even before the first ones are terminated). If the referenced job becomes FAILED or is CANCELED, this one will fail (optional)
+     * @param pageRange The pages that should be used in previous job to process this one. Can only be used if execute_after_id is not null. Pages are indexed from 0. Syntax is the same as Python slices syntax (https://docs.python.org/3/whatsnew/2.3.html#extended-slices). Examples :&lt;ul&gt; &lt;li&gt;Single positive integer : keep only this page (example 4 will keep only page 5 (Remember, pages are indexed from 0))&lt;/li&gt; &lt;li&gt;Single negative integer : keep only this page, but starting from the end (example -4 will keep only page 7 if there are 10 total pages)&lt;/li&gt; &lt;li&gt;Range (x:y) : keep only this range of pages (Including x but excluding y, indexed from 0) Examples&lt;ul&gt;     &lt;li&gt;2: will keep all pages starting from page 3&lt;/li&gt;     &lt;li&gt;:5 will keep only pages 1 to 5&lt;/li&gt;     &lt;li&gt;2:5 will keep only pages 3, 4 and 5&lt;/li&gt;     &lt;li&gt;-4: will keep only pages 7 to 10 if there are 10 total pages)&lt;/li&gt;     &lt;li&gt;:-2 will keep only pages 1 to 8 if there are 10 total pages)&lt;/li&gt;     &lt;li&gt;-4:-2 will keep only pages 7 and 8 if there are 10 total pages)&lt;/li&gt;   &lt;/ul&gt; &lt;/li&gt; &lt;li&gt;Stride (::w) : Keep 1 page every w pages starting at the first one (example ::2 will keep only odd pages)&lt;/li&gt; &lt;li&gt;Range and stride (x:y:w) : Keep 1 page every w pages within range (x:y) (example 1::2 will keep only even pages)&lt;/li&gt; &lt;/ul&gt; You can use multiple ranges of page at once, comma separated (For example, 0,2:5,-2:-1 keeps the 1st page, plus pages 3-&gt;5, plus the second to last page)  (optional)
      * @param callbackUrl Callback URL that should be called when the job becomes PROCESSED/FAILED/CANCELED. This URL will be called with a HTTP POST method, and the Job object as the payload. Callback server must answer with either a 200 or 204 HTTP response, to acknowledge the callback. Any other response code will be considered as a failure to call the callback. (optional)
      * @param modelParams Additional parameters that will be passed as is to the model (optional)
      * @param applyBody All the previous query parameters can also be passed as JSON in the body of the request (optional)
@@ -84,7 +85,7 @@ public class ModelApi {
         <tr><td> 404 </td><td> Model or document not found </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call applyModelAsyncCall(String token, String modelId, List<String> documentIds, String tag, FormatTypes formatType, String executeAfterId, String callbackUrl, Object modelParams, ApplyBody applyBody, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call applyModelAsyncCall(String token, String modelId, List<String> documentIds, String tag, FormatTypes formatType, String executeAfterId, String pageRange, String callbackUrl, Object modelParams, ApplyBody applyBody, final ApiCallback _callback) throws ApiException {
         Object localVarPostBody = applyBody;
 
         // create path and map variables
@@ -104,6 +105,10 @@ public class ModelApi {
 
         if (executeAfterId != null) {
             localVarQueryParams.addAll(localVarApiClient.parameterToPair("execute_after_id", executeAfterId));
+        }
+
+        if (pageRange != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("page_range", pageRange));
         }
 
         if (callbackUrl != null) {
@@ -140,7 +145,7 @@ public class ModelApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call applyModelAsyncValidateBeforeCall(String token, String modelId, List<String> documentIds, String tag, FormatTypes formatType, String executeAfterId, String callbackUrl, Object modelParams, ApplyBody applyBody, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call applyModelAsyncValidateBeforeCall(String token, String modelId, List<String> documentIds, String tag, FormatTypes formatType, String executeAfterId, String pageRange, String callbackUrl, Object modelParams, ApplyBody applyBody, final ApiCallback _callback) throws ApiException {
         
         // verify the required parameter 'token' is set
         if (token == null) {
@@ -158,7 +163,7 @@ public class ModelApi {
         }
         
 
-        okhttp3.Call localVarCall = applyModelAsyncCall(token, modelId, documentIds, tag, formatType, executeAfterId, callbackUrl, modelParams, applyBody, _callback);
+        okhttp3.Call localVarCall = applyModelAsyncCall(token, modelId, documentIds, tag, formatType, executeAfterId, pageRange, callbackUrl, modelParams, applyBody, _callback);
         return localVarCall;
 
     }
@@ -172,6 +177,7 @@ public class ModelApi {
      * @param tag The tag of the documents to process. If tag is present, document_ids should contain a single value, and the documents processed will be those where original_id&#x3D;document_ids[0] and that contain the specified tag (optional)
      * @param formatType The format in which the data should be returned. If empty, will return an array of key-value items. If it is classification, the result will be a Classification object. (optional)
      * @param executeAfterId The id of a job that must be in PROCESSED status before this one can be started (used to chain jobs even before the first ones are terminated). If the referenced job becomes FAILED or is CANCELED, this one will fail (optional)
+     * @param pageRange The pages that should be used in previous job to process this one. Can only be used if execute_after_id is not null. Pages are indexed from 0. Syntax is the same as Python slices syntax (https://docs.python.org/3/whatsnew/2.3.html#extended-slices). Examples :&lt;ul&gt; &lt;li&gt;Single positive integer : keep only this page (example 4 will keep only page 5 (Remember, pages are indexed from 0))&lt;/li&gt; &lt;li&gt;Single negative integer : keep only this page, but starting from the end (example -4 will keep only page 7 if there are 10 total pages)&lt;/li&gt; &lt;li&gt;Range (x:y) : keep only this range of pages (Including x but excluding y, indexed from 0) Examples&lt;ul&gt;     &lt;li&gt;2: will keep all pages starting from page 3&lt;/li&gt;     &lt;li&gt;:5 will keep only pages 1 to 5&lt;/li&gt;     &lt;li&gt;2:5 will keep only pages 3, 4 and 5&lt;/li&gt;     &lt;li&gt;-4: will keep only pages 7 to 10 if there are 10 total pages)&lt;/li&gt;     &lt;li&gt;:-2 will keep only pages 1 to 8 if there are 10 total pages)&lt;/li&gt;     &lt;li&gt;-4:-2 will keep only pages 7 and 8 if there are 10 total pages)&lt;/li&gt;   &lt;/ul&gt; &lt;/li&gt; &lt;li&gt;Stride (::w) : Keep 1 page every w pages starting at the first one (example ::2 will keep only odd pages)&lt;/li&gt; &lt;li&gt;Range and stride (x:y:w) : Keep 1 page every w pages within range (x:y) (example 1::2 will keep only even pages)&lt;/li&gt; &lt;/ul&gt; You can use multiple ranges of page at once, comma separated (For example, 0,2:5,-2:-1 keeps the 1st page, plus pages 3-&gt;5, plus the second to last page)  (optional)
      * @param callbackUrl Callback URL that should be called when the job becomes PROCESSED/FAILED/CANCELED. This URL will be called with a HTTP POST method, and the Job object as the payload. Callback server must answer with either a 200 or 204 HTTP response, to acknowledge the callback. Any other response code will be considered as a failure to call the callback. (optional)
      * @param modelParams Additional parameters that will be passed as is to the model (optional)
      * @param applyBody All the previous query parameters can also be passed as JSON in the body of the request (optional)
@@ -187,8 +193,8 @@ public class ModelApi {
         <tr><td> 404 </td><td> Model or document not found </td><td>  -  </td></tr>
      </table>
      */
-    public Job applyModelAsync(String token, String modelId, List<String> documentIds, String tag, FormatTypes formatType, String executeAfterId, String callbackUrl, Object modelParams, ApplyBody applyBody) throws ApiException {
-        ApiResponse<Job> localVarResp = applyModelAsyncWithHttpInfo(token, modelId, documentIds, tag, formatType, executeAfterId, callbackUrl, modelParams, applyBody);
+    public Job applyModelAsync(String token, String modelId, List<String> documentIds, String tag, FormatTypes formatType, String executeAfterId, String pageRange, String callbackUrl, Object modelParams, ApplyBody applyBody) throws ApiException {
+        ApiResponse<Job> localVarResp = applyModelAsyncWithHttpInfo(token, modelId, documentIds, tag, formatType, executeAfterId, pageRange, callbackUrl, modelParams, applyBody);
         return localVarResp.getData();
     }
 
@@ -201,6 +207,7 @@ public class ModelApi {
      * @param tag The tag of the documents to process. If tag is present, document_ids should contain a single value, and the documents processed will be those where original_id&#x3D;document_ids[0] and that contain the specified tag (optional)
      * @param formatType The format in which the data should be returned. If empty, will return an array of key-value items. If it is classification, the result will be a Classification object. (optional)
      * @param executeAfterId The id of a job that must be in PROCESSED status before this one can be started (used to chain jobs even before the first ones are terminated). If the referenced job becomes FAILED or is CANCELED, this one will fail (optional)
+     * @param pageRange The pages that should be used in previous job to process this one. Can only be used if execute_after_id is not null. Pages are indexed from 0. Syntax is the same as Python slices syntax (https://docs.python.org/3/whatsnew/2.3.html#extended-slices). Examples :&lt;ul&gt; &lt;li&gt;Single positive integer : keep only this page (example 4 will keep only page 5 (Remember, pages are indexed from 0))&lt;/li&gt; &lt;li&gt;Single negative integer : keep only this page, but starting from the end (example -4 will keep only page 7 if there are 10 total pages)&lt;/li&gt; &lt;li&gt;Range (x:y) : keep only this range of pages (Including x but excluding y, indexed from 0) Examples&lt;ul&gt;     &lt;li&gt;2: will keep all pages starting from page 3&lt;/li&gt;     &lt;li&gt;:5 will keep only pages 1 to 5&lt;/li&gt;     &lt;li&gt;2:5 will keep only pages 3, 4 and 5&lt;/li&gt;     &lt;li&gt;-4: will keep only pages 7 to 10 if there are 10 total pages)&lt;/li&gt;     &lt;li&gt;:-2 will keep only pages 1 to 8 if there are 10 total pages)&lt;/li&gt;     &lt;li&gt;-4:-2 will keep only pages 7 and 8 if there are 10 total pages)&lt;/li&gt;   &lt;/ul&gt; &lt;/li&gt; &lt;li&gt;Stride (::w) : Keep 1 page every w pages starting at the first one (example ::2 will keep only odd pages)&lt;/li&gt; &lt;li&gt;Range and stride (x:y:w) : Keep 1 page every w pages within range (x:y) (example 1::2 will keep only even pages)&lt;/li&gt; &lt;/ul&gt; You can use multiple ranges of page at once, comma separated (For example, 0,2:5,-2:-1 keeps the 1st page, plus pages 3-&gt;5, plus the second to last page)  (optional)
      * @param callbackUrl Callback URL that should be called when the job becomes PROCESSED/FAILED/CANCELED. This URL will be called with a HTTP POST method, and the Job object as the payload. Callback server must answer with either a 200 or 204 HTTP response, to acknowledge the callback. Any other response code will be considered as a failure to call the callback. (optional)
      * @param modelParams Additional parameters that will be passed as is to the model (optional)
      * @param applyBody All the previous query parameters can also be passed as JSON in the body of the request (optional)
@@ -216,8 +223,8 @@ public class ModelApi {
         <tr><td> 404 </td><td> Model or document not found </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Job> applyModelAsyncWithHttpInfo(String token, String modelId, List<String> documentIds, String tag, FormatTypes formatType, String executeAfterId, String callbackUrl, Object modelParams, ApplyBody applyBody) throws ApiException {
-        okhttp3.Call localVarCall = applyModelAsyncValidateBeforeCall(token, modelId, documentIds, tag, formatType, executeAfterId, callbackUrl, modelParams, applyBody, null);
+    public ApiResponse<Job> applyModelAsyncWithHttpInfo(String token, String modelId, List<String> documentIds, String tag, FormatTypes formatType, String executeAfterId, String pageRange, String callbackUrl, Object modelParams, ApplyBody applyBody) throws ApiException {
+        okhttp3.Call localVarCall = applyModelAsyncValidateBeforeCall(token, modelId, documentIds, tag, formatType, executeAfterId, pageRange, callbackUrl, modelParams, applyBody, null);
         Type localVarReturnType = new TypeToken<Job>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
@@ -231,6 +238,7 @@ public class ModelApi {
      * @param tag The tag of the documents to process. If tag is present, document_ids should contain a single value, and the documents processed will be those where original_id&#x3D;document_ids[0] and that contain the specified tag (optional)
      * @param formatType The format in which the data should be returned. If empty, will return an array of key-value items. If it is classification, the result will be a Classification object. (optional)
      * @param executeAfterId The id of a job that must be in PROCESSED status before this one can be started (used to chain jobs even before the first ones are terminated). If the referenced job becomes FAILED or is CANCELED, this one will fail (optional)
+     * @param pageRange The pages that should be used in previous job to process this one. Can only be used if execute_after_id is not null. Pages are indexed from 0. Syntax is the same as Python slices syntax (https://docs.python.org/3/whatsnew/2.3.html#extended-slices). Examples :&lt;ul&gt; &lt;li&gt;Single positive integer : keep only this page (example 4 will keep only page 5 (Remember, pages are indexed from 0))&lt;/li&gt; &lt;li&gt;Single negative integer : keep only this page, but starting from the end (example -4 will keep only page 7 if there are 10 total pages)&lt;/li&gt; &lt;li&gt;Range (x:y) : keep only this range of pages (Including x but excluding y, indexed from 0) Examples&lt;ul&gt;     &lt;li&gt;2: will keep all pages starting from page 3&lt;/li&gt;     &lt;li&gt;:5 will keep only pages 1 to 5&lt;/li&gt;     &lt;li&gt;2:5 will keep only pages 3, 4 and 5&lt;/li&gt;     &lt;li&gt;-4: will keep only pages 7 to 10 if there are 10 total pages)&lt;/li&gt;     &lt;li&gt;:-2 will keep only pages 1 to 8 if there are 10 total pages)&lt;/li&gt;     &lt;li&gt;-4:-2 will keep only pages 7 and 8 if there are 10 total pages)&lt;/li&gt;   &lt;/ul&gt; &lt;/li&gt; &lt;li&gt;Stride (::w) : Keep 1 page every w pages starting at the first one (example ::2 will keep only odd pages)&lt;/li&gt; &lt;li&gt;Range and stride (x:y:w) : Keep 1 page every w pages within range (x:y) (example 1::2 will keep only even pages)&lt;/li&gt; &lt;/ul&gt; You can use multiple ranges of page at once, comma separated (For example, 0,2:5,-2:-1 keeps the 1st page, plus pages 3-&gt;5, plus the second to last page)  (optional)
      * @param callbackUrl Callback URL that should be called when the job becomes PROCESSED/FAILED/CANCELED. This URL will be called with a HTTP POST method, and the Job object as the payload. Callback server must answer with either a 200 or 204 HTTP response, to acknowledge the callback. Any other response code will be considered as a failure to call the callback. (optional)
      * @param modelParams Additional parameters that will be passed as is to the model (optional)
      * @param applyBody All the previous query parameters can also be passed as JSON in the body of the request (optional)
@@ -247,9 +255,9 @@ public class ModelApi {
         <tr><td> 404 </td><td> Model or document not found </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call applyModelAsyncAsync(String token, String modelId, List<String> documentIds, String tag, FormatTypes formatType, String executeAfterId, String callbackUrl, Object modelParams, ApplyBody applyBody, final ApiCallback<Job> _callback) throws ApiException {
+    public okhttp3.Call applyModelAsyncAsync(String token, String modelId, List<String> documentIds, String tag, FormatTypes formatType, String executeAfterId, String pageRange, String callbackUrl, Object modelParams, ApplyBody applyBody, final ApiCallback<Job> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = applyModelAsyncValidateBeforeCall(token, modelId, documentIds, tag, formatType, executeAfterId, callbackUrl, modelParams, applyBody, _callback);
+        okhttp3.Call localVarCall = applyModelAsyncValidateBeforeCall(token, modelId, documentIds, tag, formatType, executeAfterId, pageRange, callbackUrl, modelParams, applyBody, _callback);
         Type localVarReturnType = new TypeToken<Job>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;

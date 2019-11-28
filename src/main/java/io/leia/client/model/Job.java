@@ -32,35 +32,19 @@ import java.util.List;
 /**
  * Job
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-11-22T11:39:43.225+01:00[Europe/Paris]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-11-26T15:53:43.006+01:00[Europe/Paris]")
 public class Job {
-  public static final String SERIALIZED_NAME_ID = "id";
-  @SerializedName(SERIALIZED_NAME_ID)
-  private String id;
-
   public static final String SERIALIZED_NAME_APPLICATION_ID = "application_id";
   @SerializedName(SERIALIZED_NAME_APPLICATION_ID)
   private String applicationId;
 
+  public static final String SERIALIZED_NAME_CALLBACK_URL = "callback_url";
+  @SerializedName(SERIALIZED_NAME_CALLBACK_URL)
+  private String callbackUrl;
+
   public static final String SERIALIZED_NAME_CREATION_TIME = "creation_time";
   @SerializedName(SERIALIZED_NAME_CREATION_TIME)
   private OffsetDateTime creationTime;
-
-  public static final String SERIALIZED_NAME_STARTING_TIME = "starting_time";
-  @SerializedName(SERIALIZED_NAME_STARTING_TIME)
-  private OffsetDateTime startingTime;
-
-  public static final String SERIALIZED_NAME_FINISHED_TIME = "finished_time";
-  @SerializedName(SERIALIZED_NAME_FINISHED_TIME)
-  private OffsetDateTime finishedTime;
-
-  public static final String SERIALIZED_NAME_JOB_TYPE = "job_type";
-  @SerializedName(SERIALIZED_NAME_JOB_TYPE)
-  private String jobType;
-
-  public static final String SERIALIZED_NAME_MODEL_ID = "model_id";
-  @SerializedName(SERIALIZED_NAME_MODEL_ID)
-  private String modelId;
 
   public static final String SERIALIZED_NAME_DOCUMENT_IDS = "document_ids";
   @SerializedName(SERIALIZED_NAME_DOCUMENT_IDS)
@@ -70,13 +54,25 @@ public class Job {
   @SerializedName(SERIALIZED_NAME_EXECUTE_AFTER_ID)
   private String executeAfterId;
 
+  public static final String SERIALIZED_NAME_FINISHED_TIME = "finished_time";
+  @SerializedName(SERIALIZED_NAME_FINISHED_TIME)
+  private OffsetDateTime finishedTime;
+
+  public static final String SERIALIZED_NAME_ID = "id";
+  @SerializedName(SERIALIZED_NAME_ID)
+  private String id;
+
+  public static final String SERIALIZED_NAME_JOB_TYPE = "job_type";
+  @SerializedName(SERIALIZED_NAME_JOB_TYPE)
+  private String jobType;
+
+  public static final String SERIALIZED_NAME_MODEL_ID = "model_id";
+  @SerializedName(SERIALIZED_NAME_MODEL_ID)
+  private String modelId;
+
   public static final String SERIALIZED_NAME_PARENT_JOB_ID = "parent_job_id";
   @SerializedName(SERIALIZED_NAME_PARENT_JOB_ID)
   private String parentJobId;
-
-  public static final String SERIALIZED_NAME_STATUS = "status";
-  @SerializedName(SERIALIZED_NAME_STATUS)
-  private Statuses status;
 
   public static final String SERIALIZED_NAME_REASON = "reason";
   @SerializedName(SERIALIZED_NAME_REASON)
@@ -90,31 +86,13 @@ public class Job {
   @SerializedName(SERIALIZED_NAME_RESULT_TYPE)
   private ResultTypes resultType;
 
-  public static final String SERIALIZED_NAME_CALLBACK_URL = "callback_url";
-  @SerializedName(SERIALIZED_NAME_CALLBACK_URL)
-  private String callbackUrl;
+  public static final String SERIALIZED_NAME_STARTING_TIME = "starting_time";
+  @SerializedName(SERIALIZED_NAME_STARTING_TIME)
+  private OffsetDateTime startingTime;
 
-
-  public Job id(String id) {
-    
-    this.id = id;
-    return this;
-  }
-
-   /**
-   * Get id
-   * @return id
-  **/
-  @ApiModelProperty(example = "507f191e810c19729de860ea", required = true, value = "")
-
-  public String getId() {
-    return id;
-  }
-
-
-  public void setId(String id) {
-    this.id = id;
-  }
+  public static final String SERIALIZED_NAME_STATUS = "status";
+  @SerializedName(SERIALIZED_NAME_STATUS)
+  private Statuses status;
 
 
   public Job applicationId(String applicationId) {
@@ -139,6 +117,29 @@ public class Job {
   }
 
 
+  public Job callbackUrl(String callbackUrl) {
+    
+    this.callbackUrl = callbackUrl;
+    return this;
+  }
+
+   /**
+   * Get callbackUrl
+   * @return callbackUrl
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(example = "https://callback.example.com/leia_callback", value = "")
+
+  public String getCallbackUrl() {
+    return callbackUrl;
+  }
+
+
+  public void setCallbackUrl(String callbackUrl) {
+    this.callbackUrl = callbackUrl;
+  }
+
+
   public Job creationTime(OffsetDateTime creationTime) {
     
     this.creationTime = creationTime;
@@ -158,97 +159,6 @@ public class Job {
 
   public void setCreationTime(OffsetDateTime creationTime) {
     this.creationTime = creationTime;
-  }
-
-
-  public Job startingTime(OffsetDateTime startingTime) {
-    
-    this.startingTime = startingTime;
-    return this;
-  }
-
-   /**
-   * Get startingTime
-   * @return startingTime
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(example = "2018-11-07T16:02:29.761Z", value = "")
-
-  public OffsetDateTime getStartingTime() {
-    return startingTime;
-  }
-
-
-  public void setStartingTime(OffsetDateTime startingTime) {
-    this.startingTime = startingTime;
-  }
-
-
-  public Job finishedTime(OffsetDateTime finishedTime) {
-    
-    this.finishedTime = finishedTime;
-    return this;
-  }
-
-   /**
-   * Get finishedTime
-   * @return finishedTime
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(example = "2018-11-07T16:02:29.761Z", value = "")
-
-  public OffsetDateTime getFinishedTime() {
-    return finishedTime;
-  }
-
-
-  public void setFinishedTime(OffsetDateTime finishedTime) {
-    this.finishedTime = finishedTime;
-  }
-
-
-  public Job jobType(String jobType) {
-    
-    this.jobType = jobType;
-    return this;
-  }
-
-   /**
-   * Get jobType
-   * @return jobType
-  **/
-  @ApiModelProperty(example = "image-text", required = true, value = "")
-
-  public String getJobType() {
-    return jobType;
-  }
-
-
-  public void setJobType(String jobType) {
-    this.jobType = jobType;
-  }
-
-
-  public Job modelId(String modelId) {
-    
-    this.modelId = modelId;
-    return this;
-  }
-
-   /**
-   * Get modelId
-   * @return modelId
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(example = "507f191e810c19729de860ea", value = "")
-
-  public String getModelId() {
-    return modelId;
-  }
-
-
-  public void setModelId(String modelId) {
-    this.modelId = modelId;
   }
 
 
@@ -302,6 +212,96 @@ public class Job {
   }
 
 
+  public Job finishedTime(OffsetDateTime finishedTime) {
+    
+    this.finishedTime = finishedTime;
+    return this;
+  }
+
+   /**
+   * Get finishedTime
+   * @return finishedTime
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(example = "2018-11-07T16:02:29.761Z", value = "")
+
+  public OffsetDateTime getFinishedTime() {
+    return finishedTime;
+  }
+
+
+  public void setFinishedTime(OffsetDateTime finishedTime) {
+    this.finishedTime = finishedTime;
+  }
+
+
+  public Job id(String id) {
+    
+    this.id = id;
+    return this;
+  }
+
+   /**
+   * Get id
+   * @return id
+  **/
+  @ApiModelProperty(example = "507f191e810c19729de860ea", required = true, value = "")
+
+  public String getId() {
+    return id;
+  }
+
+
+  public void setId(String id) {
+    this.id = id;
+  }
+
+
+  public Job jobType(String jobType) {
+    
+    this.jobType = jobType;
+    return this;
+  }
+
+   /**
+   * Get jobType
+   * @return jobType
+  **/
+  @ApiModelProperty(example = "image-text", required = true, value = "")
+
+  public String getJobType() {
+    return jobType;
+  }
+
+
+  public void setJobType(String jobType) {
+    this.jobType = jobType;
+  }
+
+
+  public Job modelId(String modelId) {
+    
+    this.modelId = modelId;
+    return this;
+  }
+
+   /**
+   * Get modelId
+   * @return modelId
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(example = "507f191e810c19729de860ea", value = "")
+
+  public String getModelId() {
+    return modelId;
+  }
+
+
+  public void setModelId(String modelId) {
+    this.modelId = modelId;
+  }
+
+
   public Job parentJobId(String parentJobId) {
     
     this.parentJobId = parentJobId;
@@ -322,28 +322,6 @@ public class Job {
 
   public void setParentJobId(String parentJobId) {
     this.parentJobId = parentJobId;
-  }
-
-
-  public Job status(Statuses status) {
-    
-    this.status = status;
-    return this;
-  }
-
-   /**
-   * Get status
-   * @return status
-  **/
-  @ApiModelProperty(required = true, value = "")
-
-  public Statuses getStatus() {
-    return status;
-  }
-
-
-  public void setStatus(Statuses status) {
-    this.status = status;
   }
 
 
@@ -416,26 +394,48 @@ public class Job {
   }
 
 
-  public Job callbackUrl(String callbackUrl) {
+  public Job startingTime(OffsetDateTime startingTime) {
     
-    this.callbackUrl = callbackUrl;
+    this.startingTime = startingTime;
     return this;
   }
 
    /**
-   * Get callbackUrl
-   * @return callbackUrl
+   * Get startingTime
+   * @return startingTime
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(example = "https://callback.example.com/leia_callback", value = "")
+  @ApiModelProperty(example = "2018-11-07T16:02:29.761Z", value = "")
 
-  public String getCallbackUrl() {
-    return callbackUrl;
+  public OffsetDateTime getStartingTime() {
+    return startingTime;
   }
 
 
-  public void setCallbackUrl(String callbackUrl) {
-    this.callbackUrl = callbackUrl;
+  public void setStartingTime(OffsetDateTime startingTime) {
+    this.startingTime = startingTime;
+  }
+
+
+  public Job status(Statuses status) {
+    
+    this.status = status;
+    return this;
+  }
+
+   /**
+   * Get status
+   * @return status
+  **/
+  @ApiModelProperty(required = true, value = "")
+
+  public Statuses getStatus() {
+    return status;
+  }
+
+
+  public void setStatus(Statuses status) {
+    this.status = status;
   }
 
 
@@ -448,26 +448,26 @@ public class Job {
       return false;
     }
     Job job = (Job) o;
-    return Objects.equals(this.id, job.id) &&
-        Objects.equals(this.applicationId, job.applicationId) &&
+    return Objects.equals(this.applicationId, job.applicationId) &&
+        Objects.equals(this.callbackUrl, job.callbackUrl) &&
         Objects.equals(this.creationTime, job.creationTime) &&
-        Objects.equals(this.startingTime, job.startingTime) &&
-        Objects.equals(this.finishedTime, job.finishedTime) &&
-        Objects.equals(this.jobType, job.jobType) &&
-        Objects.equals(this.modelId, job.modelId) &&
         Objects.equals(this.documentIds, job.documentIds) &&
         Objects.equals(this.executeAfterId, job.executeAfterId) &&
+        Objects.equals(this.finishedTime, job.finishedTime) &&
+        Objects.equals(this.id, job.id) &&
+        Objects.equals(this.jobType, job.jobType) &&
+        Objects.equals(this.modelId, job.modelId) &&
         Objects.equals(this.parentJobId, job.parentJobId) &&
-        Objects.equals(this.status, job.status) &&
         Objects.equals(this.reason, job.reason) &&
         Objects.equals(this.result, job.result) &&
         Objects.equals(this.resultType, job.resultType) &&
-        Objects.equals(this.callbackUrl, job.callbackUrl);
+        Objects.equals(this.startingTime, job.startingTime) &&
+        Objects.equals(this.status, job.status);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, applicationId, creationTime, startingTime, finishedTime, jobType, modelId, documentIds, executeAfterId, parentJobId, status, reason, result, resultType, callbackUrl);
+    return Objects.hash(applicationId, callbackUrl, creationTime, documentIds, executeAfterId, finishedTime, id, jobType, modelId, parentJobId, reason, result, resultType, startingTime, status);
   }
 
 
@@ -475,21 +475,21 @@ public class Job {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class Job {\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    applicationId: ").append(toIndentedString(applicationId)).append("\n");
+    sb.append("    callbackUrl: ").append(toIndentedString(callbackUrl)).append("\n");
     sb.append("    creationTime: ").append(toIndentedString(creationTime)).append("\n");
-    sb.append("    startingTime: ").append(toIndentedString(startingTime)).append("\n");
-    sb.append("    finishedTime: ").append(toIndentedString(finishedTime)).append("\n");
-    sb.append("    jobType: ").append(toIndentedString(jobType)).append("\n");
-    sb.append("    modelId: ").append(toIndentedString(modelId)).append("\n");
     sb.append("    documentIds: ").append(toIndentedString(documentIds)).append("\n");
     sb.append("    executeAfterId: ").append(toIndentedString(executeAfterId)).append("\n");
+    sb.append("    finishedTime: ").append(toIndentedString(finishedTime)).append("\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    jobType: ").append(toIndentedString(jobType)).append("\n");
+    sb.append("    modelId: ").append(toIndentedString(modelId)).append("\n");
     sb.append("    parentJobId: ").append(toIndentedString(parentJobId)).append("\n");
-    sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    reason: ").append(toIndentedString(reason)).append("\n");
     sb.append("    result: ").append(toIndentedString(result)).append("\n");
     sb.append("    resultType: ").append(toIndentedString(resultType)).append("\n");
-    sb.append("    callbackUrl: ").append(toIndentedString(callbackUrl)).append("\n");
+    sb.append("    startingTime: ").append(toIndentedString(startingTime)).append("\n");
+    sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("}");
     return sb.toString();
   }

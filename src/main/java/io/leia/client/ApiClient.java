@@ -54,7 +54,7 @@ import io.leia.client.auth.ApiKeyAuth;
 
 public class ApiClient {
 
-    private String basePath = "http://localhost/leia/1.0.0";
+    private String basePath = "http://127.0.0.1:8080/leia/1.0.0";
     private boolean debugging = false;
     private Map<String, String> defaultHeaderMap = new HashMap<String, String>();
     private Map<String, String> defaultCookieMap = new HashMap<String, String>();
@@ -115,7 +115,7 @@ public class ApiClient {
     /**
      * Set base path
      *
-     * @param basePath Base path of the URL (e.g http://localhost/leia/1.0.0
+     * @param basePath Base path of the URL (e.g http://127.0.0.1:8080/leia/1.0.0
      * @return An instance of OkHttpClient
      */
     public ApiClient setBasePath(String basePath) {
@@ -790,16 +790,16 @@ public class ApiClient {
         if (obj instanceof byte[]) {
             // Binary (byte array) body parameter support.
             return RequestBody.create(MediaType.parse(contentType), (byte[]) obj);
-        } else if (obj instanceof File) {
-            // File body parameter support.
-            return RequestBody.create(MediaType.parse(contentType), (File) obj);
         } else if (obj instanceof InputStream) {
             try {
                 return RequestBody.create(MediaType.parse(contentType), ByteStreams.toByteArray((InputStream) obj));
             } catch (IOException e) {
-                throw new ApiException("Cannot convert InputStream content to byte[]", e, 0 ,null);
+                throw new ApiException("Cannot convert InputStream content to byte[]", e, 0, null);
             }
-        }else if (isJsonMime(contentType)) {
+        }else if (obj instanceof File) {
+            // File body parameter support.
+            return RequestBody.create(MediaType.parse(contentType), (File) obj);
+        } else if (isJsonMime(contentType)) {
             String content;
             if (obj != null) {
                 content = json.serialize(obj);

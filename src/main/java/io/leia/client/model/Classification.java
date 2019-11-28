@@ -27,8 +27,12 @@ import java.io.IOException;
 /**
  * Classification
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-11-22T11:39:43.225+01:00[Europe/Paris]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-11-26T15:53:43.006+01:00[Europe/Paris]")
 public class Classification {
+  public static final String SERIALIZED_NAME_ACCURACY = "accuracy";
+  @SerializedName(SERIALIZED_NAME_ACCURACY)
+  private Double accuracy;
+
   public static final String SERIALIZED_NAME_CATEGORY = "category";
   @SerializedName(SERIALIZED_NAME_CATEGORY)
   private String category;
@@ -37,9 +41,29 @@ public class Classification {
   @SerializedName(SERIALIZED_NAME_SCORE)
   private Double score;
 
-  public static final String SERIALIZED_NAME_ACCURACY = "accuracy";
-  @SerializedName(SERIALIZED_NAME_ACCURACY)
-  private Double accuracy;
+
+  public Classification accuracy(Double accuracy) {
+    
+    this.accuracy = accuracy;
+    return this;
+  }
+
+   /**
+   * Get accuracy
+   * minimum: 0
+   * maximum: 1
+   * @return accuracy
+  **/
+  @ApiModelProperty(example = "0.999", required = true, value = "")
+
+  public Double getAccuracy() {
+    return accuracy;
+  }
+
+
+  public void setAccuracy(Double accuracy) {
+    this.accuracy = accuracy;
+  }
 
 
   public Classification category(String category) {
@@ -88,30 +112,6 @@ public class Classification {
   }
 
 
-  public Classification accuracy(Double accuracy) {
-    
-    this.accuracy = accuracy;
-    return this;
-  }
-
-   /**
-   * Get accuracy
-   * minimum: 0
-   * maximum: 1
-   * @return accuracy
-  **/
-  @ApiModelProperty(example = "0.999", required = true, value = "")
-
-  public Double getAccuracy() {
-    return accuracy;
-  }
-
-
-  public void setAccuracy(Double accuracy) {
-    this.accuracy = accuracy;
-  }
-
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -121,14 +121,14 @@ public class Classification {
       return false;
     }
     Classification classification = (Classification) o;
-    return Objects.equals(this.category, classification.category) &&
-        Objects.equals(this.score, classification.score) &&
-        Objects.equals(this.accuracy, classification.accuracy);
+    return Objects.equals(this.accuracy, classification.accuracy) &&
+        Objects.equals(this.category, classification.category) &&
+        Objects.equals(this.score, classification.score);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(category, score, accuracy);
+    return Objects.hash(accuracy, category, score);
   }
 
 
@@ -136,9 +136,9 @@ public class Classification {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class Classification {\n");
+    sb.append("    accuracy: ").append(toIndentedString(accuracy)).append("\n");
     sb.append("    category: ").append(toIndentedString(category)).append("\n");
     sb.append("    score: ").append(toIndentedString(score)).append("\n");
-    sb.append("    accuracy: ").append(toIndentedString(accuracy)).append("\n");
     sb.append("}");
     return sb.toString();
   }

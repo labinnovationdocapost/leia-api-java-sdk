@@ -27,15 +27,19 @@ import java.io.IOException;
 /**
  * TransformBody
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-11-22T11:39:43.225+01:00[Europe/Paris]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-11-26T15:53:43.006+01:00[Europe/Paris]")
 public class TransformBody {
+  public static final String SERIALIZED_NAME_CALLBACK_HEADERS = "callback_headers";
+  @SerializedName(SERIALIZED_NAME_CALLBACK_HEADERS)
+  private Object callbackHeaders;
+
   public static final String SERIALIZED_NAME_CALLBACK_URL = "callback_url";
   @SerializedName(SERIALIZED_NAME_CALLBACK_URL)
   private String callbackUrl;
 
-  public static final String SERIALIZED_NAME_CALLBACK_HEADERS = "callback_headers";
-  @SerializedName(SERIALIZED_NAME_CALLBACK_HEADERS)
-  private Object callbackHeaders;
+  public static final String SERIALIZED_NAME_EXECUTE_AFTER_ID = "execute_after_id";
+  @SerializedName(SERIALIZED_NAME_EXECUTE_AFTER_ID)
+  private String executeAfterId;
 
   public static final String SERIALIZED_NAME_INPUT_TAG = "input_tag";
   @SerializedName(SERIALIZED_NAME_INPUT_TAG)
@@ -45,13 +49,36 @@ public class TransformBody {
   @SerializedName(SERIALIZED_NAME_OUTPUT_TAG)
   private String outputTag;
 
-  public static final String SERIALIZED_NAME_EXECUTE_AFTER_ID = "execute_after_id";
-  @SerializedName(SERIALIZED_NAME_EXECUTE_AFTER_ID)
-  private String executeAfterId;
+  public static final String SERIALIZED_NAME_PAGE_RANGE = "page_range";
+  @SerializedName(SERIALIZED_NAME_PAGE_RANGE)
+  private String pageRange;
 
   public static final String SERIALIZED_NAME_TRANSFORM_PARAMS = "transform_params";
   @SerializedName(SERIALIZED_NAME_TRANSFORM_PARAMS)
   private Object transformParams;
+
+
+  public TransformBody callbackHeaders(Object callbackHeaders) {
+    
+    this.callbackHeaders = callbackHeaders;
+    return this;
+  }
+
+   /**
+   * Get callbackHeaders
+   * @return callbackHeaders
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(example = "{\"header_1\":\"header_value_1\",\"header_2\":\"header_value_2\"}", value = "")
+
+  public Object getCallbackHeaders() {
+    return callbackHeaders;
+  }
+
+
+  public void setCallbackHeaders(Object callbackHeaders) {
+    this.callbackHeaders = callbackHeaders;
+  }
 
 
   public TransformBody callbackUrl(String callbackUrl) {
@@ -77,26 +104,26 @@ public class TransformBody {
   }
 
 
-  public TransformBody callbackHeaders(Object callbackHeaders) {
+  public TransformBody executeAfterId(String executeAfterId) {
     
-    this.callbackHeaders = callbackHeaders;
+    this.executeAfterId = executeAfterId;
     return this;
   }
 
    /**
-   * Get callbackHeaders
-   * @return callbackHeaders
+   * Get executeAfterId
+   * @return executeAfterId
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(example = "{\"header_1\":\"header_value_1\",\"header_2\":\"header_value_2\"}", value = "")
+  @ApiModelProperty(example = "507f191e810c19729de860ec", value = "")
 
-  public Object getCallbackHeaders() {
-    return callbackHeaders;
+  public String getExecuteAfterId() {
+    return executeAfterId;
   }
 
 
-  public void setCallbackHeaders(Object callbackHeaders) {
-    this.callbackHeaders = callbackHeaders;
+  public void setExecuteAfterId(String executeAfterId) {
+    this.executeAfterId = executeAfterId;
   }
 
 
@@ -146,26 +173,26 @@ public class TransformBody {
   }
 
 
-  public TransformBody executeAfterId(String executeAfterId) {
+  public TransformBody pageRange(String pageRange) {
     
-    this.executeAfterId = executeAfterId;
+    this.pageRange = pageRange;
     return this;
   }
 
    /**
-   * Get executeAfterId
-   * @return executeAfterId
+   * Get pageRange
+   * @return pageRange
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(example = "507f191e810c19729de860ec", value = "")
+  @ApiModelProperty(example = "3:5", value = "")
 
-  public String getExecuteAfterId() {
-    return executeAfterId;
+  public String getPageRange() {
+    return pageRange;
   }
 
 
-  public void setExecuteAfterId(String executeAfterId) {
-    this.executeAfterId = executeAfterId;
+  public void setPageRange(String pageRange) {
+    this.pageRange = pageRange;
   }
 
 
@@ -201,17 +228,18 @@ public class TransformBody {
       return false;
     }
     TransformBody transformBody = (TransformBody) o;
-    return Objects.equals(this.callbackUrl, transformBody.callbackUrl) &&
-        Objects.equals(this.callbackHeaders, transformBody.callbackHeaders) &&
+    return Objects.equals(this.callbackHeaders, transformBody.callbackHeaders) &&
+        Objects.equals(this.callbackUrl, transformBody.callbackUrl) &&
+        Objects.equals(this.executeAfterId, transformBody.executeAfterId) &&
         Objects.equals(this.inputTag, transformBody.inputTag) &&
         Objects.equals(this.outputTag, transformBody.outputTag) &&
-        Objects.equals(this.executeAfterId, transformBody.executeAfterId) &&
+        Objects.equals(this.pageRange, transformBody.pageRange) &&
         Objects.equals(this.transformParams, transformBody.transformParams);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(callbackUrl, callbackHeaders, inputTag, outputTag, executeAfterId, transformParams);
+    return Objects.hash(callbackHeaders, callbackUrl, executeAfterId, inputTag, outputTag, pageRange, transformParams);
   }
 
 
@@ -219,11 +247,12 @@ public class TransformBody {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class TransformBody {\n");
-    sb.append("    callbackUrl: ").append(toIndentedString(callbackUrl)).append("\n");
     sb.append("    callbackHeaders: ").append(toIndentedString(callbackHeaders)).append("\n");
+    sb.append("    callbackUrl: ").append(toIndentedString(callbackUrl)).append("\n");
+    sb.append("    executeAfterId: ").append(toIndentedString(executeAfterId)).append("\n");
     sb.append("    inputTag: ").append(toIndentedString(inputTag)).append("\n");
     sb.append("    outputTag: ").append(toIndentedString(outputTag)).append("\n");
-    sb.append("    executeAfterId: ").append(toIndentedString(executeAfterId)).append("\n");
+    sb.append("    pageRange: ").append(toIndentedString(pageRange)).append("\n");
     sb.append("    transformParams: ").append(toIndentedString(transformParams)).append("\n");
     sb.append("}");
     return sb.toString();

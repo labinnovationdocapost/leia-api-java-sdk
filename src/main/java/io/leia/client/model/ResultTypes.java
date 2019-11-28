@@ -33,9 +33,13 @@ public enum ResultTypes {
   
   LIST_DOCUMENT_("list[document]"),
   
-  DICT("dict"),
+  OBJECT("object"),
   
-  CLASSIFICATION("classification");
+  CLASSIFICATION("classification"),
+  
+  DICT_OBJECT_("dict[object]"),
+  
+  DICT_CLASSIFICATION_("dict[classification]");
 
   private String value;
 

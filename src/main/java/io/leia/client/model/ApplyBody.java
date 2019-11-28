@@ -28,54 +28,35 @@ import java.io.IOException;
 /**
  * ApplyBody
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-11-22T11:39:43.225+01:00[Europe/Paris]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-11-26T15:53:43.006+01:00[Europe/Paris]")
 public class ApplyBody {
-  public static final String SERIALIZED_NAME_CALLBACK_URL = "callback_url";
-  @SerializedName(SERIALIZED_NAME_CALLBACK_URL)
-  private String callbackUrl;
-
   public static final String SERIALIZED_NAME_CALLBACK_HEADERS = "callback_headers";
   @SerializedName(SERIALIZED_NAME_CALLBACK_HEADERS)
   private Object callbackHeaders;
 
-  public static final String SERIALIZED_NAME_TAG = "tag";
-  @SerializedName(SERIALIZED_NAME_TAG)
-  private String tag;
-
-  public static final String SERIALIZED_NAME_FORMAT_TYPE = "format_type";
-  @SerializedName(SERIALIZED_NAME_FORMAT_TYPE)
-  private FormatTypes formatType;
+  public static final String SERIALIZED_NAME_CALLBACK_URL = "callback_url";
+  @SerializedName(SERIALIZED_NAME_CALLBACK_URL)
+  private String callbackUrl;
 
   public static final String SERIALIZED_NAME_EXECUTE_AFTER_ID = "execute_after_id";
   @SerializedName(SERIALIZED_NAME_EXECUTE_AFTER_ID)
   private String executeAfterId;
 
+  public static final String SERIALIZED_NAME_FORMAT_TYPE = "format_type";
+  @SerializedName(SERIALIZED_NAME_FORMAT_TYPE)
+  private FormatTypes formatType;
+
   public static final String SERIALIZED_NAME_MODEL_PARAMS = "model_params";
   @SerializedName(SERIALIZED_NAME_MODEL_PARAMS)
   private Object modelParams;
 
+  public static final String SERIALIZED_NAME_PAGE_RANGE = "page_range";
+  @SerializedName(SERIALIZED_NAME_PAGE_RANGE)
+  private String pageRange;
 
-  public ApplyBody callbackUrl(String callbackUrl) {
-    
-    this.callbackUrl = callbackUrl;
-    return this;
-  }
-
-   /**
-   * Get callbackUrl
-   * @return callbackUrl
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(example = "http://www.example.com/callback_url", value = "")
-
-  public String getCallbackUrl() {
-    return callbackUrl;
-  }
-
-
-  public void setCallbackUrl(String callbackUrl) {
-    this.callbackUrl = callbackUrl;
-  }
+  public static final String SERIALIZED_NAME_TAG = "tag";
+  @SerializedName(SERIALIZED_NAME_TAG)
+  private String tag;
 
 
   public ApplyBody callbackHeaders(Object callbackHeaders) {
@@ -101,49 +82,26 @@ public class ApplyBody {
   }
 
 
-  public ApplyBody tag(String tag) {
+  public ApplyBody callbackUrl(String callbackUrl) {
     
-    this.tag = tag;
+    this.callbackUrl = callbackUrl;
     return this;
   }
 
    /**
-   * Get tag
-   * @return tag
+   * Get callbackUrl
+   * @return callbackUrl
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(example = "tag", value = "")
+  @ApiModelProperty(example = "http://www.example.com/callback_url", value = "")
 
-  public String getTag() {
-    return tag;
+  public String getCallbackUrl() {
+    return callbackUrl;
   }
 
 
-  public void setTag(String tag) {
-    this.tag = tag;
-  }
-
-
-  public ApplyBody formatType(FormatTypes formatType) {
-    
-    this.formatType = formatType;
-    return this;
-  }
-
-   /**
-   * Get formatType
-   * @return formatType
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
-  public FormatTypes getFormatType() {
-    return formatType;
-  }
-
-
-  public void setFormatType(FormatTypes formatType) {
-    this.formatType = formatType;
+  public void setCallbackUrl(String callbackUrl) {
+    this.callbackUrl = callbackUrl;
   }
 
 
@@ -170,6 +128,29 @@ public class ApplyBody {
   }
 
 
+  public ApplyBody formatType(FormatTypes formatType) {
+    
+    this.formatType = formatType;
+    return this;
+  }
+
+   /**
+   * Get formatType
+   * @return formatType
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(value = "")
+
+  public FormatTypes getFormatType() {
+    return formatType;
+  }
+
+
+  public void setFormatType(FormatTypes formatType) {
+    this.formatType = formatType;
+  }
+
+
   public ApplyBody modelParams(Object modelParams) {
     
     this.modelParams = modelParams;
@@ -193,6 +174,52 @@ public class ApplyBody {
   }
 
 
+  public ApplyBody pageRange(String pageRange) {
+    
+    this.pageRange = pageRange;
+    return this;
+  }
+
+   /**
+   * Get pageRange
+   * @return pageRange
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(example = "3:5", value = "")
+
+  public String getPageRange() {
+    return pageRange;
+  }
+
+
+  public void setPageRange(String pageRange) {
+    this.pageRange = pageRange;
+  }
+
+
+  public ApplyBody tag(String tag) {
+    
+    this.tag = tag;
+    return this;
+  }
+
+   /**
+   * Get tag
+   * @return tag
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(example = "tag", value = "")
+
+  public String getTag() {
+    return tag;
+  }
+
+
+  public void setTag(String tag) {
+    this.tag = tag;
+  }
+
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -202,17 +229,18 @@ public class ApplyBody {
       return false;
     }
     ApplyBody applyBody = (ApplyBody) o;
-    return Objects.equals(this.callbackUrl, applyBody.callbackUrl) &&
-        Objects.equals(this.callbackHeaders, applyBody.callbackHeaders) &&
-        Objects.equals(this.tag, applyBody.tag) &&
-        Objects.equals(this.formatType, applyBody.formatType) &&
+    return Objects.equals(this.callbackHeaders, applyBody.callbackHeaders) &&
+        Objects.equals(this.callbackUrl, applyBody.callbackUrl) &&
         Objects.equals(this.executeAfterId, applyBody.executeAfterId) &&
-        Objects.equals(this.modelParams, applyBody.modelParams);
+        Objects.equals(this.formatType, applyBody.formatType) &&
+        Objects.equals(this.modelParams, applyBody.modelParams) &&
+        Objects.equals(this.pageRange, applyBody.pageRange) &&
+        Objects.equals(this.tag, applyBody.tag);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(callbackUrl, callbackHeaders, tag, formatType, executeAfterId, modelParams);
+    return Objects.hash(callbackHeaders, callbackUrl, executeAfterId, formatType, modelParams, pageRange, tag);
   }
 
 
@@ -220,12 +248,13 @@ public class ApplyBody {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class ApplyBody {\n");
-    sb.append("    callbackUrl: ").append(toIndentedString(callbackUrl)).append("\n");
     sb.append("    callbackHeaders: ").append(toIndentedString(callbackHeaders)).append("\n");
-    sb.append("    tag: ").append(toIndentedString(tag)).append("\n");
-    sb.append("    formatType: ").append(toIndentedString(formatType)).append("\n");
+    sb.append("    callbackUrl: ").append(toIndentedString(callbackUrl)).append("\n");
     sb.append("    executeAfterId: ").append(toIndentedString(executeAfterId)).append("\n");
+    sb.append("    formatType: ").append(toIndentedString(formatType)).append("\n");
     sb.append("    modelParams: ").append(toIndentedString(modelParams)).append("\n");
+    sb.append("    pageRange: ").append(toIndentedString(pageRange)).append("\n");
+    sb.append("    tag: ").append(toIndentedString(tag)).append("\n");
     sb.append("}");
     return sb.toString();
   }

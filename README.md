@@ -81,7 +81,7 @@ else if (obj instanceof InputStream) {
      try {
          return RequestBody.create(MediaType.parse(contentType), ByteStreams.toByteArray((InputStream) obj));
      } catch (IOException e) {
-         throw new LeiaRuntimeException("Cannot convert InputStream content to byte[]", e);
+         throw new ApiException("Cannot convert InputStream content to byte[]", e, 0, null);
      }
  }
 ```  
