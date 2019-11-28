@@ -13,7 +13,7 @@
 
 package io.leia.client;
 
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-11-22T11:39:43.225+01:00[Europe/Paris]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-11-26T15:53:43.006+01:00[Europe/Paris]")
 public class Pair {
     private String name = "";
     private String value = "";

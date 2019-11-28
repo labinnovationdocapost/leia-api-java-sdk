@@ -28,10 +28,8 @@ import java.io.IOException;
 
 
 import io.leia.client.model.Document;
-import java.io.File;
-import io.leia.client.model.Job;
-
 import java.io.InputStream;
+import io.leia.client.model.Job;
 import java.time.OffsetDateTime;
 import io.leia.client.model.TransformBody;
 import io.leia.client.model.TransformTypes;
@@ -735,7 +733,7 @@ public class DocumentApi {
      * @param documentId The id of the document to retrieve (required)
      * @param maxSize Restrict the size of the image to get (only applicable for documents of type image). The largest dimension of the image will be capped to this dimension (optional)
      * @param jpegCompression JPEG compression rate, in percent (only applicable for documents of type image) (optional)
-     * @return File
+     * @return InputStream
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
@@ -758,7 +756,7 @@ public class DocumentApi {
      * @param documentId The id of the document to retrieve (required)
      * @param maxSize Restrict the size of the image to get (only applicable for documents of type image). The largest dimension of the image will be capped to this dimension (optional)
      * @param jpegCompression JPEG compression rate, in percent (only applicable for documents of type image) (optional)
-     * @return ApiResponse&lt;File&gt;
+     * @return ApiResponse&lt;InputStream&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
@@ -1259,7 +1257,7 @@ public class DocumentApi {
      * @param tags If specified, filters the documents by tag (optional)
      * @param createdAfter If specified, keeps only documents created after given UTC timestamp (ISO 8601 format : yyyy-MM-ddThh:mm:ss) (optional)
      * @param createdBefore If specified, keeps only documents created before given UTC timestamp (ISO 8601 format : yyyy-MM-ddThh:mm:ss) (optional)
-     * @return File
+     * @return InputStream
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
@@ -1287,7 +1285,7 @@ public class DocumentApi {
      * @param tags If specified, filters the documents by tag (optional)
      * @param createdAfter If specified, keeps only documents created after given UTC timestamp (ISO 8601 format : yyyy-MM-ddThh:mm:ss) (optional)
      * @param createdBefore If specified, keeps only documents created before given UTC timestamp (ISO 8601 format : yyyy-MM-ddThh:mm:ss) (optional)
-     * @return ApiResponse&lt;File&gt;
+     * @return ApiResponse&lt;InputStream&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
@@ -1485,6 +1483,7 @@ public class DocumentApi {
      * @param inputTag The tag of the documents to process. If tag is present, document_ids should contain a single value, and the documents processed will be those where original_id&#x3D;document_ids[0] and that contain the specified tag (optional)
      * @param outputTag The tag to add to the documents resulting from the transformation (optional)
      * @param executeAfterId The id of a job that must be in PROCESSED status before this one can be started (used to chain jobs even before the first ones are terminated). If the referenced job becomes FAILED or is CANCELED, this one will fail (optional)
+     * @param pageRange The pages that should be used in previous job to process this one. Can only be used if execute_after_id is not null. Pages are indexed from 0. Syntax is the same as Python slices syntax (https://docs.python.org/3/whatsnew/2.3.html#extended-slices). Examples :&lt;ul&gt; &lt;li&gt;Single positive integer : keep only this page (example 4 will keep only page 5 (Remember, pages are indexed from 0))&lt;/li&gt; &lt;li&gt;Single negative integer : keep only this page, but starting from the end (example -4 will keep only page 7 if there are 10 total pages)&lt;/li&gt; &lt;li&gt;Range (x:y) : keep only this range of pages (Including x but excluding y, indexed from 0) Examples&lt;ul&gt;     &lt;li&gt;2: will keep all pages starting from page 3&lt;/li&gt;     &lt;li&gt;:5 will keep only pages 1 to 5&lt;/li&gt;     &lt;li&gt;2:5 will keep only pages 3, 4 and 5&lt;/li&gt;     &lt;li&gt;-4: will keep only pages 7 to 10 if there are 10 total pages)&lt;/li&gt;     &lt;li&gt;:-2 will keep only pages 1 to 8 if there are 10 total pages)&lt;/li&gt;     &lt;li&gt;-4:-2 will keep only pages 7 and 8 if there are 10 total pages)&lt;/li&gt;   &lt;/ul&gt; &lt;/li&gt; &lt;li&gt;Stride (::w) : Keep 1 page every w pages starting at the first one (example 2 will keep only odd pages)&lt;/li&gt; &lt;li&gt;Range and stride (x:y:w) : Keep 1 page every w pages within range (x:y) (example 1::2 will keep only even pages)&lt;/li&gt; &lt;/ul&gt; You can use multiple ranges of page at once, comma separated (For example, 0,2:5,-2:-1 keeps the 1st page, plus pages 3-&gt;5, plus the second to last page)  (optional)
      * @param callbackUrl Callback URL that should be called when the job becomes PROCESSED/FAILED/CANCELED. This URL will be called with a HTTP POST method, and the Job object as the payload. Callback server must answer with either a 200 or 204 HTTP response, to acknowledge the callback. Any other response code will be considered as a failure to call the callback. (optional)
      * @param transformParams Free form parameters for the transformation (optional)
      * @param transformBody All the previous query parameters can also be passed as JSON in the body of the request (optional)
@@ -1500,7 +1499,7 @@ public class DocumentApi {
         <tr><td> 404 </td><td> Document not found </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call transformDocumentAsyncCall(String token, List<String> documentIds, TransformTypes outputType, String inputTag, String outputTag, String executeAfterId, String callbackUrl, Object transformParams, TransformBody transformBody, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call transformDocumentAsyncCall(String token, List<String> documentIds, TransformTypes outputType, String inputTag, String outputTag, String executeAfterId, String pageRange, String callbackUrl, Object transformParams, TransformBody transformBody, final ApiCallback _callback) throws ApiException {
         Object localVarPostBody = transformBody;
 
         // create path and map variables
@@ -1520,6 +1519,10 @@ public class DocumentApi {
 
         if (executeAfterId != null) {
             localVarQueryParams.addAll(localVarApiClient.parameterToPair("execute_after_id", executeAfterId));
+        }
+
+        if (pageRange != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("page_range", pageRange));
         }
 
         if (callbackUrl != null) {
@@ -1556,7 +1559,7 @@ public class DocumentApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call transformDocumentAsyncValidateBeforeCall(String token, List<String> documentIds, TransformTypes outputType, String inputTag, String outputTag, String executeAfterId, String callbackUrl, Object transformParams, TransformBody transformBody, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call transformDocumentAsyncValidateBeforeCall(String token, List<String> documentIds, TransformTypes outputType, String inputTag, String outputTag, String executeAfterId, String pageRange, String callbackUrl, Object transformParams, TransformBody transformBody, final ApiCallback _callback) throws ApiException {
         
         // verify the required parameter 'token' is set
         if (token == null) {
@@ -1574,7 +1577,7 @@ public class DocumentApi {
         }
         
 
-        okhttp3.Call localVarCall = transformDocumentAsyncCall(token, documentIds, outputType, inputTag, outputTag, executeAfterId, callbackUrl, transformParams, transformBody, _callback);
+        okhttp3.Call localVarCall = transformDocumentAsyncCall(token, documentIds, outputType, inputTag, outputTag, executeAfterId, pageRange, callbackUrl, transformParams, transformBody, _callback);
         return localVarCall;
 
     }
@@ -1588,6 +1591,7 @@ public class DocumentApi {
      * @param inputTag The tag of the documents to process. If tag is present, document_ids should contain a single value, and the documents processed will be those where original_id&#x3D;document_ids[0] and that contain the specified tag (optional)
      * @param outputTag The tag to add to the documents resulting from the transformation (optional)
      * @param executeAfterId The id of a job that must be in PROCESSED status before this one can be started (used to chain jobs even before the first ones are terminated). If the referenced job becomes FAILED or is CANCELED, this one will fail (optional)
+     * @param pageRange The pages that should be used in previous job to process this one. Can only be used if execute_after_id is not null. Pages are indexed from 0. Syntax is the same as Python slices syntax (https://docs.python.org/3/whatsnew/2.3.html#extended-slices). Examples :&lt;ul&gt; &lt;li&gt;Single positive integer : keep only this page (example 4 will keep only page 5 (Remember, pages are indexed from 0))&lt;/li&gt; &lt;li&gt;Single negative integer : keep only this page, but starting from the end (example -4 will keep only page 7 if there are 10 total pages)&lt;/li&gt; &lt;li&gt;Range (x:y) : keep only this range of pages (Including x but excluding y, indexed from 0) Examples&lt;ul&gt;     &lt;li&gt;2: will keep all pages starting from page 3&lt;/li&gt;     &lt;li&gt;:5 will keep only pages 1 to 5&lt;/li&gt;     &lt;li&gt;2:5 will keep only pages 3, 4 and 5&lt;/li&gt;     &lt;li&gt;-4: will keep only pages 7 to 10 if there are 10 total pages)&lt;/li&gt;     &lt;li&gt;:-2 will keep only pages 1 to 8 if there are 10 total pages)&lt;/li&gt;     &lt;li&gt;-4:-2 will keep only pages 7 and 8 if there are 10 total pages)&lt;/li&gt;   &lt;/ul&gt; &lt;/li&gt; &lt;li&gt;Stride (::w) : Keep 1 page every w pages starting at the first one (example 2 will keep only odd pages)&lt;/li&gt; &lt;li&gt;Range and stride (x:y:w) : Keep 1 page every w pages within range (x:y) (example 1::2 will keep only even pages)&lt;/li&gt; &lt;/ul&gt; You can use multiple ranges of page at once, comma separated (For example, 0,2:5,-2:-1 keeps the 1st page, plus pages 3-&gt;5, plus the second to last page)  (optional)
      * @param callbackUrl Callback URL that should be called when the job becomes PROCESSED/FAILED/CANCELED. This URL will be called with a HTTP POST method, and the Job object as the payload. Callback server must answer with either a 200 or 204 HTTP response, to acknowledge the callback. Any other response code will be considered as a failure to call the callback. (optional)
      * @param transformParams Free form parameters for the transformation (optional)
      * @param transformBody All the previous query parameters can also be passed as JSON in the body of the request (optional)
@@ -1602,8 +1606,8 @@ public class DocumentApi {
         <tr><td> 404 </td><td> Document not found </td><td>  -  </td></tr>
      </table>
      */
-    public Job transformDocumentAsync(String token, List<String> documentIds, TransformTypes outputType, String inputTag, String outputTag, String executeAfterId, String callbackUrl, Object transformParams, TransformBody transformBody) throws ApiException {
-        ApiResponse<Job> localVarResp = transformDocumentAsyncWithHttpInfo(token, documentIds, outputType, inputTag, outputTag, executeAfterId, callbackUrl, transformParams, transformBody);
+    public Job transformDocumentAsync(String token, List<String> documentIds, TransformTypes outputType, String inputTag, String outputTag, String executeAfterId, String pageRange, String callbackUrl, Object transformParams, TransformBody transformBody) throws ApiException {
+        ApiResponse<Job> localVarResp = transformDocumentAsyncWithHttpInfo(token, documentIds, outputType, inputTag, outputTag, executeAfterId, pageRange, callbackUrl, transformParams, transformBody);
         return localVarResp.getData();
     }
 
@@ -1616,6 +1620,7 @@ public class DocumentApi {
      * @param inputTag The tag of the documents to process. If tag is present, document_ids should contain a single value, and the documents processed will be those where original_id&#x3D;document_ids[0] and that contain the specified tag (optional)
      * @param outputTag The tag to add to the documents resulting from the transformation (optional)
      * @param executeAfterId The id of a job that must be in PROCESSED status before this one can be started (used to chain jobs even before the first ones are terminated). If the referenced job becomes FAILED or is CANCELED, this one will fail (optional)
+     * @param pageRange The pages that should be used in previous job to process this one. Can only be used if execute_after_id is not null. Pages are indexed from 0. Syntax is the same as Python slices syntax (https://docs.python.org/3/whatsnew/2.3.html#extended-slices). Examples :&lt;ul&gt; &lt;li&gt;Single positive integer : keep only this page (example 4 will keep only page 5 (Remember, pages are indexed from 0))&lt;/li&gt; &lt;li&gt;Single negative integer : keep only this page, but starting from the end (example -4 will keep only page 7 if there are 10 total pages)&lt;/li&gt; &lt;li&gt;Range (x:y) : keep only this range of pages (Including x but excluding y, indexed from 0) Examples&lt;ul&gt;     &lt;li&gt;2: will keep all pages starting from page 3&lt;/li&gt;     &lt;li&gt;:5 will keep only pages 1 to 5&lt;/li&gt;     &lt;li&gt;2:5 will keep only pages 3, 4 and 5&lt;/li&gt;     &lt;li&gt;-4: will keep only pages 7 to 10 if there are 10 total pages)&lt;/li&gt;     &lt;li&gt;:-2 will keep only pages 1 to 8 if there are 10 total pages)&lt;/li&gt;     &lt;li&gt;-4:-2 will keep only pages 7 and 8 if there are 10 total pages)&lt;/li&gt;   &lt;/ul&gt; &lt;/li&gt; &lt;li&gt;Stride (::w) : Keep 1 page every w pages starting at the first one (example 2 will keep only odd pages)&lt;/li&gt; &lt;li&gt;Range and stride (x:y:w) : Keep 1 page every w pages within range (x:y) (example 1::2 will keep only even pages)&lt;/li&gt; &lt;/ul&gt; You can use multiple ranges of page at once, comma separated (For example, 0,2:5,-2:-1 keeps the 1st page, plus pages 3-&gt;5, plus the second to last page)  (optional)
      * @param callbackUrl Callback URL that should be called when the job becomes PROCESSED/FAILED/CANCELED. This URL will be called with a HTTP POST method, and the Job object as the payload. Callback server must answer with either a 200 or 204 HTTP response, to acknowledge the callback. Any other response code will be considered as a failure to call the callback. (optional)
      * @param transformParams Free form parameters for the transformation (optional)
      * @param transformBody All the previous query parameters can also be passed as JSON in the body of the request (optional)
@@ -1630,8 +1635,8 @@ public class DocumentApi {
         <tr><td> 404 </td><td> Document not found </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Job> transformDocumentAsyncWithHttpInfo(String token, List<String> documentIds, TransformTypes outputType, String inputTag, String outputTag, String executeAfterId, String callbackUrl, Object transformParams, TransformBody transformBody) throws ApiException {
-        okhttp3.Call localVarCall = transformDocumentAsyncValidateBeforeCall(token, documentIds, outputType, inputTag, outputTag, executeAfterId, callbackUrl, transformParams, transformBody, null);
+    public ApiResponse<Job> transformDocumentAsyncWithHttpInfo(String token, List<String> documentIds, TransformTypes outputType, String inputTag, String outputTag, String executeAfterId, String pageRange, String callbackUrl, Object transformParams, TransformBody transformBody) throws ApiException {
+        okhttp3.Call localVarCall = transformDocumentAsyncValidateBeforeCall(token, documentIds, outputType, inputTag, outputTag, executeAfterId, pageRange, callbackUrl, transformParams, transformBody, null);
         Type localVarReturnType = new TypeToken<Job>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
@@ -1645,6 +1650,7 @@ public class DocumentApi {
      * @param inputTag The tag of the documents to process. If tag is present, document_ids should contain a single value, and the documents processed will be those where original_id&#x3D;document_ids[0] and that contain the specified tag (optional)
      * @param outputTag The tag to add to the documents resulting from the transformation (optional)
      * @param executeAfterId The id of a job that must be in PROCESSED status before this one can be started (used to chain jobs even before the first ones are terminated). If the referenced job becomes FAILED or is CANCELED, this one will fail (optional)
+     * @param pageRange The pages that should be used in previous job to process this one. Can only be used if execute_after_id is not null. Pages are indexed from 0. Syntax is the same as Python slices syntax (https://docs.python.org/3/whatsnew/2.3.html#extended-slices). Examples :&lt;ul&gt; &lt;li&gt;Single positive integer : keep only this page (example 4 will keep only page 5 (Remember, pages are indexed from 0))&lt;/li&gt; &lt;li&gt;Single negative integer : keep only this page, but starting from the end (example -4 will keep only page 7 if there are 10 total pages)&lt;/li&gt; &lt;li&gt;Range (x:y) : keep only this range of pages (Including x but excluding y, indexed from 0) Examples&lt;ul&gt;     &lt;li&gt;2: will keep all pages starting from page 3&lt;/li&gt;     &lt;li&gt;:5 will keep only pages 1 to 5&lt;/li&gt;     &lt;li&gt;2:5 will keep only pages 3, 4 and 5&lt;/li&gt;     &lt;li&gt;-4: will keep only pages 7 to 10 if there are 10 total pages)&lt;/li&gt;     &lt;li&gt;:-2 will keep only pages 1 to 8 if there are 10 total pages)&lt;/li&gt;     &lt;li&gt;-4:-2 will keep only pages 7 and 8 if there are 10 total pages)&lt;/li&gt;   &lt;/ul&gt; &lt;/li&gt; &lt;li&gt;Stride (::w) : Keep 1 page every w pages starting at the first one (example 2 will keep only odd pages)&lt;/li&gt; &lt;li&gt;Range and stride (x:y:w) : Keep 1 page every w pages within range (x:y) (example 1::2 will keep only even pages)&lt;/li&gt; &lt;/ul&gt; You can use multiple ranges of page at once, comma separated (For example, 0,2:5,-2:-1 keeps the 1st page, plus pages 3-&gt;5, plus the second to last page)  (optional)
      * @param callbackUrl Callback URL that should be called when the job becomes PROCESSED/FAILED/CANCELED. This URL will be called with a HTTP POST method, and the Job object as the payload. Callback server must answer with either a 200 or 204 HTTP response, to acknowledge the callback. Any other response code will be considered as a failure to call the callback. (optional)
      * @param transformParams Free form parameters for the transformation (optional)
      * @param transformBody All the previous query parameters can also be passed as JSON in the body of the request (optional)
@@ -1660,9 +1666,9 @@ public class DocumentApi {
         <tr><td> 404 </td><td> Document not found </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call transformDocumentAsyncAsync(String token, List<String> documentIds, TransformTypes outputType, String inputTag, String outputTag, String executeAfterId, String callbackUrl, Object transformParams, TransformBody transformBody, final ApiCallback<Job> _callback) throws ApiException {
+    public okhttp3.Call transformDocumentAsyncAsync(String token, List<String> documentIds, TransformTypes outputType, String inputTag, String outputTag, String executeAfterId, String pageRange, String callbackUrl, Object transformParams, TransformBody transformBody, final ApiCallback<Job> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = transformDocumentAsyncValidateBeforeCall(token, documentIds, outputType, inputTag, outputTag, executeAfterId, callbackUrl, transformParams, transformBody, _callback);
+        okhttp3.Call localVarCall = transformDocumentAsyncValidateBeforeCall(token, documentIds, outputType, inputTag, outputTag, executeAfterId, pageRange, callbackUrl, transformParams, transformBody, _callback);
         Type localVarReturnType = new TypeToken<Job>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;

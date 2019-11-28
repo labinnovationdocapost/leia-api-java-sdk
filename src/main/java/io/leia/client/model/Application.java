@@ -29,43 +29,23 @@ import java.time.OffsetDateTime;
 /**
  * Application
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-11-22T11:39:43.225+01:00[Europe/Paris]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-11-26T15:53:43.006+01:00[Europe/Paris]")
 public class Application {
-  public static final String SERIALIZED_NAME_ID = "id";
-  @SerializedName(SERIALIZED_NAME_ID)
-  private String id;
+  public static final String SERIALIZED_NAME_API_KEY = "api_key";
+  @SerializedName(SERIALIZED_NAME_API_KEY)
+  private String apiKey;
 
   public static final String SERIALIZED_NAME_APPLICATION_NAME = "application_name";
   @SerializedName(SERIALIZED_NAME_APPLICATION_NAME)
   private String applicationName;
 
-  public static final String SERIALIZED_NAME_EMAIL = "email";
-  @SerializedName(SERIALIZED_NAME_EMAIL)
-  private String email;
-
-  public static final String SERIALIZED_NAME_FIRST_NAME = "first_name";
-  @SerializedName(SERIALIZED_NAME_FIRST_NAME)
-  private String firstName;
-
-  public static final String SERIALIZED_NAME_LAST_NAME = "last_name";
-  @SerializedName(SERIALIZED_NAME_LAST_NAME)
-  private String lastName;
-
   public static final String SERIALIZED_NAME_APPLICATION_TYPE = "application_type";
   @SerializedName(SERIALIZED_NAME_APPLICATION_TYPE)
   private ApplicationTypes applicationType;
 
-  public static final String SERIALIZED_NAME_API_KEY = "api_key";
-  @SerializedName(SERIALIZED_NAME_API_KEY)
-  private String apiKey;
-
   public static final String SERIALIZED_NAME_CREATION_TIME = "creation_time";
   @SerializedName(SERIALIZED_NAME_CREATION_TIME)
   private OffsetDateTime creationTime;
-
-  public static final String SERIALIZED_NAME_DEFAULT_JOB_CALLBACK_URL = "default_job_callback_url";
-  @SerializedName(SERIALIZED_NAME_DEFAULT_JOB_CALLBACK_URL)
-  private String defaultJobCallbackUrl;
 
   public static final String SERIALIZED_NAME_DEDICATED_WORKERS = "dedicated_workers";
   @SerializedName(SERIALIZED_NAME_DEDICATED_WORKERS)
@@ -75,27 +55,47 @@ public class Application {
   @SerializedName(SERIALIZED_NAME_DEDICATED_WORKERS_TTL)
   private Integer dedicatedWorkersTtl;
 
+  public static final String SERIALIZED_NAME_DEFAULT_JOB_CALLBACK_URL = "default_job_callback_url";
+  @SerializedName(SERIALIZED_NAME_DEFAULT_JOB_CALLBACK_URL)
+  private String defaultJobCallbackUrl;
 
-  public Application id(String id) {
+  public static final String SERIALIZED_NAME_EMAIL = "email";
+  @SerializedName(SERIALIZED_NAME_EMAIL)
+  private String email;
+
+  public static final String SERIALIZED_NAME_FIRST_NAME = "first_name";
+  @SerializedName(SERIALIZED_NAME_FIRST_NAME)
+  private String firstName;
+
+  public static final String SERIALIZED_NAME_ID = "id";
+  @SerializedName(SERIALIZED_NAME_ID)
+  private String id;
+
+  public static final String SERIALIZED_NAME_LAST_NAME = "last_name";
+  @SerializedName(SERIALIZED_NAME_LAST_NAME)
+  private String lastName;
+
+
+  public Application apiKey(String apiKey) {
     
-    this.id = id;
+    this.apiKey = apiKey;
     return this;
   }
 
    /**
-   * Get id
-   * @return id
+   * Get apiKey
+   * @return apiKey
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(example = "507f191e810c19729de860ea", value = "")
+  @ApiModelProperty(example = "ghsrt6j94u6nbdw148j6t41nxf65bnwdt", value = "")
 
-  public String getId() {
-    return id;
+  public String getApiKey() {
+    return apiKey;
   }
 
 
-  public void setId(String id) {
-    this.id = id;
+  public void setApiKey(String apiKey) {
+    this.apiKey = apiKey;
   }
 
 
@@ -122,72 +122,6 @@ public class Application {
   }
 
 
-  public Application email(String email) {
-    
-    this.email = email;
-    return this;
-  }
-
-   /**
-   * Get email
-   * @return email
-  **/
-  @ApiModelProperty(example = "sebastien.favre@docapost.fr", required = true, value = "")
-
-  public String getEmail() {
-    return email;
-  }
-
-
-  public void setEmail(String email) {
-    this.email = email;
-  }
-
-
-  public Application firstName(String firstName) {
-    
-    this.firstName = firstName;
-    return this;
-  }
-
-   /**
-   * Get firstName
-   * @return firstName
-  **/
-  @ApiModelProperty(example = "Sébastien", required = true, value = "")
-
-  public String getFirstName() {
-    return firstName;
-  }
-
-
-  public void setFirstName(String firstName) {
-    this.firstName = firstName;
-  }
-
-
-  public Application lastName(String lastName) {
-    
-    this.lastName = lastName;
-    return this;
-  }
-
-   /**
-   * Get lastName
-   * @return lastName
-  **/
-  @ApiModelProperty(example = "Favre", required = true, value = "")
-
-  public String getLastName() {
-    return lastName;
-  }
-
-
-  public void setLastName(String lastName) {
-    this.lastName = lastName;
-  }
-
-
   public Application applicationType(ApplicationTypes applicationType) {
     
     this.applicationType = applicationType;
@@ -207,29 +141,6 @@ public class Application {
 
   public void setApplicationType(ApplicationTypes applicationType) {
     this.applicationType = applicationType;
-  }
-
-
-  public Application apiKey(String apiKey) {
-    
-    this.apiKey = apiKey;
-    return this;
-  }
-
-   /**
-   * Get apiKey
-   * @return apiKey
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(example = "ghsrt6j94u6nbdw148j6t41nxf65bnwdt", value = "")
-
-  public String getApiKey() {
-    return apiKey;
-  }
-
-
-  public void setApiKey(String apiKey) {
-    this.apiKey = apiKey;
   }
 
 
@@ -253,29 +164,6 @@ public class Application {
 
   public void setCreationTime(OffsetDateTime creationTime) {
     this.creationTime = creationTime;
-  }
-
-
-  public Application defaultJobCallbackUrl(String defaultJobCallbackUrl) {
-    
-    this.defaultJobCallbackUrl = defaultJobCallbackUrl;
-    return this;
-  }
-
-   /**
-   * Get defaultJobCallbackUrl
-   * @return defaultJobCallbackUrl
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(example = "https://callback.example.com/leia_callback", value = "")
-
-  public String getDefaultJobCallbackUrl() {
-    return defaultJobCallbackUrl;
-  }
-
-
-  public void setDefaultJobCallbackUrl(String defaultJobCallbackUrl) {
-    this.defaultJobCallbackUrl = defaultJobCallbackUrl;
   }
 
 
@@ -325,6 +213,118 @@ public class Application {
   }
 
 
+  public Application defaultJobCallbackUrl(String defaultJobCallbackUrl) {
+    
+    this.defaultJobCallbackUrl = defaultJobCallbackUrl;
+    return this;
+  }
+
+   /**
+   * Get defaultJobCallbackUrl
+   * @return defaultJobCallbackUrl
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(example = "https://callback.example.com/leia_callback", value = "")
+
+  public String getDefaultJobCallbackUrl() {
+    return defaultJobCallbackUrl;
+  }
+
+
+  public void setDefaultJobCallbackUrl(String defaultJobCallbackUrl) {
+    this.defaultJobCallbackUrl = defaultJobCallbackUrl;
+  }
+
+
+  public Application email(String email) {
+    
+    this.email = email;
+    return this;
+  }
+
+   /**
+   * Get email
+   * @return email
+  **/
+  @ApiModelProperty(example = "sebastien.favre@docapost.fr", required = true, value = "")
+
+  public String getEmail() {
+    return email;
+  }
+
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+
+  public Application firstName(String firstName) {
+    
+    this.firstName = firstName;
+    return this;
+  }
+
+   /**
+   * Get firstName
+   * @return firstName
+  **/
+  @ApiModelProperty(example = "Sébastien", required = true, value = "")
+
+  public String getFirstName() {
+    return firstName;
+  }
+
+
+  public void setFirstName(String firstName) {
+    this.firstName = firstName;
+  }
+
+
+  public Application id(String id) {
+    
+    this.id = id;
+    return this;
+  }
+
+   /**
+   * Get id
+   * @return id
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(example = "507f191e810c19729de860ea", value = "")
+
+  public String getId() {
+    return id;
+  }
+
+
+  public void setId(String id) {
+    this.id = id;
+  }
+
+
+  public Application lastName(String lastName) {
+    
+    this.lastName = lastName;
+    return this;
+  }
+
+   /**
+   * Get lastName
+   * @return lastName
+  **/
+  @ApiModelProperty(example = "Favre", required = true, value = "")
+
+  public String getLastName() {
+    return lastName;
+  }
+
+
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
+  }
+
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -334,22 +334,22 @@ public class Application {
       return false;
     }
     Application application = (Application) o;
-    return Objects.equals(this.id, application.id) &&
+    return Objects.equals(this.apiKey, application.apiKey) &&
         Objects.equals(this.applicationName, application.applicationName) &&
+        Objects.equals(this.applicationType, application.applicationType) &&
+        Objects.equals(this.creationTime, application.creationTime) &&
+        Objects.equals(this.dedicatedWorkers, application.dedicatedWorkers) &&
+        Objects.equals(this.dedicatedWorkersTtl, application.dedicatedWorkersTtl) &&
+        Objects.equals(this.defaultJobCallbackUrl, application.defaultJobCallbackUrl) &&
         Objects.equals(this.email, application.email) &&
         Objects.equals(this.firstName, application.firstName) &&
-        Objects.equals(this.lastName, application.lastName) &&
-        Objects.equals(this.applicationType, application.applicationType) &&
-        Objects.equals(this.apiKey, application.apiKey) &&
-        Objects.equals(this.creationTime, application.creationTime) &&
-        Objects.equals(this.defaultJobCallbackUrl, application.defaultJobCallbackUrl) &&
-        Objects.equals(this.dedicatedWorkers, application.dedicatedWorkers) &&
-        Objects.equals(this.dedicatedWorkersTtl, application.dedicatedWorkersTtl);
+        Objects.equals(this.id, application.id) &&
+        Objects.equals(this.lastName, application.lastName);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, applicationName, email, firstName, lastName, applicationType, apiKey, creationTime, defaultJobCallbackUrl, dedicatedWorkers, dedicatedWorkersTtl);
+    return Objects.hash(apiKey, applicationName, applicationType, creationTime, dedicatedWorkers, dedicatedWorkersTtl, defaultJobCallbackUrl, email, firstName, id, lastName);
   }
 
 
@@ -357,17 +357,17 @@ public class Application {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class Application {\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    applicationName: ").append(toIndentedString(applicationName)).append("\n");
-    sb.append("    email: ").append(toIndentedString(email)).append("\n");
-    sb.append("    firstName: ").append(toIndentedString(firstName)).append("\n");
-    sb.append("    lastName: ").append(toIndentedString(lastName)).append("\n");
-    sb.append("    applicationType: ").append(toIndentedString(applicationType)).append("\n");
     sb.append("    apiKey: ").append(toIndentedString(apiKey)).append("\n");
+    sb.append("    applicationName: ").append(toIndentedString(applicationName)).append("\n");
+    sb.append("    applicationType: ").append(toIndentedString(applicationType)).append("\n");
     sb.append("    creationTime: ").append(toIndentedString(creationTime)).append("\n");
-    sb.append("    defaultJobCallbackUrl: ").append(toIndentedString(defaultJobCallbackUrl)).append("\n");
     sb.append("    dedicatedWorkers: ").append(toIndentedString(dedicatedWorkers)).append("\n");
     sb.append("    dedicatedWorkersTtl: ").append(toIndentedString(dedicatedWorkersTtl)).append("\n");
+    sb.append("    defaultJobCallbackUrl: ").append(toIndentedString(defaultJobCallbackUrl)).append("\n");
+    sb.append("    email: ").append(toIndentedString(email)).append("\n");
+    sb.append("    firstName: ").append(toIndentedString(firstName)).append("\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    lastName: ").append(toIndentedString(lastName)).append("\n");
     sb.append("}");
     return sb.toString();
   }

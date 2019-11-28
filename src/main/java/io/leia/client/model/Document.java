@@ -30,35 +30,11 @@ import java.util.List;
 /**
  * Document
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-11-22T11:39:43.225+01:00[Europe/Paris]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-11-26T15:53:43.006+01:00[Europe/Paris]")
 public class Document {
-  public static final String SERIALIZED_NAME_ID = "id";
-  @SerializedName(SERIALIZED_NAME_ID)
-  private String id;
-
   public static final String SERIALIZED_NAME_APPLICATION_ID = "application_id";
   @SerializedName(SERIALIZED_NAME_APPLICATION_ID)
   private String applicationId;
-
-  public static final String SERIALIZED_NAME_FILENAME = "filename";
-  @SerializedName(SERIALIZED_NAME_FILENAME)
-  private String filename;
-
-  public static final String SERIALIZED_NAME_EXTENSION = "extension";
-  @SerializedName(SERIALIZED_NAME_EXTENSION)
-  private String extension;
-
-  public static final String SERIALIZED_NAME_MIME_TYPE = "mime_type";
-  @SerializedName(SERIALIZED_NAME_MIME_TYPE)
-  private String mimeType;
-
-  public static final String SERIALIZED_NAME_SIZE = "size";
-  @SerializedName(SERIALIZED_NAME_SIZE)
-  private Integer size;
-
-  public static final String SERIALIZED_NAME_ORIGINAL_ID = "original_id";
-  @SerializedName(SERIALIZED_NAME_ORIGINAL_ID)
-  private String originalId;
 
   public static final String SERIALIZED_NAME_CREATION_TIME = "creation_time";
   @SerializedName(SERIALIZED_NAME_CREATION_TIME)
@@ -68,39 +44,41 @@ public class Document {
   @SerializedName(SERIALIZED_NAME_EXPIRATION_TIME)
   private OffsetDateTime expirationTime;
 
+  public static final String SERIALIZED_NAME_EXTENSION = "extension";
+  @SerializedName(SERIALIZED_NAME_EXTENSION)
+  private String extension;
+
+  public static final String SERIALIZED_NAME_FILENAME = "filename";
+  @SerializedName(SERIALIZED_NAME_FILENAME)
+  private String filename;
+
+  public static final String SERIALIZED_NAME_ID = "id";
+  @SerializedName(SERIALIZED_NAME_ID)
+  private String id;
+
+  public static final String SERIALIZED_NAME_MIME_TYPE = "mime_type";
+  @SerializedName(SERIALIZED_NAME_MIME_TYPE)
+  private String mimeType;
+
+  public static final String SERIALIZED_NAME_ORIGINAL_ID = "original_id";
+  @SerializedName(SERIALIZED_NAME_ORIGINAL_ID)
+  private String originalId;
+
   public static final String SERIALIZED_NAME_PAGE = "page";
   @SerializedName(SERIALIZED_NAME_PAGE)
   private Integer page;
-
-  public static final String SERIALIZED_NAME_TAGS = "tags";
-  @SerializedName(SERIALIZED_NAME_TAGS)
-  private List<String> tags = null;
 
   public static final String SERIALIZED_NAME_ROTATION_ANGLE = "rotation_angle";
   @SerializedName(SERIALIZED_NAME_ROTATION_ANGLE)
   private Integer rotationAngle;
 
+  public static final String SERIALIZED_NAME_SIZE = "size";
+  @SerializedName(SERIALIZED_NAME_SIZE)
+  private Integer size;
 
-  public Document id(String id) {
-    
-    this.id = id;
-    return this;
-  }
-
-   /**
-   * Get id
-   * @return id
-  **/
-  @ApiModelProperty(example = "507f191e810c19729de860ea", required = true, value = "")
-
-  public String getId() {
-    return id;
-  }
-
-
-  public void setId(String id) {
-    this.id = id;
-  }
+  public static final String SERIALIZED_NAME_TAGS = "tags";
+  @SerializedName(SERIALIZED_NAME_TAGS)
+  private List<String> tags = null;
 
 
   public Document applicationId(String applicationId) {
@@ -122,120 +100,6 @@ public class Document {
 
   public void setApplicationId(String applicationId) {
     this.applicationId = applicationId;
-  }
-
-
-  public Document filename(String filename) {
-    
-    this.filename = filename;
-    return this;
-  }
-
-   /**
-   * Get filename
-   * @return filename
-  **/
-  @ApiModelProperty(example = "mydoc", required = true, value = "")
-
-  public String getFilename() {
-    return filename;
-  }
-
-
-  public void setFilename(String filename) {
-    this.filename = filename;
-  }
-
-
-  public Document extension(String extension) {
-    
-    this.extension = extension;
-    return this;
-  }
-
-   /**
-   * Get extension
-   * @return extension
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(example = "jpg", value = "")
-
-  public String getExtension() {
-    return extension;
-  }
-
-
-  public void setExtension(String extension) {
-    this.extension = extension;
-  }
-
-
-  public Document mimeType(String mimeType) {
-    
-    this.mimeType = mimeType;
-    return this;
-  }
-
-   /**
-   * Get mimeType
-   * @return mimeType
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(example = "image/jpeg", value = "")
-
-  public String getMimeType() {
-    return mimeType;
-  }
-
-
-  public void setMimeType(String mimeType) {
-    this.mimeType = mimeType;
-  }
-
-
-  public Document size(Integer size) {
-    
-    this.size = size;
-    return this;
-  }
-
-   /**
-   * The size of the document in bytes
-   * @return size
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(example = "1000000", value = "The size of the document in bytes")
-
-  public Integer getSize() {
-    return size;
-  }
-
-
-  public void setSize(Integer size) {
-    this.size = size;
-  }
-
-
-  public Document originalId(String originalId) {
-    
-    this.originalId = originalId;
-    return this;
-  }
-
-   /**
-   * If this document is the result of a conversion, will contain the id of the original document
-   * @return originalId
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "If this document is the result of a conversion, will contain the id of the original document")
-
-  public String getOriginalId() {
-    return originalId;
-  }
-
-
-  public void setOriginalId(String originalId) {
-    this.originalId = originalId;
   }
 
 
@@ -284,6 +148,119 @@ public class Document {
   }
 
 
+  public Document extension(String extension) {
+    
+    this.extension = extension;
+    return this;
+  }
+
+   /**
+   * Get extension
+   * @return extension
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(example = "jpg", value = "")
+
+  public String getExtension() {
+    return extension;
+  }
+
+
+  public void setExtension(String extension) {
+    this.extension = extension;
+  }
+
+
+  public Document filename(String filename) {
+    
+    this.filename = filename;
+    return this;
+  }
+
+   /**
+   * Get filename
+   * @return filename
+  **/
+  @ApiModelProperty(example = "mydoc", required = true, value = "")
+
+  public String getFilename() {
+    return filename;
+  }
+
+
+  public void setFilename(String filename) {
+    this.filename = filename;
+  }
+
+
+  public Document id(String id) {
+    
+    this.id = id;
+    return this;
+  }
+
+   /**
+   * Get id
+   * @return id
+  **/
+  @ApiModelProperty(example = "507f191e810c19729de860ea", required = true, value = "")
+
+  public String getId() {
+    return id;
+  }
+
+
+  public void setId(String id) {
+    this.id = id;
+  }
+
+
+  public Document mimeType(String mimeType) {
+    
+    this.mimeType = mimeType;
+    return this;
+  }
+
+   /**
+   * Get mimeType
+   * @return mimeType
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(example = "image/jpeg", value = "")
+
+  public String getMimeType() {
+    return mimeType;
+  }
+
+
+  public void setMimeType(String mimeType) {
+    this.mimeType = mimeType;
+  }
+
+
+  public Document originalId(String originalId) {
+    
+    this.originalId = originalId;
+    return this;
+  }
+
+   /**
+   * If this document is the result of a conversion, will contain the id of the original document
+   * @return originalId
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(value = "If this document is the result of a conversion, will contain the id of the original document")
+
+  public String getOriginalId() {
+    return originalId;
+  }
+
+
+  public void setOriginalId(String originalId) {
+    this.originalId = originalId;
+  }
+
+
   public Document page(Integer page) {
     
     this.page = page;
@@ -304,6 +281,54 @@ public class Document {
 
   public void setPage(Integer page) {
     this.page = page;
+  }
+
+
+  public Document rotationAngle(Integer rotationAngle) {
+    
+    this.rotationAngle = rotationAngle;
+    return this;
+  }
+
+   /**
+   * The rotation angle in degrees to apply to the document to present it in a human readable orientation
+   * minimum: 0
+   * maximum: 359
+   * @return rotationAngle
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(example = "0", value = "The rotation angle in degrees to apply to the document to present it in a human readable orientation")
+
+  public Integer getRotationAngle() {
+    return rotationAngle;
+  }
+
+
+  public void setRotationAngle(Integer rotationAngle) {
+    this.rotationAngle = rotationAngle;
+  }
+
+
+  public Document size(Integer size) {
+    
+    this.size = size;
+    return this;
+  }
+
+   /**
+   * The size of the document in bytes
+   * @return size
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(example = "1000000", value = "The size of the document in bytes")
+
+  public Integer getSize() {
+    return size;
+  }
+
+
+  public void setSize(Integer size) {
+    this.size = size;
   }
 
 
@@ -338,31 +363,6 @@ public class Document {
   }
 
 
-  public Document rotationAngle(Integer rotationAngle) {
-    
-    this.rotationAngle = rotationAngle;
-    return this;
-  }
-
-   /**
-   * The rotation angle in degrees to apply to the document to present it in a human readable orientation
-   * minimum: 0
-   * maximum: 359
-   * @return rotationAngle
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(example = "0", value = "The rotation angle in degrees to apply to the document to present it in a human readable orientation")
-
-  public Integer getRotationAngle() {
-    return rotationAngle;
-  }
-
-
-  public void setRotationAngle(Integer rotationAngle) {
-    this.rotationAngle = rotationAngle;
-  }
-
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -372,23 +372,23 @@ public class Document {
       return false;
     }
     Document document = (Document) o;
-    return Objects.equals(this.id, document.id) &&
-        Objects.equals(this.applicationId, document.applicationId) &&
-        Objects.equals(this.filename, document.filename) &&
-        Objects.equals(this.extension, document.extension) &&
-        Objects.equals(this.mimeType, document.mimeType) &&
-        Objects.equals(this.size, document.size) &&
-        Objects.equals(this.originalId, document.originalId) &&
+    return Objects.equals(this.applicationId, document.applicationId) &&
         Objects.equals(this.creationTime, document.creationTime) &&
         Objects.equals(this.expirationTime, document.expirationTime) &&
+        Objects.equals(this.extension, document.extension) &&
+        Objects.equals(this.filename, document.filename) &&
+        Objects.equals(this.id, document.id) &&
+        Objects.equals(this.mimeType, document.mimeType) &&
+        Objects.equals(this.originalId, document.originalId) &&
         Objects.equals(this.page, document.page) &&
-        Objects.equals(this.tags, document.tags) &&
-        Objects.equals(this.rotationAngle, document.rotationAngle);
+        Objects.equals(this.rotationAngle, document.rotationAngle) &&
+        Objects.equals(this.size, document.size) &&
+        Objects.equals(this.tags, document.tags);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, applicationId, filename, extension, mimeType, size, originalId, creationTime, expirationTime, page, tags, rotationAngle);
+    return Objects.hash(applicationId, creationTime, expirationTime, extension, filename, id, mimeType, originalId, page, rotationAngle, size, tags);
   }
 
 
@@ -396,18 +396,18 @@ public class Document {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class Document {\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    applicationId: ").append(toIndentedString(applicationId)).append("\n");
-    sb.append("    filename: ").append(toIndentedString(filename)).append("\n");
-    sb.append("    extension: ").append(toIndentedString(extension)).append("\n");
-    sb.append("    mimeType: ").append(toIndentedString(mimeType)).append("\n");
-    sb.append("    size: ").append(toIndentedString(size)).append("\n");
-    sb.append("    originalId: ").append(toIndentedString(originalId)).append("\n");
     sb.append("    creationTime: ").append(toIndentedString(creationTime)).append("\n");
     sb.append("    expirationTime: ").append(toIndentedString(expirationTime)).append("\n");
+    sb.append("    extension: ").append(toIndentedString(extension)).append("\n");
+    sb.append("    filename: ").append(toIndentedString(filename)).append("\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    mimeType: ").append(toIndentedString(mimeType)).append("\n");
+    sb.append("    originalId: ").append(toIndentedString(originalId)).append("\n");
     sb.append("    page: ").append(toIndentedString(page)).append("\n");
-    sb.append("    tags: ").append(toIndentedString(tags)).append("\n");
     sb.append("    rotationAngle: ").append(toIndentedString(rotationAngle)).append("\n");
+    sb.append("    size: ").append(toIndentedString(size)).append("\n");
+    sb.append("    tags: ").append(toIndentedString(tags)).append("\n");
     sb.append("}");
     return sb.toString();
   }
