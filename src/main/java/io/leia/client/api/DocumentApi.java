@@ -77,7 +77,7 @@ public class DocumentApi {
         <tr><td> 401 </td><td> Not logged in </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call createDocumentCall(String token, String filename, InputStream body, Boolean b64, Integer ttl, List<String> tags, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call createDocumentCall(String token, String filename, byte[] body, Boolean b64, Integer ttl, List<String> tags, final ApiCallback _callback) throws ApiException {
         Object localVarPostBody = body;
 
         // create path and map variables
@@ -127,7 +127,7 @@ public class DocumentApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call createDocumentValidateBeforeCall(String token, String filename, InputStream body, Boolean b64, Integer ttl, List<String> tags, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call createDocumentValidateBeforeCall(String token, String filename, byte[] body, Boolean b64, Integer ttl, List<String> tags, final ApiCallback _callback) throws ApiException {
         
         // verify the required parameter 'token' is set
         if (token == null) {
@@ -168,7 +168,7 @@ public class DocumentApi {
         <tr><td> 401 </td><td> Not logged in </td><td>  -  </td></tr>
      </table>
      */
-    public Document createDocument(String token, String filename, InputStream body, Boolean b64, Integer ttl, List<String> tags) throws ApiException {
+    public Document createDocument(String token, String filename, byte[] body, Boolean b64, Integer ttl, List<String> tags) throws ApiException {
         ApiResponse<Document> localVarResp = createDocumentWithHttpInfo(token, filename, body, b64, ttl, tags);
         return localVarResp.getData();
     }
@@ -191,7 +191,7 @@ public class DocumentApi {
         <tr><td> 401 </td><td> Not logged in </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Document> createDocumentWithHttpInfo(String token, String filename, InputStream body, Boolean b64, Integer ttl, List<String> tags) throws ApiException {
+    public ApiResponse<Document> createDocumentWithHttpInfo(String token, String filename, byte[] body, Boolean b64, Integer ttl, List<String> tags) throws ApiException {
         okhttp3.Call localVarCall = createDocumentValidateBeforeCall(token, filename, body, b64, ttl, tags, null);
         Type localVarReturnType = new TypeToken<Document>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
@@ -216,7 +216,7 @@ public class DocumentApi {
         <tr><td> 401 </td><td> Not logged in </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call createDocumentAsync(String token, String filename, InputStream body, Boolean b64, Integer ttl, List<String> tags, final ApiCallback<Document> _callback) throws ApiException {
+    public okhttp3.Call createDocumentAsync(String token, String filename, byte[] body, Boolean b64, Integer ttl, List<String> tags, final ApiCallback<Document> _callback) throws ApiException {
 
         okhttp3.Call localVarCall = createDocumentValidateBeforeCall(token, filename, body, b64, ttl, tags, _callback);
         Type localVarReturnType = new TypeToken<Document>(){}.getType();

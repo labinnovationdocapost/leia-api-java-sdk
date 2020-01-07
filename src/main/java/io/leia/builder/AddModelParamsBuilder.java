@@ -12,7 +12,7 @@ public final class AddModelParamsBuilder {
         addModelParams = new AddModelParams();
     }
 
-    public static AddModelParamsBuilder create(String applicationId, String name, InputStream file) {
+    public static AddModelParamsBuilder create(String applicationId, String name, byte[] file) {
         return new AddModelParamsBuilder().withApplicationId(applicationId).withFile(file).withName(name);
     }
 
@@ -26,7 +26,7 @@ public final class AddModelParamsBuilder {
         return this;
     }
 
-    public AddModelParamsBuilder withFile(InputStream file) {
+    public AddModelParamsBuilder withFile(byte[] file) {
         addModelParams.setFile(file);
         return this;
     }
