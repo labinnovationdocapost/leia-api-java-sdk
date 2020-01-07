@@ -104,7 +104,6 @@ public class Leia {
     }
     public LoginToken login(Boolean force) throws LeiaException {
         LocalDateTime datetime = LocalDateTime.now();
-        System.out.println("login");
         if(!force) {
             if(token != null)
                 return token;
@@ -125,7 +124,6 @@ public class Leia {
 
     private synchronized Boolean tryCorrectError(ApiException e, LocalDateTime errorTime) throws LeiaException {
         if(lastError != null && errorTime.isBefore(lastError)) {
-            System.out.println("exclude");
             return true;
         }
         if(error > 0)
@@ -133,7 +131,6 @@ public class Leia {
 
         lastError = LocalDateTime.now();
 
-        System.out.println(error);
         error++;
 
         if(e.getCode() == 401)
@@ -151,7 +148,6 @@ public class Leia {
 
     private void verifyToken() throws LeiaException {
         if(token == null) {
-            System.out.println("not log");
             login();
         }
     }
@@ -164,7 +160,6 @@ public class Leia {
     }
     public Document getDocument(String documentId) throws LeiaException {
         LocalDateTime datetime = LocalDateTime.now();
-        System.out.println("createDocument");
         verifyToken();
 
         try {
@@ -181,7 +176,6 @@ public class Leia {
     //region getDocumentContent
     public <T> T getDocumentContent(GetDocumentContentParams params) throws LeiaException {
         LocalDateTime datetime = LocalDateTime.now();
-        System.out.println("getDocumentContent");
         verifyToken();
 
         try {
@@ -207,20 +201,19 @@ public class Leia {
     //endregion
 
     //region createDocument
-    public Document createDocument(String filename, InputStream body) throws LeiaException {
+    public Document createDocument(String filename, byte[] body) throws LeiaException {
         return createDocument(filename, body, null, null, null);
     }
-    public Document createDocument(String filename, InputStream body, Boolean b64) throws LeiaException {
+    public Document createDocument(String filename, byte[] body, Boolean b64) throws LeiaException {
         return createDocument(filename, body, b64,null, null);
 
     }
-    public Document createDocument(String filename, InputStream body, Boolean b64, Integer ttl) throws LeiaException {
+    public Document createDocument(String filename, byte[] body, Boolean b64, Integer ttl) throws LeiaException {
         return createDocument(filename, body, b64, ttl,null);
 
     }
-    public Document createDocument(String filename, InputStream body, Boolean b64, Integer ttl, List<String> tags) throws LeiaException {
+    public Document createDocument(String filename, byte[] body, Boolean b64, Integer ttl, List<String> tags) throws LeiaException {
         LocalDateTime datetime = LocalDateTime.now();
-        System.out.println("createDocument");
         verifyToken();
 
         try {
@@ -237,7 +230,6 @@ public class Leia {
     //region getDocumentsTags
     List<String> getDocumentsTags() throws LeiaException {
         LocalDateTime datetime = LocalDateTime.now();
-        System.out.println("getDocumentsTags");
         verifyToken();
 
         try {
@@ -254,7 +246,6 @@ public class Leia {
     //region transformDocument
     public Job transformDocuments(TransformDocumentParams params) throws LeiaException {
         LocalDateTime datetime = LocalDateTime.now();
-        System.out.println("transformDocumentId");
         verifyToken();
         try {
             return documentApi.transformDocumentAsync(token.getToken(), params.getDocumentIds(), params.getOutputType(), params.getInputTag(), params.getOutputTag(), params.getExecuteAfterId(), params.getPageRange(), params.getCallbackUrl(), params.getTransformParams(), params.getTransformBody());
@@ -273,7 +264,6 @@ public class Leia {
     }
     void deleteDocument(String documentId) throws LeiaException {
         LocalDateTime datetime = LocalDateTime.now();
-        System.out.println("deleteDocument");
         verifyToken();
 
         try {
@@ -290,7 +280,6 @@ public class Leia {
     //region modifyDocument
     void modifyDocument(ModifyDocumentParams params) throws LeiaException {
         LocalDateTime datetime = LocalDateTime.now();
-        System.out.println("modifyDocument");
         verifyToken();
 
         try {
@@ -307,7 +296,6 @@ public class Leia {
     //region untagDocument
     void untagDocument(String documentId, String tag) throws LeiaException {
         LocalDateTime datetime = LocalDateTime.now();
-        System.out.println("untagDocument");
         verifyToken();
 
         try {
@@ -324,7 +312,6 @@ public class Leia {
     //region tagDocument
     public void tagDocument(String documentId, String tag) throws LeiaException {
         LocalDateTime datetime = LocalDateTime.now();
-        System.out.println("createDocument");
         verifyToken();
 
         try {
@@ -347,7 +334,6 @@ public class Leia {
 
     public Job getJobResult(String jobId) throws LeiaException {
         LocalDateTime datetime = LocalDateTime.now();
-        System.out.println("getJobResult " + jobId);
         verifyToken();
         try {
             return jobApi.getJob(token.getToken(), jobId);
@@ -392,7 +378,6 @@ public class Leia {
     //region getModels
     public List<Model> getModels(GetModelsParams params) throws LeiaException {
         LocalDateTime datetime = LocalDateTime.now();
-        System.out.println("getModels");
         verifyToken();
         try {
             return modelApi.getModels(token.getToken(), params.getModelId(), params.getModelType(), params.getName() ,params.getDescription() ,params.getInputTypes() ,params.getTags(), params.getCreatedAfter(), params.getCreatedBefore(), params.getOnlyMime(), params.getSort(), params.getOffset(), params.getLimit());
@@ -414,7 +399,6 @@ public class Leia {
     }
     public Model getModel(String modelId) throws LeiaException {
         LocalDateTime datetime = LocalDateTime.now();
-        System.out.println("getModel");
         verifyToken();
         try {
             return modelApi.getModel(token.getToken(), modelId);
@@ -430,7 +414,6 @@ public class Leia {
     //region inferred
     public Job inferredDocuments(InferedDocumentParams params) throws LeiaException {
         LocalDateTime datetime = LocalDateTime.now();
-        System.out.println("inferred");
         verifyToken();
         try {
             return modelApi.applyModelAsync(token.getToken(), params.getModelId(), params.getDocumentIds(), params.getTag(), params.getFormatType(), params.getExecuteAfterId(), params.getPageRange(), params.getCallbackUrl(), params.getModelParams(), params.getApplyBody());
@@ -449,7 +432,6 @@ public class Leia {
     }
     public Model tagModel(String modelId, String tag) throws LeiaException {
         LocalDateTime datetime = LocalDateTime.now();
-        System.out.println("tagModel");
         verifyToken();
         try {
             return modelApi.tagModel(token.getToken(), modelId, tag);
@@ -468,7 +450,6 @@ public class Leia {
     }
     public void untagModel(String modelId, String tag) throws LeiaException {
         LocalDateTime datetime = LocalDateTime.now();
-        System.out.println("untagModel");
         verifyToken();
         try {
             modelApi.untagModel(token.getToken(), modelId, tag);
@@ -486,7 +467,6 @@ public class Leia {
     //region getWorkers
     public List<Worker> getWorkers() throws LeiaException {
         LocalDateTime datetime = LocalDateTime.now();
-        System.out.println("getWorkers");
         verifyToken();
         try {
             return workerApi.getWorkers(token.getToken());
@@ -502,7 +482,6 @@ public class Leia {
     //region worker
     public Worker getWorker(String jobType) throws LeiaException {
         LocalDateTime datetime = LocalDateTime.now();
-        System.out.println("getWorker");
         verifyToken();
         try {
             return workerApi.getWorker(token.getToken(), jobType);
@@ -520,7 +499,6 @@ public class Leia {
     //region healthCheck
     public void healthCheck() throws LeiaException {
         LocalDateTime datetime = LocalDateTime.now();
-        System.out.println("healthCheck");
         verifyToken();
         try {
             healthApi.healthCheck();
@@ -537,7 +515,6 @@ public class Leia {
     //region addModel (Unfinished)
     public Model addModel(AddModelParams addModelParams) throws LeiaException {
         LocalDateTime datetime = LocalDateTime.now();
-        System.out.println("addModel");
         verifyToken();
         try {
             return modelAdminApi.adminCreateModel(token.getToken(), addModelParams.getApplicationId(), addModelParams.getName(), addModelParams.getFile(), addModelParams.getDescription(), addModelParams.getTtl(), addModelParams.getAllowedApplicationIds(), addModelParams.getAllowAllApplications(), addModelParams.getTags());

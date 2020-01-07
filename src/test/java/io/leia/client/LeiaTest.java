@@ -10,13 +10,16 @@ import org.junit.Test;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.lang.reflect.Type;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
 public class LeiaTest {
-    public Model getOrCreateModel(Leia api) throws LeiaException, FileNotFoundException {
+    public Model getOrCreateModel(Leia api) throws LeiaException, IOException {
         List<Model> models = api.getModels(GetModelsParamsBuilder.create().build());
         HashMap<String, Model> dico = new HashMap<>();
         for(Model model : models){
@@ -25,24 +28,32 @@ public class LeiaTest {
         }
 
         Model model = null;
-        if(dico.containsKey("transverse")){
-            model = dico.get("transverse");
+        if(dico.containsKey("transverse2")){
+            model = dico.get("transverse2");
         }
         else {
             model = api.addModel(AddModelParamsBuilder
                     .create("5dceca1246eac2df484031de",
-                            "transverse",
-                            new FileInputStream("C:\\Users\\ctisserand\\Downloads\\5d1dc84b76134ea8778f5d35"))
+                            "transverse2",
+                            Files.readAllBytes(Paths.get("C:\\Users\\ctisserand\\Downloads\\5d1dc84b76134ea8778f5d35")))
                     .build());
         }
         return model;
     }
 
     @Test
-    public void TestLink() throws FileNotFoundException, LeiaException, ExecutionException, InterruptedException {
+    public void TestFetOrCreateModel() throws LeiaException, IOException {
+        Leia api = new Leia("http://127.0.0.1:8080/leia/1.0.0", "p4vxl6NhF08rHHZOBXWIhhYIDlBLfz");
+//        Leia api = new Leia("https://api.leia.io/leia/1.0.0", "c7wyJqqNgu8g4Vnapob4Ekp0rTobSO");
+        Model model = getOrCreateModel(api);
+        assert model != null;
+    }
+
+    @Test
+    public void TestLink() throws IOException, LeiaException, ExecutionException, InterruptedException {
         Leia api = new Leia("http://127.0.0.1:8080/leia/1.0.0", "p4vxl6NhF08rHHZOBXWIhhYIDlBLfz");
         Model model = getOrCreateModel(api);
-        Document doc = api.createDocument("test", new FileInputStream("C:\\Users\\ctisserand\\Documents\\Scanned-image_18-02-2019-150749.pdf"));
+        Document doc = api.createDocument("test", Files.readAllBytes(Paths.get("C:\\Users\\ctisserand\\Documents\\Scanned-image_18-02-2019-150749.pdf")));
         Job job_image = api.transformDocuments(TransformDocumentParamsBuilder
                 .create(doc, TransformTypes.IMAGE)
                 .build());
@@ -59,11 +70,9 @@ public class LeiaTest {
 
         ExecutorService s = Executors.newFixedThreadPool(10);
         Future<Job> future_job_text = s.submit(() -> {
-            System.out.println("future_job_text");
             return api.awaitJob(job_text_doc,1000);
         });
         Future<Job> future_job_predict = s.submit( () -> {
-            System.out.println("future_job_predict");
             return api.awaitJob(job_predict_doc,1000);
         });
 
@@ -87,11 +96,11 @@ public class LeiaTest {
         System.out.println(m.keySet());
     }
     @Test
-    public void All() {
+    public void All() throws IOException {
         try {
             Leia api = new Leia("http://127.0.0.1:8080/leia/1.0.0", "p4vxl6NhF08rHHZOBXWIhhYIDlBLfz");
 //            api.login();
-            Document doc = api.createDocument("test", new FileInputStream("C:\\Users\\ctisserand\\Documents\\Scanned-image_18-02-2019-1507493.pdf"));
+            Document doc = api.createDocument("test", Files.readAllBytes(Paths.get("C:\\Users\\ctisserand\\Documents\\Scanned-image_18-02-2019-150749.pdf")));
             Job job = api.transformDocuments(TransformDocumentParamsBuilder.create(doc, TransformTypes.IMAGE).build());
             job = api.awaitJob(job, 1000);
             Document[] j = JobTools.getResult(job, Document[].class);
@@ -117,7 +126,7 @@ public class LeiaTest {
                     .withFormatType(FormatTypes.CLASSIFICATION)
                     .build());
             job = api.awaitJob(job,1000);
-            System.out.println(JobTools.getResult(job, Map.class));
+            System.out.println(JobTools.getResult(job, Classification.class));
         } catch (LeiaException | FileNotFoundException e) {
             e.printStackTrace();
         }

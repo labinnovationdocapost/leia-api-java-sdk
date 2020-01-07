@@ -6,7 +6,7 @@ import java.util.List;
 public class AddModelParams {
     private String applicationId;
     private String name;
-    private InputStream file;
+    private byte[] file;
     private String description;
     private Integer ttl;
     private List<String> allowedApplicationIds;
@@ -29,11 +29,11 @@ public class AddModelParams {
         this.name = name;
     }
 
-    public InputStream getFile() {
+    public byte[] getFile() {
         return file;
     }
 
-    public void setFile(InputStream file) {
+    public void setFile(byte[] file) {
         this.file = file;
     }
 

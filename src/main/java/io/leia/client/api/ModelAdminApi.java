@@ -296,7 +296,7 @@ public class ModelAdminApi {
         <tr><td> 404 </td><td> Owner application not found </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call adminCreateModelCall(String token, String applicationId, String name, InputStream body, String description, Integer ttl, List<String> allowedApplicationIds, Boolean allowAllApplications, List<String> tags, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call adminCreateModelCall(String token, String applicationId, String name, byte[] body, String description, Integer ttl, List<String> allowedApplicationIds, Boolean allowAllApplications, List<String> tags, final ApiCallback _callback) throws ApiException {
         Object localVarPostBody = body;
 
         // create path and map variables
@@ -355,7 +355,7 @@ public class ModelAdminApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call adminCreateModelValidateBeforeCall(String token, String applicationId, String name, InputStream body, String description, Integer ttl, List<String> allowedApplicationIds, Boolean allowAllApplications, List<String> tags, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call adminCreateModelValidateBeforeCall(String token, String applicationId, String name, byte[] body, String description, Integer ttl, List<String> allowedApplicationIds, Boolean allowAllApplications, List<String> tags, final ApiCallback _callback) throws ApiException {
         
         // verify the required parameter 'token' is set
         if (token == null) {
@@ -406,7 +406,7 @@ public class ModelAdminApi {
         <tr><td> 404 </td><td> Owner application not found </td><td>  -  </td></tr>
      </table>
      */
-    public Model adminCreateModel(String token, String applicationId, String name, InputStream body, String description, Integer ttl, List<String> allowedApplicationIds, Boolean allowAllApplications, List<String> tags) throws ApiException {
+    public Model adminCreateModel(String token, String applicationId, String name, byte[] body, String description, Integer ttl, List<String> allowedApplicationIds, Boolean allowAllApplications, List<String> tags) throws ApiException {
         ApiResponse<Model> localVarResp = adminCreateModelWithHttpInfo(token, applicationId, name, body, description, ttl, allowedApplicationIds, allowAllApplications, tags);
         return localVarResp.getData();
     }
@@ -434,7 +434,7 @@ public class ModelAdminApi {
         <tr><td> 404 </td><td> Owner application not found </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Model> adminCreateModelWithHttpInfo(String token, String applicationId, String name, InputStream body, String description, Integer ttl, List<String> allowedApplicationIds, Boolean allowAllApplications, List<String> tags) throws ApiException {
+    public ApiResponse<Model> adminCreateModelWithHttpInfo(String token, String applicationId, String name, byte[] body, String description, Integer ttl, List<String> allowedApplicationIds, Boolean allowAllApplications, List<String> tags) throws ApiException {
         okhttp3.Call localVarCall = adminCreateModelValidateBeforeCall(token, applicationId, name, body, description, ttl, allowedApplicationIds, allowAllApplications, tags, null);
         Type localVarReturnType = new TypeToken<Model>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
@@ -464,7 +464,7 @@ public class ModelAdminApi {
         <tr><td> 404 </td><td> Owner application not found </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call adminCreateModelAsync(String token, String applicationId, String name, InputStream body, String description, Integer ttl, List<String> allowedApplicationIds, Boolean allowAllApplications, List<String> tags, final ApiCallback<Model> _callback) throws ApiException {
+    public okhttp3.Call adminCreateModelAsync(String token, String applicationId, String name, byte[] body, String description, Integer ttl, List<String> allowedApplicationIds, Boolean allowAllApplications, List<String> tags, final ApiCallback<Model> _callback) throws ApiException {
 
         okhttp3.Call localVarCall = adminCreateModelValidateBeforeCall(token, applicationId, name, body, description, ttl, allowedApplicationIds, allowAllApplications, tags, _callback);
         Type localVarReturnType = new TypeToken<Model>(){}.getType();
