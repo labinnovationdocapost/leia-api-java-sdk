@@ -28,14 +28,14 @@ public class LeiaTest {
         }
 
         Model model = null;
-        if(dico.containsKey("transverse2")){
-            model = dico.get("transverse2");
+        if(dico.containsKey("transverse3")){
+            model = dico.get("transverse3");
         }
         else {
             model = api.addModel(AddModelParamsBuilder
                     .create("5dceca1246eac2df484031de",
-                            "transverse2",
-                            Files.readAllBytes(Paths.get("C:\\Users\\ctisserand\\Downloads\\5d1dc84b76134ea8778f5d35")))
+                            "transverse3",
+                            Files.readAllBytes(Paths.get("C:\\Users\\ctisserand\\Downloads\\5dd2b9fd6578690e688d98d6")))
                     .build());
         }
         return model;
@@ -43,15 +43,15 @@ public class LeiaTest {
 
     @Test
     public void TestFetOrCreateModel() throws LeiaException, IOException {
-        Leia api = new Leia("http://127.0.0.1:8080/leia/1.0.0", "p4vxl6NhF08rHHZOBXWIhhYIDlBLfz");
-//        Leia api = new Leia("https://api.leia.io/leia/1.0.0", "c7wyJqqNgu8g4Vnapob4Ekp0rTobSO");
+//        Leia api = new Leia("http://127.0.0.1:8080/leia/1.0.0", "p4vxl6NhF08rHHZOBXWIhhYIDlBLfz");
+        Leia api = new Leia("http://127.0.0.1:8080/leia/1.0.0", "wDlNJa6wPUSspPQFYNc6ekJpWpL70Z");
         Model model = getOrCreateModel(api);
         assert model != null;
     }
 
     @Test
     public void TestLink() throws IOException, LeiaException, ExecutionException, InterruptedException {
-        Leia api = new Leia("http://127.0.0.1:8080/leia/1.0.0", "p4vxl6NhF08rHHZOBXWIhhYIDlBLfz");
+        Leia api = new Leia("http://127.0.0.1:8080/leia/1.0.0", "wDlNJa6wPUSspPQFYNc6ekJpWpL70Z");
         Model model = getOrCreateModel(api);
         Document doc = api.createDocument("test", Files.readAllBytes(Paths.get("C:\\Users\\ctisserand\\Documents\\Scanned-image_18-02-2019-150749.pdf")));
         Job job_image = api.transformDocuments(TransformDocumentParamsBuilder
@@ -98,7 +98,7 @@ public class LeiaTest {
     @Test
     public void All() throws IOException {
         try {
-            Leia api = new Leia("http://127.0.0.1:8080/leia/1.0.0", "p4vxl6NhF08rHHZOBXWIhhYIDlBLfz");
+            Leia api = new Leia("http://127.0.0.1:8080/leia/1.0.0", "wDlNJa6wPUSspPQFYNc6ekJpWpL70Z");
 //            api.login();
             Document doc = api.createDocument("test", Files.readAllBytes(Paths.get("C:\\Users\\ctisserand\\Documents\\Scanned-image_18-02-2019-150749.pdf")));
             Job job = api.transformDocuments(TransformDocumentParamsBuilder.create(doc, TransformTypes.IMAGE).build());

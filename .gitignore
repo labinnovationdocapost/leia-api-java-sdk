@@ -20,3 +20,9 @@ target
 .gradle
 build
 .idea
+.openapi-generator
+.settings
+.openapi-generator-ignore
+.classpath
+.project
+.travis.yml

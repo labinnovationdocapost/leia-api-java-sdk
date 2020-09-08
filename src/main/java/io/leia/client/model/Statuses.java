@@ -32,7 +32,9 @@ public enum Statuses {
   WAITING("WAITING"),
   
   READY("READY"),
-  
+
+  LOADING_MODEL("LOADING_MODEL"),
+
   NEW("NEW"),
   
   PROCESSING("PROCESSING"),
