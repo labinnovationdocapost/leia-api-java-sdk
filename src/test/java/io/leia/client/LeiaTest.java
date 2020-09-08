@@ -28,14 +28,14 @@ public class LeiaTest {
         }
 
         Model model = null;
-        if(dico.containsKey("transverse2")){
-            model = dico.get("transverse2");
+        if(dico.containsKey("transverse3")){
+            model = dico.get("transverse3");
         }
         else {
             model = api.addModel(AddModelParamsBuilder
                     .create("5dceca1246eac2df484031de",
-                            "transverse2",
-                            Files.readAllBytes(Paths.get("C:\\Users\\ctisserand\\Downloads\\5d1dc84b76134ea8778f5d35")))
+                            "transverse3",
+                            Files.readAllBytes(Paths.get("C:\\Users\\ctisserand\\Downloads\\5dd2b9fd6578690e688d98d6")))
                     .build());
         }
         return model;
@@ -43,8 +43,8 @@ public class LeiaTest {
 
     @Test
     public void TestFetOrCreateModel() throws LeiaException, IOException {
+//        Leia api = new Leia("http://127.0.0.1:8080/leia/1.0.0", "xxxxxxxxxxxxxxxxxxxx");
         Leia api = new Leia("http://127.0.0.1:8080/leia/1.0.0", "xxxxxxxxxxxxxxxxxxxx");
-//        Leia api = new Leia("https://api.leia.io/leia/1.0.0", "xxxxxxxxxxxxxxxxxxxx");
         Model model = getOrCreateModel(api);
         assert model != null;
     }
