@@ -28,7 +28,9 @@ import com.google.gson.stream.JsonWriter;
  */
 @JsonAdapter(Statuses.Adapter.class)
 public enum Statuses {
-  
+
+  STARTING("STARTING"),
+
   WAITING("WAITING"),
   
   READY("READY"),

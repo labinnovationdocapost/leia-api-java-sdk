@@ -6,6 +6,7 @@ import io.leia.client.model.TransformBody;
 import io.leia.client.model.TransformTypes;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,6 +20,7 @@ public class TransformDocumentParams {
     private String callbackUrl;
     private Object transformParams;
     private TransformBody transformBody;
+    private HashMap<String, String> callbackHeaders;
 
     public List<String> getDocumentIds() {
         return documentIds;
@@ -110,5 +112,13 @@ public class TransformDocumentParams {
 
     public void setTransformBody(TransformBody transformBody) {
         this.transformBody = transformBody;
+    }
+
+    public HashMap<String, String> getCallbackHeaders() {
+        return callbackHeaders;
+    }
+
+    public void setCallbackHeaders(HashMap<String, String> callbackHeaders) {
+        this.callbackHeaders = callbackHeaders;
     }
 }

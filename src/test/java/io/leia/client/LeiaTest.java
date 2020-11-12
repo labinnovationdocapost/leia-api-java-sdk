@@ -1,6 +1,6 @@
 package io.leia.client;
 
-import com.google.gson.reflect.TypeToken;
+import com.google.common.io.ByteStreams;
 import io.leia.Leia;
 import io.leia.LeiaException;
 import io.leia.builder.*;
@@ -8,17 +8,17 @@ import io.leia.client.model.*;
 import io.leia.custom.client.tools.JobTools;
 import org.junit.Test;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.stream.Collectors;
+
+import org.apache.commons.lang3.tuple.Pair;
 
 public class LeiaTest {
+
     public Model getOrCreateModel(Leia api) throws LeiaException, IOException {
         List<Model> models = api.getModels(GetModelsParamsBuilder.create().build());
         HashMap<String, Model> dico = new HashMap<>();
@@ -35,7 +35,7 @@ public class LeiaTest {
             model = api.addModel(AddModelParamsBuilder
                     .create("5dceca1246eac2df484031de",
                             "transverse3",
-                            Files.readAllBytes(Paths.get("C:\\Users\\ctisserand\\Downloads\\5dd2b9fd6578690e688d98d6")))
+                            ByteStreams.toByteArray(this.getClass().getClassLoader().getResourceAsStream("mobilenet.model")))
                     .build());
         }
         return model;
@@ -51,56 +51,58 @@ public class LeiaTest {
 
     @Test
     public void TestLink() throws IOException, LeiaException, ExecutionException, InterruptedException {
+        ExecutorService s = Executors.newFixedThreadPool(10);
         Leia api = new Leia("http://127.0.0.1:8080/leia/1.0.0", "xxxxxxxxxxxxxxxxxxxx");
+        System.out.println("Connected to Leia");
         Model model = getOrCreateModel(api);
-        Document doc = api.createDocument("test", Files.readAllBytes(Paths.get("C:\\Users\\ctisserand\\Documents\\Scanned-image_18-02-2019-150749.pdf")));
+        System.out.println("Document found");
+        Document doc = api.createDocument("test", ByteStreams.toByteArray(this.getClass().getClassLoader().getResourceAsStream("lorem_ipsum.pdf")));
+        System.out.printf("Document created : %s%n", doc);
         Job job_image = api.transformDocuments(TransformDocumentParamsBuilder
                 .create(doc, TransformTypes.IMAGE)
+                .withOutputTag("PDF_IMAGES")
                 .build());
-        Job job_text_doc = api.transformDocuments(TransformDocumentParamsBuilder
-                .create(doc, TransformTypes.TEXT)
-                .executeAfter(job_image)
-                .build());
-        Job job_predict_doc = api.inferredDocuments(InferedDocumentParamsBuilder
+        System.out.println("Job pdf to image created");
+        Job job_predict = api.inferredDocuments(InferedDocumentParamsBuilder
                 .create(model, doc)
                 .withFormatType(FormatTypes.CLASSIFICATION)
                 .executeAfter(job_image)
                 .withPageRange("0")
                 .build());
 
-        ExecutorService s = Executors.newFixedThreadPool(10);
-        Future<Job> future_job_text = s.submit(() -> {
-            return api.awaitJob(job_text_doc,1000);
+        System.out.println("Job classification created");
+
+        ConditionalJobBuilder cjb = ConditionalJobBuilder.create(job_predict).addRule("r1",
+                ConditionalJobRuleBuilder.create()
+                        .addCondition("category", Pair.of(ConditionOperatorTypes.EQUAL, "AUTRE"))
+                        .addCondition("accuracy", Pair.of(ConditionOperatorTypes.GREATER_OR_EQUAL, 0.5))
+                        .addJob(ConditionalJobRuleJobBuilder.Transform.createImageToText().addDocument(doc).withTag("PDF_IMAGES").withPageRange("0").build())
+                        .addJob(ConditionalJobRuleJobBuilder.Model.create(model).addDocument(doc).withFormatType(FormatTypes.CLASSIFICATION).withTag("PDF_IMAGES").withPageRange("0").build())
+                        .build()
+        );
+        Job job_conditional_doc = api.conditionalJob(cjb.build());
+        System.out.printf("Job conditional ocr + classif created : %s", job_conditional_doc.getId());
+        System.out.println("Awaiting job");
+
+        Future<Job> future_job_conditional = s.submit(() -> {
+            return api.awaitJob(job_conditional_doc,1000);
         });
-        Future<Job> future_job_predict = s.submit( () -> {
-            return api.awaitJob(job_predict_doc,1000);
-        });
+        Job job_conditional = future_job_conditional.get();
+        System.out.println("Job finished");
 
-
-
-        Job job_text = future_job_text.get();
-        Job job_predict = future_job_predict.get();
-
-//        Document[] j = JobTools.getResult(job_text, Document[].class);
-//        System.out.println(Arrays.stream(j).map(Document::getId).collect(Collectors.joining(",")));
-//        System.out.println(Arrays.stream(j).map(x -> {
-//            try {
-//                return (String)api.getDocumentContent(GetDocumentContentParamsBuilder.create(x).returnAs(String.class).build());
-//            } catch (LeiaException e) {
-//                e.printStackTrace();
-//                return null;
-//            }
-//        }).collect(Collectors.joining("\n********************************************************************************\n")));
-        System.out.println(job_predict.getResultType());
-        Map<String,Classification> m = JobTools.getResult(job_predict);
-        System.out.println(m.keySet());
+        System.out.printf("Result type: %s", job_conditional.getResultType());
+        System.out.printf("Result : \n%s", job_conditional.getResult());
+        JobTools.Result result = JobTools.getResults(job_conditional);
+        System.out.println(result.getConditional().get("r1"));
+        System.out.println(result.getConditional().get("r1").getDocuments().get(0));
+        System.out.println(result.getConditional().get("r1").getClassifications().get(0));
     }
     @Test
     public void All() throws IOException {
         try {
             Leia api = new Leia("http://127.0.0.1:8080/leia/1.0.0", "xxxxxxxxxxxxxxxxxxxx");
 //            api.login();
-            Document doc = api.createDocument("test", Files.readAllBytes(Paths.get("C:\\Users\\ctisserand\\Documents\\Scanned-image_18-02-2019-150749.pdf")));
+            Document doc = api.createDocument("test", ByteStreams.toByteArray(this.getClass().getClassLoader().getResourceAsStream("lorem_ipsum.pdf")));
             Job job = api.transformDocuments(TransformDocumentParamsBuilder.create(doc, TransformTypes.IMAGE).build());
             job = api.awaitJob(job, 1000);
             Document[] j = JobTools.getResult(job, Document[].class);

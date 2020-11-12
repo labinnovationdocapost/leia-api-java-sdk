@@ -4,7 +4,7 @@ apply plugin: 'java'
 apply plugin: 'maven-publish'
 
 group = 'io.leia'
-version = '0.0.6'
+version = '1.0.0'
 
 publishing {
     repositories {
@@ -122,7 +122,7 @@ dependencies {
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
     compile 'org.threeten:threetenbp:1.4.0'
     compile group: 'com.google.guava', name: 'guava', version: '29.0-jre'
-    testCompile 'junit:junit:4.12'
+    testCompile 'junit:junit:4.13.1'
 }
 
 javadoc {

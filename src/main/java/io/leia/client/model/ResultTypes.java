@@ -39,7 +39,9 @@ public enum ResultTypes {
   
   DICT_OBJECT_("dict[object]"),
   
-  DICT_CLASSIFICATION_("dict[classification]");
+  DICT_CLASSIFICATION_("dict[classification]"),
+
+  CONDITIONAL("conditional");
 
   private String value;
 
