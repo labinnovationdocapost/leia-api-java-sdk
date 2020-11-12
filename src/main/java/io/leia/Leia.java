@@ -324,6 +324,26 @@ public class Leia {
         }
     }
     //endregion
+
+    //region conditional job
+    public Job conditionalJob(ConditionalJobParams params) throws LeiaException {
+        LocalDateTime datetime = LocalDateTime.now();
+        verifyToken();
+        try {
+            return jobApi.createConditionalJob(token.getToken(), params.getExecuteAfterId(), params, params.getCallbackUrl());
+        } catch (ApiException e) {
+            e.printStackTrace();
+            System.out.println(e.getResponseBody());
+            if(e.getCode() == 404) {
+                return null;
+            }
+            if(tryCorrectError(e,datetime)){
+                return conditionalJob(params);
+            }
+            throw createLeiaException(e);
+        }
+    }
+    //endregion
     //endregion
 
     //region job
@@ -338,6 +358,7 @@ public class Leia {
         try {
             return jobApi.getJob(token.getToken(), jobId);
         } catch (ApiException e) {
+            e.printStackTrace();
             if(tryCorrectError(e, datetime)){
                 return getJobResult(jobId);
             }

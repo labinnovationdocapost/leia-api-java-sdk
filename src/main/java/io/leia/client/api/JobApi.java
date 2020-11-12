@@ -13,6 +13,7 @@
 
 package io.leia.client.api;
 
+import io.leia.builder.params.ConditionalJobParams;
 import io.leia.client.ApiCallback;
 import io.leia.client.ApiClient;
 import io.leia.client.ApiException;
@@ -57,6 +58,124 @@ public class JobApi {
         this.localVarApiClient = apiClient;
     }
 
+    /**
+     *
+     * @param token
+     * @param executeAfterId
+     * @param body
+     * @param callbackUrl
+     * @param _callback
+     * @return
+     * @throws ApiException
+     */
+    public okhttp3.Call createConditionalJobCall(String token, String executeAfterId, ConditionalJobParams body, String callbackUrl, final ApiCallback _callback) throws ApiException {
+        Object localVarPostBody = body;
+
+        // create path and map variables
+        String localVarPath = "/job/conditional/{execute_after_id}"
+                .replaceAll("\\{" + "execute_after_id" + "\\}", localVarApiClient.escapeString(executeAfterId.toString()));;
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+        if (callbackUrl != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("callback_url", callbackUrl));
+        }
+
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+        if (token != null) {
+            localVarHeaderParams.put("token", localVarApiClient.parameterToString(token));
+        }
+
+        Map<String, String> localVarCookieParams = new HashMap<String, String>();
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+        final String[] localVarAccepts = {
+                "application/json"
+        };
+        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) {
+            localVarHeaderParams.put("Accept", localVarAccept);
+        }
+
+        final String[] localVarContentTypes = {
+                "application/json"
+        };
+        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
+        localVarHeaderParams.put("Content-Type", localVarContentType);
+
+        String[] localVarAuthNames = new String[] {  };
+        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+    }
+
+    @SuppressWarnings("rawtypes")
+    private okhttp3.Call createConditionalJobValidateBeforeCall(String token, String executeAfterId, ConditionalJobParams body, String callbackUrl, final ApiCallback _callback) throws ApiException {
+
+        // verify the required parameter 'token' is set
+        if (token == null) {
+            throw new ApiException("Missing the required parameter 'token' when calling createDocument(Async)");
+        }
+
+        // verify the required parameter 'filename' is set
+        if (executeAfterId == null) {
+            throw new ApiException("Missing the required parameter 'filename' when calling createDocument(Async)");
+        }
+
+        // verify the required parameter 'body' is set
+        if (body == null) {
+            throw new ApiException("Missing the required parameter 'body' when calling createDocument(Async)");
+        }
+
+
+        okhttp3.Call localVarCall = createConditionalJobCall(token, executeAfterId, body, callbackUrl, _callback);
+        return localVarCall;
+
+    }
+
+    /**
+     *
+     * @param token
+     * @param executeAfterId
+     * @param body
+     * @param callbackUrl
+     * @return
+     * @throws ApiException
+     */
+    public Job createConditionalJob(String token, String executeAfterId, ConditionalJobParams body, String callbackUrl) throws ApiException {
+        ApiResponse<Job> localVarResp = createConditionalJobWithHttpInfo(token, executeAfterId, body, callbackUrl);
+        return localVarResp.getData();
+    }
+
+    /**
+     *
+     * @param token
+     * @param executeAfterId
+     * @param body
+     * @param callbackUrl
+     * @return
+     * @throws ApiException
+     */
+    public ApiResponse<Job> createConditionalJobWithHttpInfo(String token, String executeAfterId, ConditionalJobParams body, String callbackUrl) throws ApiException {
+        okhttp3.Call localVarCall = createConditionalJobValidateBeforeCall(token, executeAfterId, body, callbackUrl, null);
+        Type localVarReturnType = new TypeToken<Job>(){}.getType();
+        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    }
+
+    /**
+     *
+     * @param token
+     * @param executeAfterId
+     * @param body
+     * @param callbackUrl
+     * @param _callback
+     * @return
+     * @throws ApiException
+     */
+    public okhttp3.Call createConditionalJobAsync(String token, String executeAfterId, ConditionalJobParams body, String callbackUrl, final ApiCallback<Job> _callback) throws ApiException {
+
+        okhttp3.Call localVarCall = createConditionalJobValidateBeforeCall(token, executeAfterId, body, callbackUrl, _callback);
+        Type localVarReturnType = new TypeToken<Job>(){}.getType();
+        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
+        return localVarCall;
+    }
     /**
      * Build call for cancelJob
      * @param token The login token obtained via GET /login/{api_key} (required)
