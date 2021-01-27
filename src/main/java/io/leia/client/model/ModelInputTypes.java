@@ -13,71 +13,68 @@
 
 package io.leia.client.model;
 
-import java.util.Objects;
-import java.util.Arrays;
-import com.google.gson.annotations.SerializedName;
-
-import java.io.IOException;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+
+import java.io.IOException;
 
 /**
  * Gets or Sets ModelInputTypes
  */
 @JsonAdapter(ModelInputTypes.Adapter.class)
 public enum ModelInputTypes {
-  
-  IMAGE("image"),
-  
-  TEXT("text"),
 
-  VIDEO("video"),
+    IMAGE("image"),
 
-  TEXT_TREE("text_tree"),
-  
-  LIST_IMAGE_("list[image]"),
-  
-  LIST_TEXT_("list[text]"),
+    TEXT("text"),
 
-  LIST_TEXT_TREE_("list[text_tree]");
+    VIDEO("video"),
 
-  private String value;
+    TEXT_TREE("text_tree"),
 
-  ModelInputTypes(String value) {
-    this.value = value;
-  }
+    LIST_IMAGE_("list[image]"),
 
-  public String getValue() {
-    return value;
-  }
+    LIST_TEXT_("list[text]"),
 
-  @Override
-  public String toString() {
-    return String.valueOf(value);
-  }
+    LIST_TEXT_TREE_("list[text_tree]");
 
-  public static ModelInputTypes fromValue(String value) {
-    for (ModelInputTypes b : ModelInputTypes.values()) {
-      if (b.value.equals(value)) {
-        return b;
-      }
+    private String value;
+
+    ModelInputTypes(String value) {
+        this.value = value;
     }
-    throw new IllegalArgumentException("Unexpected value '" + value + "'");
-  }
 
-  public static class Adapter extends TypeAdapter<ModelInputTypes> {
-    @Override
-    public void write(final JsonWriter jsonWriter, final ModelInputTypes enumeration) throws IOException {
-      jsonWriter.value(enumeration.getValue());
+    public String getValue() {
+        return value;
     }
 
     @Override
-    public ModelInputTypes read(final JsonReader jsonReader) throws IOException {
-      String value = jsonReader.nextString();
-      return ModelInputTypes.fromValue(value);
+    public String toString() {
+        return String.valueOf(value);
     }
-  }
+
+    public static ModelInputTypes fromValue(String value) {
+        for (ModelInputTypes b : ModelInputTypes.values()) {
+            if (b.value.equals(value)) {
+                return b;
+            }
+        }
+        throw new IllegalArgumentException("Unexpected value '" + value + "'");
+    }
+
+    public static class Adapter extends TypeAdapter<ModelInputTypes> {
+        @Override
+        public void write(final JsonWriter jsonWriter, final ModelInputTypes enumeration) throws IOException {
+            jsonWriter.value(enumeration.getValue());
+        }
+
+        @Override
+        public ModelInputTypes read(final JsonReader jsonReader) throws IOException {
+            String value = jsonReader.nextString();
+            return ModelInputTypes.fromValue(value);
+        }
+    }
 }
 
