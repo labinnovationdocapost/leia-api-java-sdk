@@ -32,6 +32,8 @@ public enum ModelInputTypes {
   IMAGE("image"),
   
   TEXT("text"),
+
+  VIDEO("video"),
   
   LIST_IMAGE_("list[image]"),
   
