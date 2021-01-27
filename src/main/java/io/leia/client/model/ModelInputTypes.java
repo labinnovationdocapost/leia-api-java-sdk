@@ -34,10 +34,14 @@ public enum ModelInputTypes {
   TEXT("text"),
 
   VIDEO("video"),
+
+  TEXT_TREE("text_tree"),
   
   LIST_IMAGE_("list[image]"),
   
-  LIST_TEXT_("list[text]");
+  LIST_TEXT_("list[text]"),
+
+  LIST_TEXT_TREE_("list[text_tree]");
 
   private String value;
 
