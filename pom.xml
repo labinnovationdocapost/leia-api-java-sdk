@@ -5,7 +5,7 @@
     <artifactId>leia-api-sdk</artifactId>
     <packaging>jar</packaging>
     <name>leia-api-sdk</name>
-    <version>1.0.1</version>
+    <version>1.0.3</version>
     <url>https://github.com/openapitools/openapi-generator</url>
     <description>OpenAPI Java</description>
     <scm>
@@ -252,7 +252,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>29.0-jre</version>
+            <version>30.1.1-jre</version>
         </dependency>
         <!-- test dependencies -->
         <dependency>

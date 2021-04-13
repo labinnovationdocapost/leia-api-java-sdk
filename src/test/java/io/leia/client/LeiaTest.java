@@ -28,13 +28,16 @@ public class LeiaTest {
         }
 
         Model model = null;
-        if(dico.containsKey("transverse3")){
-            model = dico.get("transverse3");
+        if(dico.containsKey("Classification demo.leia.io")){
+            model = dico.get("Classification demo.leia.io");
+        }
+        else if(dico.containsKey("[TEST] Classification demo.leia.io")){
+            model = dico.get("[TEST] Classification demo.leia.io");
         }
         else {
             model = api.addModel(AddModelParamsBuilder
                     .create("5dceca1246eac2df484031de",
-                            "transverse3",
+                            "[TEST] Classification demo.leia.io",
                             ByteStreams.toByteArray(this.getClass().getClassLoader().getResourceAsStream("mobilenet.model")))
                     .build());
         }

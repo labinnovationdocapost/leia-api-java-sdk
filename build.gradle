@@ -4,7 +4,7 @@ apply plugin: 'java'
 apply plugin: 'maven-publish'
 
 group = 'io.leia'
-version = '1.0.1'
+version = '1.0.3'
 
 publishing {
     repositories {
@@ -121,7 +121,7 @@ dependencies {
     compile 'io.gsonfire:gson-fire:1.8.3'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
     compile 'org.threeten:threetenbp:1.4.0'
-    compile group: 'com.google.guava', name: 'guava', version: '29.0-jre'
+    compile group: 'com.google.guava', name: 'guava', version: '30.1.1-jre'
     testCompile 'junit:junit:4.13.1'
 }
 
