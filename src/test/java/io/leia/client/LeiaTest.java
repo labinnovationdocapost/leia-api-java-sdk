@@ -4,6 +4,7 @@ import com.google.common.io.ByteStreams;
 import io.leia.Leia;
 import io.leia.LeiaException;
 import io.leia.builder.*;
+import io.leia.client.api.ApplicationAdminApi;
 import io.leia.client.model.*;
 import io.leia.custom.client.tools.JobTools;
 import org.junit.Test;
@@ -19,6 +20,10 @@ import org.apache.commons.lang3.tuple.Pair;
 
 public class LeiaTest {
 
+    public String serverUrl = "http://127.0.0.1:9000/leia/1.0.0";
+    public String apiKey = "xxxxxxxxxxxxxxxxxxxx";
+    public String applicationId = "5dceca1246eac2df484031de";
+
     public Model getOrCreateModel(Leia api) throws LeiaException, IOException {
         List<Model> models = api.getModels(GetModelsParamsBuilder.create().build());
         HashMap<String, Model> dico = new HashMap<>();
@@ -27,7 +32,7 @@ public class LeiaTest {
             dico.put(model.getName(), model);
         }
 
-        Model model = null;
+        Model model;
         if(dico.containsKey("Classification demo.leia.io")){
             model = dico.get("Classification demo.leia.io");
         }
@@ -36,7 +41,7 @@ public class LeiaTest {
         }
         else {
             model = api.addModel(AddModelParamsBuilder
-                    .create("5dceca1246eac2df484031de",
+                    .create(applicationId,
                             "[TEST] Classification demo.leia.io",
                             ByteStreams.toByteArray(this.getClass().getClassLoader().getResourceAsStream("mobilenet.model")))
                     .build());
@@ -46,8 +51,7 @@ public class LeiaTest {
 
     @Test
     public void TestFetOrCreateModel() throws LeiaException, IOException {
-//        Leia api = new Leia("http://127.0.0.1:8080/leia/1.0.0", "xxxxxxxxxxxxxxxxxxxx");
-        Leia api = new Leia("http://127.0.0.1:8080/leia/1.0.0", "xxxxxxxxxxxxxxxxxxxx");
+        Leia api = new Leia(serverUrl, apiKey);
         Model model = getOrCreateModel(api);
         assert model != null;
     }
@@ -55,7 +59,7 @@ public class LeiaTest {
     @Test
     public void TestLink() throws IOException, LeiaException, ExecutionException, InterruptedException {
         ExecutorService s = Executors.newFixedThreadPool(10);
-        Leia api = new Leia("http://127.0.0.1:8080/leia/1.0.0", "xxxxxxxxxxxxxxxxxxxx");
+        Leia api = new Leia(serverUrl, apiKey);
         System.out.println("Connected to Leia");
         Model model = getOrCreateModel(api);
         System.out.println("Document found");
@@ -103,8 +107,7 @@ public class LeiaTest {
     @Test
     public void All() throws IOException {
         try {
-            Leia api = new Leia("http://127.0.0.1:8080/leia/1.0.0", "xxxxxxxxxxxxxxxxxxxx");
-//            api.login();
+            Leia api = new Leia(serverUrl, apiKey);
             Document doc = api.createDocument("test", ByteStreams.toByteArray(this.getClass().getClassLoader().getResourceAsStream("lorem_ipsum.pdf")));
             Job job = api.transformDocuments(TransformDocumentParamsBuilder.create(doc, TransformTypes.IMAGE).build());
             job = api.awaitJob(job, 1000);
