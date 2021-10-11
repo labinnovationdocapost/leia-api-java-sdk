@@ -1,6 +1,6 @@
 # DocumentAdminApi
 
-All URIs are relative to *http://localhost/leia/1.0.0*
+All URIs are relative to *http://127.0.0.1:9000/leia/1.0.0*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -8,8 +8,10 @@ Method | HTTP request | Description
 [**adminDeleteDocument**](DocumentAdminApi.md#adminDeleteDocument) | **DELETE** /admin/{application_id}/document/{document_id} | Deletes a document from Leia API (admin only)
 [**adminEditDocument**](DocumentAdminApi.md#adminEditDocument) | **PATCH** /admin/{application_id}/document/{document_id} | Updates a document in Leia API (admin only)
 [**adminGetDocument**](DocumentAdminApi.md#adminGetDocument) | **GET** /admin/{application_id}/document/{document_id} | Retrieves a document from Leia API (admin only)
+[**adminGetDocumentContents**](DocumentAdminApi.md#adminGetDocumentContents) | **GET** /admin/{application_id}/document/{document_id}/file_contents | Retrieves a document from Leia API (admin only)
 [**adminGetDocuments**](DocumentAdminApi.md#adminGetDocuments) | **GET** /admin/document | Retrieves documents from Leia API (admin only) (paginated)
 [**adminGetDocumentsTags**](DocumentAdminApi.md#adminGetDocumentsTags) | **GET** /admin/document/tag | Retrieves documents&#39; tags from Leia API (admin only)
+[**adminGetDocumentsZip**](DocumentAdminApi.md#adminGetDocumentsZip) | **GET** /admin/document/zip | Retrieves documents from Leia API (admin only) (paginated)
 [**adminTagDocument**](DocumentAdminApi.md#adminTagDocument) | **POST** /admin/{application_id}/document/{document_id}/tag/{tag} | Tags a document (admin only)
 [**adminTransformDocumentAsync**](DocumentAdminApi.md#adminTransformDocumentAsync) | **POST** /admin/{application_id}/document/{document_ids}/transform/{output_type} | Asynchronously converts a document within Leia API (admin only)
 [**adminUntagDocument**](DocumentAdminApi.md#adminUntagDocument) | **DELETE** /admin/{application_id}/document/{document_id}/tag/{tag} | Untags an document (admin only)
@@ -35,7 +37,7 @@ import io.leia.client.api.DocumentAdminApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://localhost/leia/1.0.0");
+    defaultClient.setBasePath("http://127.0.0.1:9000/leia/1.0.0");
 
     DocumentAdminApi apiInstance = new DocumentAdminApi(defaultClient);
     String token = "token_example"; // String | The login token obtained via GET /login/{api_key}
@@ -86,7 +88,7 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | A description of the uploaded document |  -  |
-**401** | Bad token |  -  |
+**401** | Not logged in |  -  |
 
 <a name="adminDeleteDocument"></a>
 # **adminDeleteDocument**
@@ -108,7 +110,7 @@ import io.leia.client.api.DocumentAdminApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://localhost/leia/1.0.0");
+    defaultClient.setBasePath("http://127.0.0.1:9000/leia/1.0.0");
 
     DocumentAdminApi apiInstance = new DocumentAdminApi(defaultClient);
     String token = "token_example"; // String | The login token obtained via GET /login/{api_key}
@@ -152,8 +154,7 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **204** | The document was successfully deleted |  -  |
-**401** | Bad token |  -  |
-**403** | Not the owner of the document |  -  |
+**401** | Not logged in |  -  |
 **404** | Document not found |  -  |
 
 <a name="adminEditDocument"></a>
@@ -176,7 +177,7 @@ import io.leia.client.api.DocumentAdminApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://localhost/leia/1.0.0");
+    defaultClient.setBasePath("http://127.0.0.1:9000/leia/1.0.0");
 
     DocumentAdminApi apiInstance = new DocumentAdminApi(defaultClient);
     String token = "token_example"; // String | The login token obtained via GET /login/{api_key}
@@ -227,16 +228,16 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | The documents&#39; metadata, updated with new values |  -  |
-**401** | Bad token |  -  |
+**401** | Not logged in |  -  |
 **404** | Document not found |  -  |
 
 <a name="adminGetDocument"></a>
 # **adminGetDocument**
-> Document adminGetDocument(token, applicationId, documentId, maxSize, jpegCompression, fileContents)
+> Document adminGetDocument(token, applicationId, documentId)
 
 Retrieves a document from Leia API (admin only)
 
-Retrieves a document from Leia API, either as metadata, or the binary contents of the file. This method is only accessible to admins 
+Retrieves a document from Leia API as metadata. This method is only accessible to admins 
 
 ### Example
 ```java
@@ -250,17 +251,14 @@ import io.leia.client.api.DocumentAdminApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://localhost/leia/1.0.0");
+    defaultClient.setBasePath("http://127.0.0.1:9000/leia/1.0.0");
 
     DocumentAdminApi apiInstance = new DocumentAdminApi(defaultClient);
     String token = "token_example"; // String | The login token obtained via GET /login/{api_key}
     String applicationId = "applicationId_example"; // String | The application to which the document to retrieve belongs
     String documentId = "documentId_example"; // String | The id of the document to retrieve
-    Integer maxSize = 56; // Integer | Restrict the size of the image to get (only applicable for documents of type image). The largest dimension of the image will be capped to this dimension. Use only if file_contents=true
-    Integer jpegCompression = 56; // Integer | JPEG compression rate, in percent (only applicable for documents of type image). Use only if file_contents=true
-    Boolean fileContents = true; // Boolean | Should Leia API return the document binary contents, or the document metadata as JSON (false by default)
     try {
-      Document result = apiInstance.adminGetDocument(token, applicationId, documentId, maxSize, jpegCompression, fileContents);
+      Document result = apiInstance.adminGetDocument(token, applicationId, documentId);
       System.out.println(result);
     } catch (ApiException e) {
       System.err.println("Exception when calling DocumentAdminApi#adminGetDocument");
@@ -280,9 +278,6 @@ Name | Type | Description  | Notes
  **token** | **String**| The login token obtained via GET /login/{api_key} |
  **applicationId** | **String**| The application to which the document to retrieve belongs |
  **documentId** | **String**| The id of the document to retrieve |
- **maxSize** | **Integer**| Restrict the size of the image to get (only applicable for documents of type image). The largest dimension of the image will be capped to this dimension. Use only if file_contents&#x3D;true | [optional]
- **jpegCompression** | **Integer**| JPEG compression rate, in percent (only applicable for documents of type image). Use only if file_contents&#x3D;true | [optional]
- **fileContents** | **Boolean**| Should Leia API return the document binary contents, or the document metadata as JSON (false by default) | [optional]
 
 ### Return type
 
@@ -300,18 +295,17 @@ No authorization required
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | The retrieved document&#39;s metadata, or its binary contents |  -  |
-**401** | Bad token |  -  |
-**403** | Not the owner of the document |  -  |
+**200** | The retrieved document&#39;s metadata |  -  |
+**401** | Not logged in |  -  |
 **404** | Document not found |  -  |
 
-<a name="adminGetDocuments"></a>
-# **adminGetDocuments**
-> List&lt;Document&gt; adminGetDocuments(token, applicationId, zipfile, filename, extension, mimeType, originalId, tags, createdAfter, createdBefore, tagResult, sort, offset, limit)
+<a name="adminGetDocumentContents"></a>
+# **adminGetDocumentContents**
+> File adminGetDocumentContents(token, applicationId, documentId, maxSize, jpegCompression)
 
-Retrieves documents from Leia API (admin only) (paginated)
+Retrieves a document from Leia API (admin only)
 
-Retrieves documents which matches the query from Leia API, either as JSON metadata or in a zip file. This method is only accessible to admins
+Retrieves the binary contents of a document from Leia API. This method is only accessible to admins 
 
 ### Example
 ```java
@@ -325,25 +319,97 @@ import io.leia.client.api.DocumentAdminApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://localhost/leia/1.0.0");
+    defaultClient.setBasePath("http://127.0.0.1:9000/leia/1.0.0");
 
     DocumentAdminApi apiInstance = new DocumentAdminApi(defaultClient);
     String token = "token_example"; // String | The login token obtained via GET /login/{api_key}
+    String applicationId = "applicationId_example"; // String | The application to which the document to retrieve belongs
+    String documentId = "documentId_example"; // String | The id of the document to retrieve
+    Integer maxSize = 56; // Integer | Restrict the size of the image to get (only applicable for documents of type image). The largest dimension of the image will be capped to this dimension
+    Integer jpegCompression = 56; // Integer | JPEG compression rate, in percent (only applicable for documents of type image)
+    try {
+      File result = apiInstance.adminGetDocumentContents(token, applicationId, documentId, maxSize, jpegCompression);
+      System.out.println(result);
+    } catch (ApiException e) {
+      System.err.println("Exception when calling DocumentAdminApi#adminGetDocumentContents");
+      System.err.println("Status code: " + e.getCode());
+      System.err.println("Reason: " + e.getResponseBody());
+      System.err.println("Response headers: " + e.getResponseHeaders());
+      e.printStackTrace();
+    }
+  }
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **token** | **String**| The login token obtained via GET /login/{api_key} |
+ **applicationId** | **String**| The application to which the document to retrieve belongs |
+ **documentId** | **String**| The id of the document to retrieve |
+ **maxSize** | **Integer**| Restrict the size of the image to get (only applicable for documents of type image). The largest dimension of the image will be capped to this dimension | [optional]
+ **jpegCompression** | **Integer**| JPEG compression rate, in percent (only applicable for documents of type image) | [optional]
+
+### Return type
+
+[**File**](File.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/octet-stream
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | The retrieved document&#39;s binary contents |  -  |
+**401** | Not logged in |  -  |
+**404** | Document not found |  -  |
+
+<a name="adminGetDocuments"></a>
+# **adminGetDocuments**
+> List&lt;Document&gt; adminGetDocuments(token, documentId, applicationId, filename, extension, mimeType, originalId, tags, createdAfter, createdBefore, tagResult, sort, offset, limit)
+
+Retrieves documents from Leia API (admin only) (paginated)
+
+Retrieves documents which matches the query from Leia API as JSON metadata. This method is only accessible to admins
+
+### Example
+```java
+// Import classes:
+import io.leia.client.ApiClient;
+import io.leia.client.ApiException;
+import io.leia.client.Configuration;
+import io.leia.client.models.*;
+import io.leia.client.api.DocumentAdminApi;
+
+public class Example {
+  public static void main(String[] args) {
+    ApiClient defaultClient = Configuration.getDefaultApiClient();
+    defaultClient.setBasePath("http://127.0.0.1:9000/leia/1.0.0");
+
+    DocumentAdminApi apiInstance = new DocumentAdminApi(defaultClient);
+    String token = "token_example"; // String | The login token obtained via GET /login/{api_key}
+    String documentId = "documentId_example"; // String | The id of the document
     String applicationId = "applicationId_example"; // String | The application that owns the documents
-    Boolean zipfile = true; // Boolean | Should Leia API return a zip file with documents, or the documents' metadata as JSON (false by default)
     String filename = "filename_example"; // String | The file name of the documents to retrieve
     String extension = "extension_example"; // String | The extension of the documents to retrieve
     String mimeType = "mimeType_example"; // String | Filters by MIME type
     String originalId = "originalId_example"; // String | Filters by original id
     List<String> tags = Arrays.asList(); // List<String> | If specified, filters the documents by tag
-    OffsetDateTime createdAfter = new OffsetDateTime(); // OffsetDateTime | If specified, keeps only documents created after given UTC timestamp (ISO 8601 format : yyyy-MM-ddThh:mm:ss)
-    OffsetDateTime createdBefore = new OffsetDateTime(); // OffsetDateTime | If specified, keeps only documents created before given UTC timestamp (ISO 8601 format : yyyy-MM-ddThh:mm:ss)
+    OffsetDateTime createdAfter = OffsetDateTime.now(); // OffsetDateTime | If specified, keeps only documents created after given UTC timestamp (ISO 8601 format : yyyy-MM-ddThh:mm:ss)
+    OffsetDateTime createdBefore = OffsetDateTime.now(); // OffsetDateTime | If specified, keeps only documents created before given UTC timestamp (ISO 8601 format : yyyy-MM-ddThh:mm:ss)
     String tagResult = "tagResult_example"; // String | Atomically adds a tag to all retrieved values if specified. The added tag will not be returned in the result
     String sort = "sort_example"; // String | If specified, sorts the documents by a list of existing parameters separated by commas. Can be 'application_id', 'filename', 'extension', 'mime_type', 'original_id', 'page', 'creation_time'. Sorts in ascending order by default. If a parameter is preceded by '-', it is sorted in descending order.
     Integer offset = 56; // Integer | Number of the first document to send (pagination)
     Integer limit = 56; // Integer | Maximum number of documents to send (pagination)
     try {
-      List<Document> result = apiInstance.adminGetDocuments(token, applicationId, zipfile, filename, extension, mimeType, originalId, tags, createdAfter, createdBefore, tagResult, sort, offset, limit);
+      List<Document> result = apiInstance.adminGetDocuments(token, documentId, applicationId, filename, extension, mimeType, originalId, tags, createdAfter, createdBefore, tagResult, sort, offset, limit);
       System.out.println(result);
     } catch (ApiException e) {
       System.err.println("Exception when calling DocumentAdminApi#adminGetDocuments");
@@ -361,8 +427,8 @@ public class Example {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **token** | **String**| The login token obtained via GET /login/{api_key} |
+ **documentId** | **String**| The id of the document | [optional]
  **applicationId** | **String**| The application that owns the documents | [optional]
- **zipfile** | **Boolean**| Should Leia API return a zip file with documents, or the documents&#39; metadata as JSON (false by default) | [optional]
  **filename** | **String**| The file name of the documents to retrieve | [optional]
  **extension** | **String**| The extension of the documents to retrieve | [optional]
  **mimeType** | **String**| Filters by MIME type | [optional]
@@ -391,9 +457,9 @@ No authorization required
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | The retrieved documents&#39; metadata, or a zip file containing the documents. Also contains pagination information in the headers:&lt;br /&gt; Content-Range: first-last/total&lt;br /&gt; Accept-Range: document max_limit  |  -  |
-**401** | Bad token |  -  |
-**403** | At least of filter must be applied |  -  |
+**200** | The retrieved documents&#39; metadata. Also contains pagination information in the headers:&lt;br /&gt; Content-Range: first-last/total&lt;br /&gt; Accept-Range: document max_limit  |  -  |
+**401** | Not logged in |  -  |
+**403** | At least one filter must be applied |  -  |
 **404** | Document not found |  -  |
 
 <a name="adminGetDocumentsTags"></a>
@@ -416,7 +482,7 @@ import io.leia.client.api.DocumentAdminApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://localhost/leia/1.0.0");
+    defaultClient.setBasePath("http://127.0.0.1:9000/leia/1.0.0");
 
     DocumentAdminApi apiInstance = new DocumentAdminApi(defaultClient);
     String token = "token_example"; // String | The login token obtained via GET /login/{api_key}
@@ -459,8 +525,91 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | The retrieved documents&#39; tags  |  -  |
-**401** | Bad token |  -  |
+**401** | Not logged in |  -  |
 **404** | Tags not found |  -  |
+
+<a name="adminGetDocumentsZip"></a>
+# **adminGetDocumentsZip**
+> File adminGetDocumentsZip(token, documentId, applicationId, filename, extension, mimeType, originalId, tags, createdAfter, createdBefore)
+
+Retrieves documents from Leia API (admin only) (paginated)
+
+Retrieves documents which matches the query from Leia API in a zip file. This method is only accessible to admins
+
+### Example
+```java
+// Import classes:
+import io.leia.client.ApiClient;
+import io.leia.client.ApiException;
+import io.leia.client.Configuration;
+import io.leia.client.models.*;
+import io.leia.client.api.DocumentAdminApi;
+
+public class Example {
+  public static void main(String[] args) {
+    ApiClient defaultClient = Configuration.getDefaultApiClient();
+    defaultClient.setBasePath("http://127.0.0.1:9000/leia/1.0.0");
+
+    DocumentAdminApi apiInstance = new DocumentAdminApi(defaultClient);
+    String token = "token_example"; // String | The login token obtained via GET /login/{api_key}
+    String documentId = "documentId_example"; // String | The id of the document
+    String applicationId = "applicationId_example"; // String | The application that owns the documents
+    String filename = "filename_example"; // String | The file name of the documents to retrieve
+    String extension = "extension_example"; // String | The extension of the documents to retrieve
+    String mimeType = "mimeType_example"; // String | Filters by MIME type
+    String originalId = "originalId_example"; // String | Filters by original id
+    List<String> tags = Arrays.asList(); // List<String> | If specified, filters the documents by tag
+    OffsetDateTime createdAfter = OffsetDateTime.now(); // OffsetDateTime | If specified, keeps only documents created after given UTC timestamp (ISO 8601 format : yyyy-MM-ddThh:mm:ss)
+    OffsetDateTime createdBefore = OffsetDateTime.now(); // OffsetDateTime | If specified, keeps only documents created before given UTC timestamp (ISO 8601 format : yyyy-MM-ddThh:mm:ss)
+    try {
+      File result = apiInstance.adminGetDocumentsZip(token, documentId, applicationId, filename, extension, mimeType, originalId, tags, createdAfter, createdBefore);
+      System.out.println(result);
+    } catch (ApiException e) {
+      System.err.println("Exception when calling DocumentAdminApi#adminGetDocumentsZip");
+      System.err.println("Status code: " + e.getCode());
+      System.err.println("Reason: " + e.getResponseBody());
+      System.err.println("Response headers: " + e.getResponseHeaders());
+      e.printStackTrace();
+    }
+  }
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **token** | **String**| The login token obtained via GET /login/{api_key} |
+ **documentId** | **String**| The id of the document | [optional]
+ **applicationId** | **String**| The application that owns the documents | [optional]
+ **filename** | **String**| The file name of the documents to retrieve | [optional]
+ **extension** | **String**| The extension of the documents to retrieve | [optional]
+ **mimeType** | **String**| Filters by MIME type | [optional]
+ **originalId** | **String**| Filters by original id | [optional]
+ **tags** | [**List&lt;String&gt;**](String.md)| If specified, filters the documents by tag | [optional]
+ **createdAfter** | **OffsetDateTime**| If specified, keeps only documents created after given UTC timestamp (ISO 8601 format : yyyy-MM-ddThh:mm:ss) | [optional]
+ **createdBefore** | **OffsetDateTime**| If specified, keeps only documents created before given UTC timestamp (ISO 8601 format : yyyy-MM-ddThh:mm:ss) | [optional]
+
+### Return type
+
+[**File**](File.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/zip
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | A zip file containing the documents. |  -  |
+**401** | Not logged in |  -  |
+**403** | At least one filter must be applied |  -  |
+**404** | Document not found |  -  |
 
 <a name="adminTagDocument"></a>
 # **adminTagDocument**
@@ -482,7 +631,7 @@ import io.leia.client.api.DocumentAdminApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://localhost/leia/1.0.0");
+    defaultClient.setBasePath("http://127.0.0.1:9000/leia/1.0.0");
 
     DocumentAdminApi apiInstance = new DocumentAdminApi(defaultClient);
     String token = "token_example"; // String | The login token obtained via GET /login/{api_key}
@@ -534,7 +683,7 @@ No authorization required
 
 <a name="adminTransformDocumentAsync"></a>
 # **adminTransformDocumentAsync**
-> Job adminTransformDocumentAsync(token, applicationId, documentIds, outputType, inputTag, outputTag, executeAfterId, callbackUrl, transformParams, transformBody)
+> Job adminTransformDocumentAsync(token, applicationId, documentIds, outputType, inputTag, outputTag, executeAfterId, pageRange, callbackUrl, transformParams, blockProcessing, transformBody)
 
 Asynchronously converts a document within Leia API (admin only)
 
@@ -552,21 +701,23 @@ import io.leia.client.api.DocumentAdminApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://localhost/leia/1.0.0");
+    defaultClient.setBasePath("http://127.0.0.1:9000/leia/1.0.0");
 
     DocumentAdminApi apiInstance = new DocumentAdminApi(defaultClient);
     String token = "token_example"; // String | The login token obtained via GET /login/{api_key}
     String applicationId = "applicationId_example"; // String | The application id whose documents to transform belong to
     List<String> documentIds = Arrays.asList(); // List<String> | Comma separated list of document ids to process
-    String outputType = "outputType_example"; // String | The output type. May be:<ul> <li>image (extract one image for each page in a PDF file)</li> <li>text (Use OCR on an image to get convert it to text)</li> <li>text_tree (text in the form of a JSON tree with information about text blocks and their position in the document)</li> <li>autorotate (Rotates an image that contains text so that it is in readable orientation)</li> <li>trim (Trims white space around a document)</li> <li>deskew (Deskew a document)</li> </ul> 
+    TransformTypes outputType = TransformTypes.fromValue("text"); // TransformTypes | The output type. May be:   * image (extract one image for each page in a PDF file)   * text (Use OCR on an image to get convert it to text)     * To use Google Vision OCR instead of normal LEIA OCR, add \"use_google_vision\":true in transform_params   * text_tree (text in the form of a JSON tree with information about text blocks and their position in the document)     * To use Google Vision OCR instead of normal LEIA OCR, add \"use_google_vision\":true in transform_params   * autorotate (Rotates an image that contains text so that it is in readable orientation)   * trim (Trims white space around a document)   * merge (Merge multiple text documents into a single one with a carriage return '\\n' between them)   * split (Splits a text document into chunks of 1000 words and replaces all spacing characters by single spaces (this number can be changed by setting split_size to another value in transform_params)) 
     String inputTag = "inputTag_example"; // String | The tag of the documents to process. If tag is present, document_ids should contain a single value, and the documents processed will be those where original_id=document_ids[0] and that contain the specified tag
     String outputTag = "outputTag_example"; // String | The tag to add to the documents resulting from the transformation
     String executeAfterId = "executeAfterId_example"; // String | The id of a job that must be in PROCESSED status before this one can be started (used to chain jobs even before the first ones are terminated). If the referenced job becomes FAILED or is CANCELED, this one will fail
+    String pageRange = "pageRange_example"; // String | The pages that should be used in previous job to process this one. Can only be used if execute_after_id is not null. Pages are indexed from 0. Syntax is the same as Python slices syntax (https://docs.python.org/3/whatsnew/2.3.html#extended-slices). Examples :   * Single positive integer : keep only this page (example 4 will keep only page 5 (Remember, pages are indexed from 0))   * Single negative integer : keep only this page, but starting from the end (example -4 will keep only page 7 if there are 10 total pages)   * Range (x:y) : keep only this range of pages (Including x but excluding y, indexed from 0)     Examples       * 2: will keep all pages starting from page 3       * :5 will keep only pages 1 to 5       * 2:5 will keep only pages 3, 4 and 5       * -4: will keep only pages 7 to 10 if there are 10 total pages)       * :-2 will keep only pages 1 to 8 if there are 10 total pages)       * -4:-2 will keep only pages 7 and 8 if there are 10 total pages)   * Stride (::w) : Keep 1 page every w pages starting at the first one (example ::2 will keep only odd pages)   * Range and stride (x:y:w) : Keep 1 page every w pages within range (x:y) (example 1::2 will keep only even pages) You can use multiple ranges of page at once, comma separated (For example, 0,2:5,-2:-1 keeps the 1st page, plus pages 3->5, plus the second to last page) 
     String callbackUrl = "callbackUrl_example"; // String | Callback URL that should be called when the job becomes PROCESSED/FAILED/CANCELED. This URL will be called with a HTTP POST method, and the Job object as the payload. Callback server must answer with either a 200 or 204 HTTP response, to acknowledge the callback. Any other response code will be considered as a failure to call the callback.
     Object transformParams = null; // Object | Free form parameters for the transformation
+    Boolean blockProcessing = true; // Boolean | If true, blocks processing on the job until /job/{id}/start is called. Default is false
     TransformBody transformBody = new TransformBody(); // TransformBody | All the previous query parameters can also be passed as JSON in the body of the request
     try {
-      Job result = apiInstance.adminTransformDocumentAsync(token, applicationId, documentIds, outputType, inputTag, outputTag, executeAfterId, callbackUrl, transformParams, transformBody);
+      Job result = apiInstance.adminTransformDocumentAsync(token, applicationId, documentIds, outputType, inputTag, outputTag, executeAfterId, pageRange, callbackUrl, transformParams, blockProcessing, transformBody);
       System.out.println(result);
     } catch (ApiException e) {
       System.err.println("Exception when calling DocumentAdminApi#adminTransformDocumentAsync");
@@ -586,12 +737,14 @@ Name | Type | Description  | Notes
  **token** | **String**| The login token obtained via GET /login/{api_key} |
  **applicationId** | **String**| The application id whose documents to transform belong to |
  **documentIds** | [**List&lt;String&gt;**](String.md)| Comma separated list of document ids to process |
- **outputType** | **String**| The output type. May be:&lt;ul&gt; &lt;li&gt;image (extract one image for each page in a PDF file)&lt;/li&gt; &lt;li&gt;text (Use OCR on an image to get convert it to text)&lt;/li&gt; &lt;li&gt;text_tree (text in the form of a JSON tree with information about text blocks and their position in the document)&lt;/li&gt; &lt;li&gt;autorotate (Rotates an image that contains text so that it is in readable orientation)&lt;/li&gt; &lt;li&gt;trim (Trims white space around a document)&lt;/li&gt; &lt;li&gt;deskew (Deskew a document)&lt;/li&gt; &lt;/ul&gt;  |
+ **outputType** | [**TransformTypes**](.md)| The output type. May be:   * image (extract one image for each page in a PDF file)   * text (Use OCR on an image to get convert it to text)     * To use Google Vision OCR instead of normal LEIA OCR, add \&quot;use_google_vision\&quot;:true in transform_params   * text_tree (text in the form of a JSON tree with information about text blocks and their position in the document)     * To use Google Vision OCR instead of normal LEIA OCR, add \&quot;use_google_vision\&quot;:true in transform_params   * autorotate (Rotates an image that contains text so that it is in readable orientation)   * trim (Trims white space around a document)   * merge (Merge multiple text documents into a single one with a carriage return &#39;\\n&#39; between them)   * split (Splits a text document into chunks of 1000 words and replaces all spacing characters by single spaces (this number can be changed by setting split_size to another value in transform_params))  | [enum: text, text_tree, image, autorotate, trim, merge, split, transcode]
  **inputTag** | **String**| The tag of the documents to process. If tag is present, document_ids should contain a single value, and the documents processed will be those where original_id&#x3D;document_ids[0] and that contain the specified tag | [optional]
  **outputTag** | **String**| The tag to add to the documents resulting from the transformation | [optional]
  **executeAfterId** | **String**| The id of a job that must be in PROCESSED status before this one can be started (used to chain jobs even before the first ones are terminated). If the referenced job becomes FAILED or is CANCELED, this one will fail | [optional]
+ **pageRange** | **String**| The pages that should be used in previous job to process this one. Can only be used if execute_after_id is not null. Pages are indexed from 0. Syntax is the same as Python slices syntax (https://docs.python.org/3/whatsnew/2.3.html#extended-slices). Examples :   * Single positive integer : keep only this page (example 4 will keep only page 5 (Remember, pages are indexed from 0))   * Single negative integer : keep only this page, but starting from the end (example -4 will keep only page 7 if there are 10 total pages)   * Range (x:y) : keep only this range of pages (Including x but excluding y, indexed from 0)     Examples       * 2: will keep all pages starting from page 3       * :5 will keep only pages 1 to 5       * 2:5 will keep only pages 3, 4 and 5       * -4: will keep only pages 7 to 10 if there are 10 total pages)       * :-2 will keep only pages 1 to 8 if there are 10 total pages)       * -4:-2 will keep only pages 7 and 8 if there are 10 total pages)   * Stride (::w) : Keep 1 page every w pages starting at the first one (example ::2 will keep only odd pages)   * Range and stride (x:y:w) : Keep 1 page every w pages within range (x:y) (example 1::2 will keep only even pages) You can use multiple ranges of page at once, comma separated (For example, 0,2:5,-2:-1 keeps the 1st page, plus pages 3-&gt;5, plus the second to last page)  | [optional]
  **callbackUrl** | **String**| Callback URL that should be called when the job becomes PROCESSED/FAILED/CANCELED. This URL will be called with a HTTP POST method, and the Job object as the payload. Callback server must answer with either a 200 or 204 HTTP response, to acknowledge the callback. Any other response code will be considered as a failure to call the callback. | [optional]
  **transformParams** | [**Object**](.md)| Free form parameters for the transformation | [optional]
+ **blockProcessing** | **Boolean**| If true, blocks processing on the job until /job/{id}/start is called. Default is false | [optional]
  **transformBody** | [**TransformBody**](TransformBody.md)| All the previous query parameters can also be passed as JSON in the body of the request | [optional]
 
 ### Return type
@@ -611,7 +764,7 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Document contents |  -  |
-**401** | Bad token |  -  |
+**401** | Not logged in |  -  |
 **403** | Not the owner of the document |  -  |
 **404** | Document not found |  -  |
 
@@ -635,7 +788,7 @@ import io.leia.client.api.DocumentAdminApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://localhost/leia/1.0.0");
+    defaultClient.setBasePath("http://127.0.0.1:9000/leia/1.0.0");
 
     DocumentAdminApi apiInstance = new DocumentAdminApi(defaultClient);
     String token = "token_example"; // String | The login token obtained via GET /login/{api_key}

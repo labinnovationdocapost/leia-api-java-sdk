@@ -1,6 +1,6 @@
 package io.leia.builder.params;
 
-import io.leia.client.model.ConditionOperatorTypes;
+import io.leia.builder.model.ConditionOperatorTypes;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;

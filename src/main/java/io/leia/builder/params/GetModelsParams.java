@@ -11,6 +11,7 @@ public class GetModelsParams {
     private String modelId = null;
     private ModelTypes modelType = null;
     private String name = null;
+    private String shortname = null;
     private String description = null;
     private List<ModelInputTypes> inputTypes = null;
     private List<String> tags = null;
@@ -48,6 +49,14 @@ public class GetModelsParams {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getShortName() {
+        return shortname;
+    }
+
+    public void setShortName(String shortname) {
+        this.shortname = shortname;
     }
 
     public String getDescription() {

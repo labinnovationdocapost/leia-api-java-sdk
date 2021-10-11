@@ -2,15 +2,18 @@
 
 # ApplyBody
 
+
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**callbackHeaders** | [**Object**](.md) |  |  [optional]
+**blockProcessing** | **Boolean** |  |  [optional]
+**callbackHeaders** | **Object** |  |  [optional]
 **callbackUrl** | **String** |  |  [optional]
 **executeAfterId** | **String** |  |  [optional]
-**formatType** | **String** |  |  [optional]
-**modelParams** | [**Object**](.md) |  |  [optional]
+**formatType** | **FormatTypes** |  |  [optional]
+**modelParams** | **Object** |  |  [optional]
+**pageRange** | **String** |  |  [optional]
 **tag** | **String** |  |  [optional]
 
 

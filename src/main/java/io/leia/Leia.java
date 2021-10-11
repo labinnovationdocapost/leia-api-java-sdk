@@ -248,7 +248,7 @@ public class Leia {
         LocalDateTime datetime = LocalDateTime.now();
         verifyToken();
         try {
-            return documentApi.transformDocumentAsync(token.getToken(), params.getDocumentIds(), params.getOutputType(), params.getInputTag(), params.getOutputTag(), params.getExecuteAfterId(), params.getPageRange(), params.getCallbackUrl(), params.getTransformParams(), params.getTransformBody());
+            return documentApi.transformDocumentAsync(token.getToken(), params.getDocumentIds(), params.getOutputType(), params.getInputTag(), params.getOutputTag(), params.getExecuteAfterId(), params.getPageRange(), params.getCallbackUrl(), params.getTransformParams(), false, params.getTransformBody());
         } catch (ApiException e) {
             if(tryCorrectError(e, datetime)){
                 return transformDocuments(params);
@@ -330,7 +330,7 @@ public class Leia {
         LocalDateTime datetime = LocalDateTime.now();
         verifyToken();
         try {
-            return jobApi.createConditionalJob(token.getToken(), params.getExecuteAfterId(), params, params.getCallbackUrl());
+            return jobApi.createConditionalJob(token.getToken(), params.getExecuteAfterId(), params.getCallbackUrl(), false, params);
         } catch (ApiException e) {
             e.printStackTrace();
             System.out.println(e.getResponseBody());
@@ -401,7 +401,7 @@ public class Leia {
         LocalDateTime datetime = LocalDateTime.now();
         verifyToken();
         try {
-            return modelApi.getModels(token.getToken(), params.getModelId(), params.getModelType(), params.getName() ,params.getDescription() ,params.getInputTypes() ,params.getTags(), params.getCreatedAfter(), params.getCreatedBefore(), params.getOnlyMime(), params.getSort(), params.getOffset(), params.getLimit());
+            return modelApi.getModels(token.getToken(), params.getModelId(), params.getModelType(), params.getName() , params.getShortName(), params.getDescription() ,params.getInputTypes() ,params.getTags(), params.getCreatedAfter(), params.getCreatedBefore(), params.getOnlyMime(), params.getSort(), params.getOffset(), params.getLimit());
         } catch (ApiException e) {
             if(e.getCode() == 404) {
                 return new ArrayList<>();
@@ -437,7 +437,7 @@ public class Leia {
         LocalDateTime datetime = LocalDateTime.now();
         verifyToken();
         try {
-            return modelApi.applyModelAsync(token.getToken(), params.getModelId(), params.getDocumentIds(), params.getTag(), params.getFormatType(), params.getExecuteAfterId(), params.getPageRange(), params.getCallbackUrl(), params.getModelParams(), params.getApplyBody());
+            return modelApi.applyModelAsync(token.getToken(), params.getModelId(), params.getDocumentIds(), params.getTag(), params.getFormatType(), params.getExecuteAfterId(), params.getPageRange(), params.getCallbackUrl(), params.getModelParams(), false, params.getApplyBody());
         } catch (ApiException e) {
             if(tryCorrectError(e, datetime)){
                 return inferredDocuments(params);
@@ -538,7 +538,7 @@ public class Leia {
         LocalDateTime datetime = LocalDateTime.now();
         verifyToken();
         try {
-            return modelAdminApi.adminCreateModel(token.getToken(), addModelParams.getApplicationId(), addModelParams.getName(), addModelParams.getFile(), addModelParams.getDescription(), addModelParams.getTtl(), addModelParams.getAllowedApplicationIds(), addModelParams.getAllowAllApplications(), addModelParams.getTags());
+            return modelAdminApi.adminCreateModel(token.getToken(), addModelParams.getApplicationId(), addModelParams.getName(), addModelParams.getFile(), addModelParams.getShortname(), addModelParams.getDescription(), addModelParams.getTtl(), addModelParams.getAllowedApplicationIds(), addModelParams.getAllowAllApplications(), addModelParams.getTags());
         } catch (ApiException e) {
             if(tryCorrectError(e, datetime)){
                 return addModel(addModelParams);

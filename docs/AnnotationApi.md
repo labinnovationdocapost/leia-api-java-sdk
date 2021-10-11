@@ -1,6 +1,6 @@
 # AnnotationApi
 
-All URIs are relative to *http://localhost/leia/1.0.0*
+All URIs are relative to *http://127.0.0.1:9000/leia/1.0.0*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -33,12 +33,12 @@ import io.leia.client.api.AnnotationApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://localhost/leia/1.0.0");
+    defaultClient.setBasePath("http://127.0.0.1:9000/leia/1.0.0");
 
     AnnotationApi apiInstance = new AnnotationApi(defaultClient);
     String token = "token_example"; // String | The login token obtained via GET /login/{api_key}
     String documentId = "documentId_example"; // String | The id of the document to annotate
-    String annotationType = TYPING; // String | The type of the annotation
+    AnnotationTypes annotationType = AnnotationTypes.fromValue("BOX"); // AnnotationTypes | The type of the annotation
     Object body = null; // Object | The prediction that should be associated to document in this annotation, in free form json
     String name = "name_example"; // String | The name of the annotation (for information purposes only)
     List<String> tags = Arrays.asList(); // List<String> | The tags of the annotation
@@ -62,7 +62,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **token** | **String**| The login token obtained via GET /login/{api_key} |
  **documentId** | **String**| The id of the document to annotate |
- **annotationType** | **String**| The type of the annotation |
+ **annotationType** | [**AnnotationTypes**](.md)| The type of the annotation | [enum: BOX, TEXT, TYPING]
  **body** | **Object**| The prediction that should be associated to document in this annotation, in free form json |
  **name** | **String**| The name of the annotation (for information purposes only) | [optional]
  **tags** | [**List&lt;String&gt;**](String.md)| The tags of the annotation | [optional]
@@ -85,6 +85,7 @@ No authorization required
 |-------------|-------------|------------------|
 **200** | OK, annotation created |  -  |
 **401** | Not logged in |  -  |
+**404** | Document not found |  -  |
 
 <a name="deleteAnnotation"></a>
 # **deleteAnnotation**
@@ -106,7 +107,7 @@ import io.leia.client.api.AnnotationApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://localhost/leia/1.0.0");
+    defaultClient.setBasePath("http://127.0.0.1:9000/leia/1.0.0");
 
     AnnotationApi apiInstance = new AnnotationApi(defaultClient);
     String token = "token_example"; // String | The login token obtained via GET /login/{api_key}
@@ -172,7 +173,7 @@ import io.leia.client.api.AnnotationApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://localhost/leia/1.0.0");
+    defaultClient.setBasePath("http://127.0.0.1:9000/leia/1.0.0");
 
     AnnotationApi apiInstance = new AnnotationApi(defaultClient);
     String token = "token_example"; // String | The login token obtained via GET /login/{api_key}
@@ -220,7 +221,7 @@ No authorization required
 
 <a name="getAnnotations"></a>
 # **getAnnotations**
-> List&lt;Annotation&gt; getAnnotations(token, annotationType, name, tags, documentId, createdAfter, createdBefore, offset, limit)
+> List&lt;Annotation&gt; getAnnotations(token, annotationId, annotationType, name, tags, documentId, createdAfter, createdBefore, offset, limit)
 
 Retrieves annotations (paginated)
 
@@ -238,20 +239,21 @@ import io.leia.client.api.AnnotationApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://localhost/leia/1.0.0");
+    defaultClient.setBasePath("http://127.0.0.1:9000/leia/1.0.0");
 
     AnnotationApi apiInstance = new AnnotationApi(defaultClient);
     String token = "token_example"; // String | The login token obtained via GET /login/{api_key}
-    String annotationType = TYPING; // String | If specified, filters the annotations by type
+    String annotationId = "annotationId_example"; // String | If specified, filters the annotations id
+    AnnotationTypes annotationType = AnnotationTypes.fromValue("BOX"); // AnnotationTypes | If specified, filters the annotations by type
     String name = "name_example"; // String | If specified, filters the annotations by name
     List<String> tags = Arrays.asList(); // List<String> | If specified, filters the annotations by tag
     String documentId = "documentId_example"; // String | If specified, filters the annotations attached to a given document
-    OffsetDateTime createdAfter = new OffsetDateTime(); // OffsetDateTime | If specified, keeps only annotations created after given UTC timestamp (ISO 8601 format : yyyy-MM-ddThh:mm:ss)
-    OffsetDateTime createdBefore = new OffsetDateTime(); // OffsetDateTime | If specified, keeps only annotations created before given UTC timestamp (ISO 8601 format : yyyy-MM-ddThh:mm:ss)
+    OffsetDateTime createdAfter = OffsetDateTime.now(); // OffsetDateTime | If specified, keeps only annotations created after given UTC timestamp (ISO 8601 format : yyyy-MM-ddThh:mm:ss)
+    OffsetDateTime createdBefore = OffsetDateTime.now(); // OffsetDateTime | If specified, keeps only annotations created before given UTC timestamp (ISO 8601 format : yyyy-MM-ddThh:mm:ss)
     Integer offset = 56; // Integer | Number of the first annotation to send (pagination)
     Integer limit = 56; // Integer | Maximum number of annotation to send (pagination)
     try {
-      List<Annotation> result = apiInstance.getAnnotations(token, annotationType, name, tags, documentId, createdAfter, createdBefore, offset, limit);
+      List<Annotation> result = apiInstance.getAnnotations(token, annotationId, annotationType, name, tags, documentId, createdAfter, createdBefore, offset, limit);
       System.out.println(result);
     } catch (ApiException e) {
       System.err.println("Exception when calling AnnotationApi#getAnnotations");
@@ -269,7 +271,8 @@ public class Example {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **token** | **String**| The login token obtained via GET /login/{api_key} |
- **annotationType** | **String**| If specified, filters the annotations by type | [optional]
+ **annotationId** | **String**| If specified, filters the annotations id | [optional]
+ **annotationType** | [**AnnotationTypes**](.md)| If specified, filters the annotations by type | [optional] [enum: BOX, TEXT, TYPING]
  **name** | **String**| If specified, filters the annotations by name | [optional]
  **tags** | [**List&lt;String&gt;**](String.md)| If specified, filters the annotations by tag | [optional]
  **documentId** | **String**| If specified, filters the annotations attached to a given document | [optional]
@@ -318,7 +321,7 @@ import io.leia.client.api.AnnotationApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://localhost/leia/1.0.0");
+    defaultClient.setBasePath("http://127.0.0.1:9000/leia/1.0.0");
 
     AnnotationApi apiInstance = new AnnotationApi(defaultClient);
     String token = "token_example"; // String | The login token obtained via GET /login/{api_key}
@@ -386,7 +389,7 @@ import io.leia.client.api.AnnotationApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://localhost/leia/1.0.0");
+    defaultClient.setBasePath("http://127.0.0.1:9000/leia/1.0.0");
 
     AnnotationApi apiInstance = new AnnotationApi(defaultClient);
     String token = "token_example"; // String | The login token obtained via GET /login/{api_key}
@@ -453,7 +456,7 @@ import io.leia.client.api.AnnotationApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://localhost/leia/1.0.0");
+    defaultClient.setBasePath("http://127.0.0.1:9000/leia/1.0.0");
 
     AnnotationApi apiInstance = new AnnotationApi(defaultClient);
     String token = "token_example"; // String | The login token obtained via GET /login/{api_key}

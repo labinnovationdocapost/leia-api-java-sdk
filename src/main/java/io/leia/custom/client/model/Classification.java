@@ -1,8 +1,6 @@
 package io.leia.custom.client.model;
 
 import com.google.gson.annotations.SerializedName;
-import org.threeten.bp.OffsetDateTime;
-
 public class Classification {
     public static final String SERIALIZED_ACCURACY = "accuracy";
     @SerializedName(SERIALIZED_ACCURACY)

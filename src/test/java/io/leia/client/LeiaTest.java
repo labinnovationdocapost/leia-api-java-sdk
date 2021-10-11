@@ -4,6 +4,7 @@ import com.google.common.io.ByteStreams;
 import io.leia.Leia;
 import io.leia.LeiaException;
 import io.leia.builder.*;
+import io.leia.builder.model.ConditionOperatorTypes;
 import io.leia.client.api.ApplicationAdminApi;
 import io.leia.client.model.*;
 import io.leia.custom.client.tools.JobTools;

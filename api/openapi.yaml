@@ -1,0 +1,5914 @@
+openapi: 3.0.0
+info:
+  contact:
+    email: contact@leia.io
+  description: Leia API
+  title: LEIA RESTful API for AI
+  version: 1.0.0
+servers:
+- url: http://127.0.0.1:9000/leia/1.0.0
+tags:
+- description: Application management
+  name: application
+- description: Document management
+  name: document
+- description: Annotation management
+  name: annotation
+- description: Model management
+  name: model
+- description: Job
+  name: job
+- description: Worker
+  name: worker
+- description: Health check
+  name: health
+- description: Application administration
+  name: application_admin
+- description: Document administration
+  name: document_admin
+- description: Model administration
+  name: model_admin
+- description: Job administration
+  name: job_admin
+- description: Worker adminstration
+  name: worker_admin
+paths:
+  /admin/application:
+    get:
+      description: Retrieves applications from the system. This method is only accessible
+        to admins
+      operationId: admin_get_applications
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: If specified, filters by application id
+        explode: true
+        in: query
+        name: application_id
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: If specified, filters by application email
+        explode: true
+        in: query
+        name: email
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: If specified, filters by application name
+        explode: true
+        in: query
+        name: application_name
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: If specified, filters by application first_name
+        explode: true
+        in: query
+        name: first_name
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: If specified, filters by application last_name
+        explode: true
+        in: query
+        name: last_name
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: If specified, filters by application application_type
+        explode: true
+        in: query
+        name: application_type
+        required: false
+        schema:
+          $ref: '#/components/schemas/ApplicationTypes'
+        style: form
+      - description: 'If specified, keeps only applications created after given UTC
+          timestamp (ISO 8601 format : yyyy-MM-ddThh:mm:ss)'
+        explode: true
+        in: query
+        name: created_after
+        required: false
+        schema:
+          format: date-time
+          type: string
+        style: form
+      - description: 'If specified, keeps only applications created before given UTC
+          timestamp (ISO 8601 format : yyyy-MM-ddThh:mm:ss)'
+        explode: true
+        in: query
+        name: created_before
+        required: false
+        schema:
+          format: date-time
+          type: string
+        style: form
+      - description: If specified, filters by dedicated_workers value
+        explode: true
+        in: query
+        name: dedicated_workers
+        required: false
+        schema:
+          type: boolean
+        style: form
+      - description: Number of the first document to send (pagination)
+        explode: true
+        in: query
+        name: offset
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: Maximum number of documents to send (pagination)
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: If specified, sorts the applications by a list of existing parameters
+          separated by commas. Can be 'application_name', 'application_type', 'creation_time',
+          'first_name', 'last_name', 'email', 'dedicated_workers'. Sorts in ascending
+          order by default. If a parameter is preceded by '-', it is sorted in descending
+          order.
+        explode: true
+        in: query
+        name: sort
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Application'
+                type: array
+          description: |
+            The retrieved applications. Also contains pagination information in the headers:<br />
+            Content-Range: first-last/total<br />
+            Accept-Range: application max_limit
+        "401":
+          description: Not logged in or not an admin
+        "404":
+          description: Application not found
+      summary: Retrieves applications (admin only) (paginated)
+      tags:
+      - application_admin
+      x-openapi-router-controller: leiaws_service.controllers.application_admin_controller
+      x-accepts: application/json
+    post:
+      description: Adds a new application to the system. This method is only accessible
+        to admins. An API key will be generated for the new application when calling
+        this method. Note or store it carefully, it will not be recoverable after
+        this call.
+      operationId: admin_create_application
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Application'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application'
+          description: Application created
+        "400":
+          description: Invalid application data
+        "401":
+          description: Not logged in or not an admin
+        "409":
+          description: An existing application already exists
+      summary: Adds a new application to the system (admin only)
+      tags:
+      - application_admin
+      x-openapi-router-controller: leiaws_service.controllers.application_admin_controller
+      x-contentType: application/json
+      x-accepts: application/json
+  /admin/application/{application_id}:
+    delete:
+      description: Retrieves a new application from the system. This method is only
+        accessible to admins
+      operationId: admin_delete_application
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id of the application to delete
+        explode: false
+        in: path
+        name: application_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: Application deleted
+        "401":
+          description: Not logged in or not an admin
+        "403":
+          description: Application still has documents/annotations/models
+        "404":
+          description: Application not found
+      summary: Deletes an application (admin only)
+      tags:
+      - application_admin
+      x-openapi-router-controller: leiaws_service.controllers.application_admin_controller
+      x-accepts: application/json
+    get:
+      description: Retrieves a new application from the system. This method is only
+        accessible to admins
+      operationId: admin_get_application
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id of the application to retrieve
+        explode: false
+        in: path
+        name: application_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application'
+          description: The retrieved application
+        "401":
+          description: Not logged in or not an admin
+        "404":
+          description: Application not found
+      summary: Retrieves an application (admin only)
+      tags:
+      - application_admin
+      x-openapi-router-controller: leiaws_service.controllers.application_admin_controller
+      x-accepts: application/json
+    patch:
+      description: Modifies an application already in the system. This method is only
+        accessible to admins
+      operationId: admin_edit_application
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The application to modify
+        explode: false
+        in: path
+        name: application_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The new name of the application
+        explode: true
+        in: query
+        name: application_name
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The new email of the application
+        explode: true
+        in: query
+        name: email
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The new first name of the application
+        explode: true
+        in: query
+        name: first_name
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The new last name of the application
+        explode: true
+        in: query
+        name: last_name
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The new default_job_callback_url of the application
+        explode: true
+        in: query
+        name: default_job_callback_url
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Should this application use dedicated workers ?
+        explode: true
+        in: query
+        name: dedicated_workers
+        required: false
+        schema:
+          type: boolean
+        style: form
+      - description: When using dedicated workers, TTL of the worker (in seconds)
+        explode: true
+        in: query
+        name: dedicated_workers_ttl
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      - description: When using dedicated workers, maximum number of models loaded
+          at the same time
+        explode: true
+        in: query
+        name: dedicated_workers_max_models
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      - description: Specifies if the callback should be sent as is, or if the potential
+          base64 encoded documents generated should be saved as sub documents of the
+          original document
+        explode: true
+        in: query
+        name: reduce_callback_payloads
+        required: false
+        schema:
+          type: boolean
+        style: form
+      - description: Adds a schedule for always on workers. Will start number always
+          on workers when start time happens and stop them at stop time. (Check always_on_*
+          parameters to set other parameters)
+        explode: true
+        in: query
+        name: always_on_number
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      - description: Adds a schedule for always on workers. Set the day(s) of the
+          week at which the worker will start (1 is Monday, 7 is Sunday, comma separated).
+          Stop day will be the same day. (Check always_on_* parameters to set other
+          parameters)
+        explode: true
+        in: query
+        name: always_on_start_days
+        required: false
+        schema:
+          items:
+            format: int32
+            type: integer
+          type: array
+        style: form
+      - description: Adds a schedule for always on workers. Set the hour at which
+          the worker will start (between 0 and 23). (Check always_on_* parameters
+          to set other parameters)
+        explode: true
+        in: query
+        name: always_on_start_hour
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      - description: Adds a schedule for always on workers. Set the hour at which
+          the worker will stop (between 0 and 23, stop must happen after start). (Check
+          always_on_* parameters to set other parameters)
+        explode: true
+        in: query
+        name: always_on_stop_hour
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      - description: Adds a schedule for always on workers. Set the minute at which
+          the worker will start (between 0 and 59). (Check always_on_* parameters
+          to set other parameters)
+        explode: true
+        in: query
+        name: always_on_start_minute
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      - description: Adds a schedule for always on workers. Set the minute at which
+          the worker will stop (between 0 and 59, stop must happen after start). (Check
+          always_on_* parameters to set other parameters)
+        explode: true
+        in: query
+        name: always_on_stop_minute
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      - description: When using dedicated workers with always on schedule, the models
+          that should be loaded on start of the worker
+        explode: true
+        in: query
+        name: always_on_workers_model_ids
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application'
+          description: Application modified
+        "401":
+          description: Not logged in or not an admin
+        "404":
+          description: Application not found
+      summary: Modifies an existing application in the system (admin only)
+      tags:
+      - application_admin
+      x-openapi-router-controller: leiaws_service.controllers.application_admin_controller
+      x-accepts: application/json
+  /admin/application/{application_id}/always_on_schedules/{always_on_schedule_id}:
+    delete:
+      description: Removes a schedule from an application
+      operationId: admin_delete_always_on_schedule
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id of the application
+        explode: false
+        in: path
+        name: application_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id of the schedule to delete
+        explode: false
+        in: path
+        name: always_on_schedule_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: The schedule was successfully deleted
+        "401":
+          description: Not logged in
+        "404":
+          description: Application or schedule not found
+      summary: Removes a schedule from an application
+      tags:
+      - application_admin
+      x-openapi-router-controller: leiaws_service.controllers.application_admin_controller
+      x-accepts: application/json
+  /admin/application/{application_id}/reset_api_key:
+    post:
+      description: Resets the API key of the application corresponding to application_id,
+        and returns a new one. This method is only accessible to admins
+      operationId: admin_reset_api_key
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id of the application to reset
+        explode: false
+        in: path
+        name: application_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application'
+          description: API key reset
+        "400":
+          description: Invalid application data
+        "401":
+          description: Not logged in or not an admin
+        "403":
+          description: Cannot reset your own api key
+        "404":
+          description: No application found
+      summary: Resets an API key (admin only)
+      tags:
+      - application_admin
+      x-openapi-router-controller: leiaws_service.controllers.application_admin_controller
+      x-accepts: application/json
+  /admin/document:
+    get:
+      description: Retrieves documents which matches the query from Leia API as JSON
+        metadata. This method is only accessible to admins
+      operationId: admin_get_documents
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id of the document
+        explode: true
+        in: query
+        name: document_id
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The application that owns the documents
+        explode: true
+        in: query
+        name: application_id
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The file name of the documents to retrieve
+        explode: true
+        in: query
+        name: filename
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The extension of the documents to retrieve
+        explode: true
+        in: query
+        name: extension
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Filters by MIME type
+        explode: true
+        in: query
+        name: mime_type
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Filters by original id
+        explode: true
+        in: query
+        name: original_id
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: If specified, filters the documents by tag
+        explode: true
+        in: query
+        name: tags
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+      - description: 'If specified, keeps only documents created after given UTC timestamp
+          (ISO 8601 format : yyyy-MM-ddThh:mm:ss)'
+        explode: true
+        in: query
+        name: created_after
+        required: false
+        schema:
+          format: date-time
+          type: string
+        style: form
+      - description: 'If specified, keeps only documents created before given UTC
+          timestamp (ISO 8601 format : yyyy-MM-ddThh:mm:ss)'
+        explode: true
+        in: query
+        name: created_before
+        required: false
+        schema:
+          format: date-time
+          type: string
+        style: form
+      - description: Atomically adds a tag to all retrieved values if specified. The
+          added tag will not be returned in the result
+        explode: true
+        in: query
+        name: tag_result
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: If specified, sorts the documents by a list of existing parameters
+          separated by commas. Can be 'application_id', 'filename', 'extension', 'mime_type',
+          'original_id', 'page', 'creation_time'. Sorts in ascending order by default.
+          If a parameter is preceded by '-', it is sorted in descending order.
+        explode: true
+        in: query
+        name: sort
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Number of the first document to send (pagination)
+        explode: true
+        in: query
+        name: offset
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: Maximum number of documents to send (pagination)
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Document'
+                type: array
+          description: |
+            The retrieved documents' metadata. Also contains pagination information in the headers:<br />
+            Content-Range: first-last/total<br />
+            Accept-Range: document max_limit
+        "401":
+          description: Not logged in
+        "403":
+          description: At least one filter must be applied
+        "404":
+          description: Document not found
+      summary: Retrieves documents from Leia API (admin only) (paginated)
+      tags:
+      - document_admin
+      x-openapi-router-controller: leiaws_service.controllers.document_admin_controller
+      x-accepts: application/json
+  /admin/document/tag:
+    get:
+      description: Retrieves tags from documents. This method is only accessible to
+        admins
+      operationId: admin_get_documents_tags
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Restrict to tags belonging to this application
+        explode: true
+        in: query
+        name: application_id
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+              - tag1
+              - tag2
+              - tag3
+              schema:
+                items:
+                  type: string
+                type: array
+          description: |
+            The retrieved documents' tags
+        "401":
+          description: Not logged in
+        "404":
+          description: Tags not found
+      summary: Retrieves documents' tags from Leia API (admin only)
+      tags:
+      - document_admin
+      x-openapi-router-controller: leiaws_service.controllers.document_admin_controller
+      x-accepts: application/json
+  /admin/document/zip:
+    get:
+      description: Retrieves documents which matches the query from Leia API in a
+        zip file. This method is only accessible to admins
+      operationId: admin_get_documents_zip
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id of the document
+        explode: true
+        in: query
+        name: document_id
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The application that owns the documents
+        explode: true
+        in: query
+        name: application_id
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The file name of the documents to retrieve
+        explode: true
+        in: query
+        name: filename
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The extension of the documents to retrieve
+        explode: true
+        in: query
+        name: extension
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Filters by MIME type
+        explode: true
+        in: query
+        name: mime_type
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Filters by original id
+        explode: true
+        in: query
+        name: original_id
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: If specified, filters the documents by tag
+        explode: true
+        in: query
+        name: tags
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+      - description: 'If specified, keeps only documents created after given UTC timestamp
+          (ISO 8601 format : yyyy-MM-ddThh:mm:ss)'
+        explode: true
+        in: query
+        name: created_after
+        required: false
+        schema:
+          format: date-time
+          type: string
+        style: form
+      - description: 'If specified, keeps only documents created before given UTC
+          timestamp (ISO 8601 format : yyyy-MM-ddThh:mm:ss)'
+        explode: true
+        in: query
+        name: created_before
+        required: false
+        schema:
+          format: date-time
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/zip:
+              schema:
+                format: binary
+                type: string
+          description: A zip file containing the documents.
+        "401":
+          description: Not logged in
+        "403":
+          description: At least one filter must be applied
+        "404":
+          description: Document not found
+      summary: Retrieves documents from Leia API (admin only) (paginated)
+      tags:
+      - document_admin
+      x-openapi-router-controller: leiaws_service.controllers.document_admin_controller
+      x-accepts: application/zip
+  /admin/job:
+    get:
+      description: Get jobs from the system. This method is only accessible to admins
+      operationId: admin_get_jobs
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id of the job
+        explode: true
+        in: query
+        name: job_id
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The id of the submitter of the job
+        explode: true
+        in: query
+        name: submitter_id
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The id of the owner of the documents processed by this job
+        explode: true
+        in: query
+        name: application_id
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The type of the job (predict, pdf-images, image-text or transform)
+        explode: true
+        in: query
+        name: job_type
+        required: false
+        schema:
+          $ref: '#/components/schemas/JobTypes'
+        style: form
+      - description: The model used by the job (only for predict jobs)
+        explode: true
+        in: query
+        name: model_id
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The document that this the job is processing
+        explode: true
+        in: query
+        name: document_id
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The job that is a prerequisite for this job to run
+        explode: true
+        in: query
+        name: execute_after_id
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The job that is the parent of this job
+        explode: true
+        in: query
+        name: parent_job_id
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The status of the job
+        explode: true
+        in: query
+        name: status
+        required: false
+        schema:
+          $ref: '#/components/schemas/Statuses'
+        style: form
+      - description: 'If specified, keeps only jobs created after given UTC timestamp
+          (ISO 8601 format : yyyy-MM-ddThh:mm:ss)'
+        explode: true
+        in: query
+        name: created_after
+        required: false
+        schema:
+          format: date-time
+          type: string
+        style: form
+      - description: 'If specified, keeps only jobs created before given UTC timestamp
+          (ISO 8601 format : yyyy-MM-ddThh:mm:ss)'
+        explode: true
+        in: query
+        name: created_before
+        required: false
+        schema:
+          format: date-time
+          type: string
+        style: form
+      - description: If specified, sorts the jobs by a list of existing parameters
+          separated by commas. Can be 'submitter_id', 'application_id', 'creation_time',
+          'starting_time', 'finished_time', 'job_type', 'model_id', 'document_ids',
+          'status', 'parent_job_id'. Sorts in ascending order by default. If a parameter
+          is preceded by '-', it is sorted in descending order.
+        explode: true
+        in: query
+        name: sort
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Number of the first job to send (pagination)
+        explode: true
+        in: query
+        name: offset
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: Maximum number of jobs to send (pagination)
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Job'
+                type: array
+          description: |
+            The retrieved jobs. Also contains pagination information in the headers:<br />
+            Content-Range: first-last/total<br />
+            Accept-Range: job max_limit
+        "401":
+          description: Not logged in
+        "404":
+          description: No jobs found
+      summary: Retrieves jobs (admin only) (paginated)
+      tags:
+      - job_admin
+      x-openapi-router-controller: leiaws_service.controllers.job_admin_controller
+      x-accepts: application/json
+  /admin/model:
+    get:
+      description: Lists all models. This method is only accessible to admins
+      operationId: admin_get_models
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id of the models
+        explode: true
+        in: query
+        name: model_id
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The application that owns the models
+        explode: true
+        in: query
+        name: application_id
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Filter by type
+        explode: true
+        in: query
+        name: model_type
+        required: false
+        schema:
+          $ref: '#/components/schemas/ModelTypes'
+        style: form
+      - description: Filter by name
+        explode: true
+        in: query
+        name: name
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Filter by short name
+        explode: true
+        in: query
+        name: short_name
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Gets models that contain this string in their description
+        explode: true
+        in: query
+        name: description
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Filter by input type
+        explode: true
+        in: query
+        name: input_types
+        required: false
+        schema:
+          items:
+            $ref: '#/components/schemas/ModelInputTypes'
+          type: array
+        style: form
+      - description: If specified, filters the models by tag
+        explode: true
+        in: query
+        name: tags
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+      - description: 'If specified, keeps only models created after given UTC timestamp
+          (ISO 8601 format : yyyy-MM-ddThh:mm:ss)'
+        explode: true
+        in: query
+        name: created_after
+        required: false
+        schema:
+          format: date-time
+          type: string
+        style: form
+      - description: 'If specified, keeps only models created before given UTC timestamp
+          (ISO 8601 format : yyyy-MM-ddThh:mm:ss)'
+        explode: true
+        in: query
+        name: created_before
+        required: false
+        schema:
+          format: date-time
+          type: string
+        style: form
+      - description: If true, will list only models that strictly belong to application_id
+          if present, or to connected application else (and not all the models that
+          it can use) (false by default)
+        explode: true
+        in: query
+        name: only_mine
+        required: false
+        schema:
+          type: boolean
+        style: form
+      - description: If specified, sorts the models by a list of existing parameters
+          separated by commas. Can be 'application_id', 'creation_time', 'name', 'description',
+          'model_type'. Sorts in ascending order by default. If a parameter is preceded
+          by '-', it is sorted in descending order.
+        explode: true
+        in: query
+        name: sort
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Number of the first model to send (pagination)
+        explode: true
+        in: query
+        name: offset
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: Maximum number of models to send (pagination)
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Model'
+                type: array
+          description: |
+            Model list. Also contains pagination information in the headers:<br />
+            Content-Range: first-last/total<br />
+            Accept-Range: model max_limit
+        "401":
+          description: Not logged in
+      summary: Lists models (admin only) (paginated))
+      tags:
+      - model_admin
+      x-openapi-router-controller: leiaws_service.controllers.model_admin_controller
+      x-accepts: application/json
+  /admin/{application_id}/document:
+    post:
+      description: |
+        Uploads a document to Leia API for future use. This method is only accessible to admins
+      operationId: admin_create_document
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The application that will own the model
+        explode: true
+        in: path
+        name: application_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The name of the file (if present, extension will be separated
+          from filename in metadata of the document)
+        explode: true
+        in: query
+        name: filename
+        required: true
+        schema:
+          type: string
+        style: form
+      - description: The TTL (in seconds, not less than 60) for the document (if present,
+          the document and any sub documents, annotations, or jobs linked to it will
+          be deleted after the TTL is expired)
+        explode: true
+        in: query
+        name: ttl
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: The tags of the document
+        explode: true
+        in: query
+        name: tags
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+      requestBody:
+        content:
+          application/octet-stream:
+            schema:
+              format: binary
+              type: string
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+          description: A description of the uploaded document
+        "401":
+          description: Not logged in
+      summary: Uploads a document to the Leia API (admin only)
+      tags:
+      - document_admin
+      x-openapi-router-controller: leiaws_service.controllers.document_admin_controller
+      x-contentType: application/octet-stream
+      x-accepts: application/json
+  /admin/{application_id}/document/{document_ids}/transform/{output_type}:
+    post:
+      description: Asynchronously transforms a document from its current type to the
+        output_type. May generate multiple new documents (for example converting a
+        PDF to image will generate one new image document for each page of the PDF).
+        Returns a Job, that will have to be polled to get the result. This method
+        is only accessible to admins
+      operationId: admin_transform_document_async
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The application id whose documents to transform belong to
+        explode: false
+        in: path
+        name: application_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Comma separated list of document ids to process
+        explode: true
+        in: path
+        name: document_ids
+        required: true
+        schema:
+          items:
+            type: string
+          type: array
+        style: simple
+      - description: |
+          The output type. May be:
+            * image (extract one image for each page in a PDF file)
+            * text (Use OCR on an image to get convert it to text)
+              * To use Google Vision OCR instead of normal LEIA OCR, add "use_google_vision":true in transform_params
+            * text_tree (text in the form of a JSON tree with information about text blocks and their position in the document)
+              * To use Google Vision OCR instead of normal LEIA OCR, add "use_google_vision":true in transform_params
+            * autorotate (Rotates an image that contains text so that it is in readable orientation)
+            * trim (Trims white space around a document)
+            * merge (Merge multiple text documents into a single one with a carriage return '\n' between them)
+            * split (Splits a text document into chunks of 1000 words and replaces all spacing characters by single spaces (this number can be changed by setting split_size to another value in transform_params))
+        explode: false
+        in: path
+        name: output_type
+        required: true
+        schema:
+          $ref: '#/components/schemas/TransformTypes'
+        style: simple
+      - description: The tag of the documents to process. If tag is present, document_ids
+          should contain a single value, and the documents processed will be those
+          where original_id=document_ids[0] and that contain the specified tag
+        explode: true
+        in: query
+        name: input_tag
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The tag to add to the documents resulting from the transformation
+        explode: false
+        in: query
+        name: output_tag
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The id of a job that must be in PROCESSED status before this
+          one can be started (used to chain jobs even before the first ones are terminated).
+          If the referenced job becomes FAILED or is CANCELED, this one will fail
+        explode: false
+        in: query
+        name: execute_after_id
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: |
+          The pages that should be used in previous job to process this one. Can only be used if execute_after_id is not null. Pages are indexed from 0. Syntax is the same as Python slices syntax (https://docs.python.org/3/whatsnew/2.3.html#extended-slices). Examples :
+            * Single positive integer : keep only this page (example 4 will keep only page 5 (Remember, pages are indexed from 0))
+            * Single negative integer : keep only this page, but starting from the end (example -4 will keep only page 7 if there are 10 total pages)
+            * Range (x:y) : keep only this range of pages (Including x but excluding y, indexed from 0)
+              Examples
+                * 2: will keep all pages starting from page 3
+                * :5 will keep only pages 1 to 5
+                * 2:5 will keep only pages 3, 4 and 5
+                * -4: will keep only pages 7 to 10 if there are 10 total pages)
+                * :-2 will keep only pages 1 to 8 if there are 10 total pages)
+                * -4:-2 will keep only pages 7 and 8 if there are 10 total pages)
+            * Stride (::w) : Keep 1 page every w pages starting at the first one (example ::2 will keep only odd pages)
+            * Range and stride (x:y:w) : Keep 1 page every w pages within range (x:y) (example 1::2 will keep only even pages)
+          You can use multiple ranges of page at once, comma separated (For example, 0,2:5,-2:-1 keeps the 1st page, plus pages 3->5, plus the second to last page)
+        explode: false
+        in: query
+        name: page_range
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Callback URL that should be called when the job becomes PROCESSED/FAILED/CANCELED.
+          This URL will be called with a HTTP POST method, and the Job object as the
+          payload. Callback server must answer with either a 200 or 204 HTTP response,
+          to acknowledge the callback. Any other response code will be considered
+          as a failure to call the callback.
+        explode: false
+        in: query
+        name: callback_url
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Free form parameters for the transformation
+        explode: true
+        in: query
+        name: transform_params
+        required: false
+        schema:
+          type: object
+        style: form
+      - description: If true, blocks processing on the job until /job/{id}/start is
+          called. Default is false
+        explode: true
+        in: query
+        name: block_processing
+        required: false
+        schema:
+          type: boolean
+        style: form
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransformBody'
+        description: All the previous query parameters can also be passed as JSON
+          in the body of the request
+        required: false
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Job'
+          description: Document contents
+        "401":
+          description: Not logged in
+        "403":
+          description: Not the owner of the document
+        "404":
+          description: Document not found
+      summary: Asynchronously converts a document within Leia API (admin only)
+      tags:
+      - document_admin
+      x-openapi-router-controller: leiaws_service.controllers.document_admin_controller
+      x-contentType: application/json
+      x-accepts: application/json
+  /admin/{application_id}/document/{document_id}:
+    delete:
+      description: |
+        Deletes a document from Leia API. This method is only accessible to admins
+      operationId: admin_delete_document
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The application to which the document to delete belongs
+        explode: false
+        in: path
+        name: application_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id of the document to delete
+        explode: false
+        in: path
+        name: document_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: The document was successfully deleted
+        "401":
+          description: Not logged in
+        "404":
+          description: Document not found
+      summary: Deletes a document from Leia API (admin only)
+      tags:
+      - document_admin
+      x-openapi-router-controller: leiaws_service.controllers.document_admin_controller
+      x-accepts: application/json
+    get:
+      description: |
+        Retrieves a document from Leia API as metadata. This method is only accessible to admins
+      operationId: admin_get_document
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The application to which the document to retrieve belongs
+        explode: false
+        in: path
+        name: application_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id of the document to retrieve
+        explode: false
+        in: path
+        name: document_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+          description: The retrieved document's metadata
+        "401":
+          description: Not logged in
+        "404":
+          description: Document not found
+      summary: Retrieves a document from Leia API (admin only)
+      tags:
+      - document_admin
+      x-openapi-router-controller: leiaws_service.controllers.document_admin_controller
+      x-accepts: application/json
+    patch:
+      description: Updates metadata for a document. This method is only accessible
+        to admins
+      operationId: admin_edit_document
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The application to which the document to update belongs
+        explode: false
+        in: path
+        name: application_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id of the document to update
+        explode: false
+        in: path
+        name: document_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The new file name of the document
+        explode: true
+        in: query
+        name: filename
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The new rotation angle of the document
+        explode: true
+        in: query
+        name: rotation_angle
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: The TTL (in seconds, not less than 60) for the document (if present,
+          the document and any sub documents, annotations, or jobs linked to it will
+          be deleted after the TTL is expired)
+        explode: true
+        in: query
+        name: ttl
+        required: false
+        schema:
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+          description: The documents' metadata, updated with new values
+        "401":
+          description: Not logged in
+        "404":
+          description: Document not found
+      summary: Updates a document in Leia API (admin only)
+      tags:
+      - document_admin
+      x-openapi-router-controller: leiaws_service.controllers.document_admin_controller
+      x-accepts: application/json
+  /admin/{application_id}/document/{document_id}/file_contents:
+    get:
+      description: |
+        Retrieves the binary contents of a document from Leia API. This method is only accessible to admins
+      operationId: admin_get_document_contents
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The application to which the document to retrieve belongs
+        explode: false
+        in: path
+        name: application_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id of the document to retrieve
+        explode: false
+        in: path
+        name: document_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Restrict the size of the image to get (only applicable for documents
+          of type image). The largest dimension of the image will be capped to this
+          dimension
+        explode: true
+        in: query
+        name: max_size
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: JPEG compression rate, in percent (only applicable for documents
+          of type image)
+        explode: true
+        in: query
+        name: jpeg_compression
+        required: false
+        schema:
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/octet-stream:
+              schema:
+                format: binary
+                type: string
+          description: The retrieved document's binary contents
+        "401":
+          description: Not logged in
+        "404":
+          description: Document not found
+      summary: Retrieves a document from Leia API (admin only)
+      tags:
+      - document_admin
+      x-openapi-router-controller: leiaws_service.controllers.document_admin_controller
+      x-accepts: application/octet-stream
+  /admin/{application_id}/document/{document_id}/tag/{tag}:
+    delete:
+      description: Untags a document. This method is only accessible to admins
+      operationId: admin_untag_document
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The application to which the document to untag belongs
+        explode: false
+        in: path
+        name: application_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id of the document
+        explode: false
+        in: path
+        name: document_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The tag to delete from the document
+        explode: false
+        in: path
+        name: tag
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: The document without the deleted tag
+        "401":
+          description: Not logged in
+        "404":
+          description: Document not found
+      summary: Untags an document (admin only)
+      tags:
+      - document_admin
+      x-openapi-router-controller: leiaws_service.controllers.document_admin_controller
+      x-accepts: application/json
+    post:
+      description: Tags a document. This method is only accessible to admins
+      operationId: admin_tag_document
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The application to which the document to tag belongs
+        explode: false
+        in: path
+        name: application_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id of the document
+        explode: false
+        in: path
+        name: document_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The tag to add to the document
+        explode: false
+        in: path
+        name: tag
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+          description: The document with the new tag
+        "401":
+          description: Not logged in
+        "404":
+          description: Document not found
+      summary: Tags a document (admin only)
+      tags:
+      - document_admin
+      x-openapi-router-controller: leiaws_service.controllers.document_admin_controller
+      x-accepts: application/json
+  /admin/{application_id}/job/conditional/{execute_after_id}:
+    post:
+      description: |
+        This method is only accessible to admins.<br /> Asynchronously runs one or more list of jobs on accessible documents and returns a Job.<br /> The list of jobs to run and the documents on which they should be run will be chosen depending on the rules parameter that is set in the body of the request and the result of the execute_after_id job.<br /> Rules should be a map[string,object] where the key is a user chosen id and the value is a list of objects containing the same parameters as normal calls to /admin/{application_id}/model/{model_id}/apply{document_ids} or /admin/{application_id}/document/{document_ids}/transform/{output_type} and a conditions field.<br /> If all the field/values in the conditions of a rule are contained as is in the result of the execute_after_id job, then the list of jobs will be executed in order with the given parameters, each job depending on the previous one in the list, else it won't be executed at all<br /> Syntax for conditions is as follows:
+          * "field_name" : value In which case the field field_name must be equal to the value for the job to be executed. value can be any valid json type (int, float, string...)
+          * "field_name": {"operator" : value} Where operator is a [Mongo like comparison operator](https://docs.mongodb.com/manual/reference/operator/query-comparison/). In this case the comparison between field field_name's value must be true for the job to be executed. value can be any valid json type (int, float, string...)
+          * "field_name": [{"operator_1" : value_1}...{"operator_n" : value_n}] Where operator_i is a [Mongo like comparison operator](https://docs.mongodb.com/manual/reference/operator/query-comparison/). In this case the comparison between field field_name's value must be true for all items in the list for the job to be executed. value_i can be any valid json type (int, float, string...). {"$eq" : value_i} can be abbreviated as value_i in the list.
+
+        You can keep the document_ids field of any job empty. If it is, the job will use the results of previous job's as an input if no tag is set, or the document_ids of the execute_after_id job + tag if tag is set.<br /> If the conditions are not mutually exclusive, 2 or more models may be executed.<br /> The result will be sent back as a map of results where the key is the rule id, and containing one entry for list of jobs that was executed. This entry will contain all the results of the executed jobs, in execution order<br /> This is mostly but not necessarily meant to be used after a classifier model, so that an execution path can be chosen automatically depending on the result of the classification.
+      operationId: admin_create_conditional_job
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The application to which the models belongs
+        explode: false
+        in: path
+        name: application_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id of a job that must be in PROCESSED status before this
+          one can be started (used to chain jobs even before the first ones are terminated).
+          If the referenced job becomes FAILED or is CANCELED, this one will fail
+        explode: false
+        in: path
+        name: execute_after_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Callback URL that should be called when the job becomes PROCESSED/FAILED/CANCELED.
+          This URL will be called with a HTTP POST method, and the Job object as the
+          payload. Callback server must answer with either a 200 or 204 HTTP response,
+          to acknowledge the callback. Any other response code will be considered
+          as a failure to call the callback.
+        explode: false
+        in: query
+        name: callback_url
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: If true, blocks processing on the job until /job/{id}/start is
+          called. Default is false
+        explode: true
+        in: query
+        name: block_processing
+        required: false
+        schema:
+          type: boolean
+        style: form
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConditionalBody'
+        description: Contains the rules to choose the model to apply. All the previous
+          query parameters can also be passed as JSON in the body of the request
+        required: false
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Job'
+          description: A JSON depending on the data that the model is able to output.
+            Might be converted to Classification if format_type was specified
+        "400":
+          description: The documents could not be processed by this model, or using
+            a tag with multiple document_ids
+        "401":
+          description: Not logged in
+        "403":
+          description: Not a classification model
+        "404":
+          description: Model or document not found
+      summary: Asynchronously and conditionaly applies model(s) on documents (admin
+        only)
+      tags:
+      - job_admin
+      x-openapi-router-controller: leiaws_service.controllers.job_admin_controller
+      x-contentType: application/json
+      x-accepts: application/json
+  /admin/{application_id}/model:
+    post:
+      description: Adds a new model to the system and prepares structures to be able
+        to serve it. This method is only accessible to admins
+      operationId: admin_create_model
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The application that will own the model
+        explode: true
+        in: path
+        name: application_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The name of the model
+        explode: true
+        in: query
+        name: name
+        required: true
+        schema:
+          type: string
+        style: form
+      - description: The new short name of the model
+        explode: true
+        in: query
+        name: short_name
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The description of the model
+        explode: true
+        in: query
+        name: description
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The TTL of the model in seconds, if running in worker mode (negative
+          for infinite TTL, default is 200)
+        explode: true
+        in: query
+        name: ttl
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: The applications allowed to use this model
+        explode: true
+        in: query
+        name: allowed_application_ids
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+      - description: Is this model allowed for everyone ?
+        explode: true
+        in: query
+        name: allow_all_applications
+        required: false
+        schema:
+          type: boolean
+        style: form
+      - description: The tags of the model
+        explode: true
+        in: query
+        name: tags
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+      requestBody:
+        content:
+          application/octet-stream:
+            schema:
+              format: binary
+              type: string
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model'
+          description: Model created
+        "400":
+          description: Invalid model data
+        "401":
+          description: Not logged in or not an admin
+        "404":
+          description: Owner application not found
+      summary: Adds a new model to the system (admin only)
+      tags:
+      - model_admin
+      x-openapi-router-controller: leiaws_service.controllers.model_admin_controller
+      x-contentType: application/octet-stream
+      x-accepts: application/json
+  /admin/{application_id}/model/{model_id}:
+    delete:
+      description: Get a model in the system that the application can access. This
+        method is only accessible to admins. This method is only accessible to admins
+      operationId: admin_delete_model
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The application to which the model to delete belongs
+        explode: false
+        in: path
+        name: application_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id of the model to delete
+        explode: false
+        in: path
+        name: model_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: Model deleted
+        "401":
+          description: Not logged in or not an admin
+        "404":
+          description: Model not found
+      summary: Deletes a model (admin only)
+      tags:
+      - model_admin
+      x-openapi-router-controller: leiaws_service.controllers.model_admin_controller
+      x-accepts: application/json
+    get:
+      description: Get a model in the system that the application can access. This
+        method is only accessible to admins
+      operationId: admin_get_model
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The application to which the model to retrieve belongs
+        explode: false
+        in: path
+        name: application_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id or the short name of the model to get
+        explode: false
+        in: path
+        name: model_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model'
+          description: A model
+        "401":
+          description: Not logged in
+        "404":
+          description: Model not found
+      summary: Get a model (admin only)
+      tags:
+      - model_admin
+      x-openapi-router-controller: leiaws_service.controllers.model_admin_controller
+      x-accepts: application/json
+    patch:
+      description: Modifies a model already in the system. This method is only accessible
+        to admins
+      operationId: admin_edit_model
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The application to which the model to modify belongs
+        explode: false
+        in: path
+        name: application_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id of the model
+        explode: true
+        in: path
+        name: model_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The new name of the model
+        explode: true
+        in: query
+        name: name
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The new short name of the model
+        explode: true
+        in: query
+        name: short_name
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The new description of the model
+        explode: true
+        in: query
+        name: description
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The applications allowed to use this model. Clears the list if
+          empty
+        explode: true
+        in: query
+        name: allowed_application_ids
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+      - description: Is this model allowed for everyone ?
+        explode: true
+        in: query
+        name: allow_all_applications
+        required: false
+        schema:
+          type: boolean
+        style: form
+      - description: The new TTL of the model in seconds, if running in worker mode
+          (negative for infinite TTL, default is 200)
+        explode: true
+        in: query
+        name: ttl
+        required: false
+        schema:
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model'
+          description: Model modified
+        "400":
+          description: Invalid model data
+        "401":
+          description: Not logged in or not an admin
+        "404":
+          description: Owner application not found
+      summary: Modifies an existing model in the system (admin only)
+      tags:
+      - model_admin
+      x-openapi-router-controller: leiaws_service.controllers.model_admin_controller
+      x-accepts: application/json
+  /admin/{application_id}/model/{model_id}/apply/{document_ids}:
+    post:
+      description: Asynchronously applies an accessible model on accessible documents
+        and returns a Job, that will have to be polled to get the result. This method
+        is only accessible to admins
+      operationId: admin_apply_model_async
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The application to which the model belongs
+        explode: false
+        in: path
+        name: application_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id or the short name of the model to apply on the document
+        explode: false
+        in: path
+        name: model_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Comma separated list of document ids to process
+        explode: true
+        in: path
+        name: document_ids
+        required: true
+        schema:
+          items:
+            type: string
+          type: array
+        style: simple
+      - description: The tag of the documents to process. If tag is present, document_ids
+          should contain a single value, and the documents processed will be those
+          where original_id=document_ids[0] and that contain the specified tag
+        explode: true
+        in: query
+        name: tag
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The format in which the data should be returned. If empty, will
+          return an array of key-value items. If it is classification, the result
+          will be a Classification object.
+        explode: true
+        in: query
+        name: format_type
+        required: false
+        schema:
+          $ref: '#/components/schemas/FormatTypes'
+        style: form
+      - description: The id of a job that must be in PROCESSED status before this
+          one can be started (used to chain jobs even before the first ones are terminated).
+          If the referenced job becomes FAILED or is CANCELED, this one will fail
+        explode: false
+        in: query
+        name: execute_after_id
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: |
+          The pages that should be used in previous job to process this one. Can only be used if execute_after_id is not null. Pages are indexed from 0. Syntax is the same as Python slices syntax (https://docs.python.org/3/whatsnew/2.3.html#extended-slices). Examples :
+            * Single positive integer : keep only this page (example 4 will keep only page 5 (Remember, pages are indexed from 0))
+            * Single negative integer : keep only this page, but starting from the end (example -4 will keep only page 7 if there are 10 total pages)
+            * Range (x:y) : keep only this range of pages (Including x but excluding y, indexed from 0)
+              Examples
+                * 2: will keep all pages starting from page 3
+                * :5 will keep only pages 1 to 5
+                * 2:5 will keep only pages 3, 4 and 5
+                * -4: will keep only pages 7 to 10 if there are 10 total pages)
+                * :-2 will keep only pages 1 to 8 if there are 10 total pages)
+                * -4:-2 will keep only pages 7 and 8 if there are 10 total pages)
+            * Stride (::w) : Keep 1 page every w pages starting at the first one (example 2 will keep only odd pages)
+            * Range and stride (x:y:w) : Keep 1 page every w pages within range (x:y) (example 1::2 will keep only even pages)
+          You can use multiple ranges of page at once, comma separated (For example, 0,2:5,-2:-1 keeps the 1st page, plus pages 3->5, plus the second to last page)
+        explode: false
+        in: query
+        name: page_range
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Callback URL that should be called when the job becomes PROCESSED/FAILED/CANCELED.
+          This URL will be called with a HTTP POST method, and the Job object as the
+          payload. Callback server must answer with either a 200 or 204 HTTP response,
+          to acknowledge the callback. Any other response code will be considered
+          as a failure to call the callback.
+        explode: false
+        in: query
+        name: callback_url
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Additional parameters that will be passed as is to the model
+        explode: true
+        in: query
+        name: model_params
+        required: false
+        schema:
+          type: object
+        style: form
+      - description: If true, blocks processing on the job until /job/{id}/start is
+          called. Default is false
+        explode: true
+        in: query
+        name: block_processing
+        required: false
+        schema:
+          type: boolean
+        style: form
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApplyBody'
+        description: All the previous query parameters can also be passed as JSON
+          in the body of the request
+        required: false
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Job'
+          description: A JSON depending on the data that the model is able to output.
+            Might be converted to Classification if format_type was specified
+        "400":
+          description: The documents could not be processed by this model, or using
+            a tag with multiple document_ids
+        "401":
+          description: Not logged in
+        "403":
+          description: Not a classification model
+        "404":
+          description: Model or document not found
+      summary: Asynchronously applies a model on documents (admin only)
+      tags:
+      - model_admin
+      x-openapi-router-controller: leiaws_service.controllers.model_admin_controller
+      x-contentType: application/json
+      x-accepts: application/json
+  /admin/{application_id}/model/{model_id}/file_contents:
+    get:
+      description: Get a model in the system that the application can access. This
+        method is only accessible to admins
+      operationId: admin_get_model_contents
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The application to which the model to retrieve belongs
+        explode: false
+        in: path
+        name: application_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id or the short name of the model to get
+        explode: false
+        in: path
+        name: model_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/octet-stream:
+              schema:
+                format: binary
+                type: string
+          description: A model
+        "401":
+          description: Not logged in
+        "404":
+          description: Model not found
+      summary: Get a model (admin only)
+      tags:
+      - model_admin
+      x-openapi-router-controller: leiaws_service.controllers.model_admin_controller
+      x-accepts: application/octet-stream
+  /admin/{application_id}/model/{model_id}/tag/{tag}:
+    delete:
+      description: Untags a model. This method is only accessible to admins
+      operationId: admin_untag_model
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The application to which the model to untag belongs
+        explode: false
+        in: path
+        name: application_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id of the model
+        explode: false
+        in: path
+        name: model_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The tag to delete from the model
+        explode: false
+        in: path
+        name: tag
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: The model without the deleted tag
+        "401":
+          description: Not logged in
+        "404":
+          description: Model not found
+      summary: Untags a model (admin only)
+      tags:
+      - model_admin
+      x-openapi-router-controller: leiaws_service.controllers.model_admin_controller
+      x-accepts: application/json
+    post:
+      description: Tags a model. This method is only accessible to admins
+      operationId: admin_tag_model
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The application to which the model to tag belongs
+        explode: false
+        in: path
+        name: application_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id of the model
+        explode: false
+        in: path
+        name: model_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The tag to add to the model
+        explode: false
+        in: path
+        name: tag
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model'
+          description: The model with the new tag
+        "401":
+          description: Not logged in
+        "404":
+          description: Model not found
+      summary: Tags a model (admin only)
+      tags:
+      - model_admin
+      x-openapi-router-controller: leiaws_service.controllers.model_admin_controller
+      x-accepts: application/json
+  /admin/{application_id}/model/{model_module}/train/{documents_tag}:
+    post:
+      description: Asynchronously trains a model on accessible documents and returns
+        a Job, that will have to be polled to get the model. This method is only accessible
+        to admins
+      operationId: admin_train_model_async
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The application to which the model belongs
+        explode: false
+        in: path
+        name: application_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The module name of the model to train on documents
+        explode: false
+        in: path
+        name: model_module
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The tag of the documents to train with
+        explode: true
+        in: path
+        name: documents_tag
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The future name of the model in database
+        explode: false
+        in: query
+        name: model_name
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The new short name of the model
+        explode: true
+        in: query
+        name: short_name
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The description of the model
+        explode: true
+        in: query
+        name: description
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The TTL of the model in seconds, if running in worker mode (negative
+          for infinite TTL, default is 200)
+        explode: true
+        in: query
+        name: ttl
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: The applications allowed to use this model
+        explode: true
+        in: query
+        name: allowed_application_ids
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+      - description: Is this model allowed for everyone ?
+        explode: true
+        in: query
+        name: allow_all_applications
+        required: false
+        schema:
+          type: boolean
+        style: form
+      - description: The tags of the model
+        explode: true
+        in: query
+        name: tags
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+      - description: The job that is a prerequisite for this job to run
+        explode: true
+        in: query
+        name: execute_after_id
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Callback URL that should be called when the job becomes PROCESSED/FAILED/CANCELED.
+          This URL will be called with a HTTP POST method, and the Job object as the
+          payload. Callback server must answer with either a 200 or 204 HTTP response,
+          to acknowledge the callback. Any other response code will be considered
+          as a failure to call the callback.
+        explode: false
+        in: query
+        name: callback_url
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Additional parameters that will be passed as is to the train
+          method
+        explode: true
+        in: query
+        name: model_params
+        required: false
+        schema:
+          type: object
+        style: form
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrainBody'
+        description: All the previous query parameters can also be passed as JSON
+          in the body of the request
+        required: false
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Job'
+          description: A JSON depending on the data that the model is able to output.
+        "400":
+          description: The documents could not be processed by this model
+        "401":
+          description: Not logged in
+        "403":
+          description: Not a trainable model
+        "404":
+          description: Training documents not found
+      summary: Asynchronously trains a model on documents (admin only)
+      tags:
+      - model_admin
+      x-openapi-router-controller: leiaws_service.controllers.model_admin_controller
+      x-contentType: application/json
+      x-accepts: application/json
+  /admin/{submitter_id}/job/{job_ids}/status:
+    get:
+      description: |
+        Retrieves a list of job statuses from Leia API. This method is only accessible to admins
+      operationId: admin_get_job_statuses
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id of the submitter of the job
+        explode: false
+        in: path
+        name: submitter_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The ids of the jobs to retrieve, comma separated
+        explode: false
+        in: path
+        name: job_ids
+        required: true
+        schema:
+          items:
+            type: string
+          type: array
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                additionalProperties:
+                  $ref: '#/components/schemas/Statuses'
+                type: object
+          description: The retrieved job statuses, in a map indexed by job id
+        "401":
+          description: Not logged in
+        "404":
+          description: Job not found
+      summary: Retrieves job statuses from Leia API (admin only)
+      tags:
+      - job_admin
+      x-openapi-router-controller: leiaws_service.controllers.job_admin_controller
+      x-accepts: application/json
+  /admin/{submitter_id}/job/{job_id}:
+    delete:
+      description: |
+        Cancels a job in Leia API (This will not really delete it, just mark it as cancelled, so dependent jobs will fail). This method is only accessible to admins
+      operationId: admin_cancel_job
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The application which submitted the job
+        explode: false
+        in: path
+        name: submitter_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id of the job to delete
+        explode: false
+        in: path
+        name: job_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: The job was successfully canceled
+        "401":
+          description: Not logged in
+        "403":
+          description: Not the owner of the job
+        "404":
+          description: Job not found (or already canceled)
+      summary: Cancels a job in Leia API (admin only)
+      tags:
+      - job_admin
+      x-openapi-router-controller: leiaws_service.controllers.job_admin_controller
+      x-accepts: application/json
+    get:
+      description: |
+        Retrieves a job from Leia API. This method is only accessible to admins
+      operationId: admin_get_job
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The application which submitted the job
+        explode: false
+        in: path
+        name: submitter_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id of the job to retrieve
+        explode: false
+        in: path
+        name: job_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Job'
+          description: The retrieved job
+        "401":
+          description: Not logged in
+        "403":
+          description: Not the owner of the job
+        "404":
+          description: Job not found
+      summary: Retrieves a job from Leia API (admin only)
+      tags:
+      - job_admin
+      x-openapi-router-controller: leiaws_service.controllers.job_admin_controller
+      x-accepts: application/json
+  /admin/{submitter_id}/job/{job_id}/start:
+    post:
+      description: |
+        Triggers a job in BLOCKED status
+      operationId: admin_start_job
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The application which submitted the job
+        explode: false
+        in: path
+        name: submitter_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id of the job to start
+        explode: false
+        in: path
+        name: job_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Job'
+          description: The started job
+        "401":
+          description: Not logged in
+        "403":
+          description: Not the owner of the job
+        "404":
+          description: Job not found
+      summary: Starts a job in BLOCKED status within Leia API
+      tags:
+      - job_admin
+      x-openapi-router-controller: leiaws_service.controllers.job_admin_controller
+      x-accepts: application/json
+  /annotation:
+    get:
+      description: Retrieves annotations
+      operationId: get_annotations
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: If specified, filters the annotations id
+        explode: true
+        in: query
+        name: annotation_id
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: If specified, filters the annotations by type
+        explode: true
+        in: query
+        name: annotation_type
+        required: false
+        schema:
+          $ref: '#/components/schemas/AnnotationTypes'
+        style: form
+      - description: If specified, filters the annotations by name
+        explode: true
+        in: query
+        name: name
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: If specified, filters the annotations by tag
+        explode: true
+        in: query
+        name: tags
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+      - description: If specified, filters the annotations attached to a given document
+        explode: true
+        in: query
+        name: document_id
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: 'If specified, keeps only annotations created after given UTC
+          timestamp (ISO 8601 format : yyyy-MM-ddThh:mm:ss)'
+        explode: true
+        in: query
+        name: created_after
+        required: false
+        schema:
+          format: date-time
+          type: string
+        style: form
+      - description: 'If specified, keeps only annotations created before given UTC
+          timestamp (ISO 8601 format : yyyy-MM-ddThh:mm:ss)'
+        explode: true
+        in: query
+        name: created_before
+        required: false
+        schema:
+          format: date-time
+          type: string
+        style: form
+      - description: Number of the first annotation to send (pagination)
+        explode: true
+        in: query
+        name: offset
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: Maximum number of annotation to send (pagination)
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Annotation'
+                type: array
+          description: |
+            The retrieved annotations. Also contains pagination information in the headers:<br />
+            Content-Range: first-last/total<br />
+            Accept-Range: annotation max_limit
+        "401":
+          description: Not logged in
+        "404":
+          description: Annotation not found
+      summary: Retrieves annotations (paginated)
+      tags:
+      - annotation
+      x-openapi-router-controller: leiaws_service.controllers.annotation_controller
+      x-accepts: application/json
+  /annotation/{annotation_id}:
+    delete:
+      description: Deletes an annotation
+      operationId: delete_annotation
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id of the annotation (for information purposes only)
+        explode: false
+        in: path
+        name: annotation_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: Annotation deleted
+        "401":
+          description: Not logged in
+        "403":
+          description: Annotation used in a model
+        "404":
+          description: Annotation not found
+      summary: Deletes an annotation
+      tags:
+      - annotation
+      x-openapi-router-controller: leiaws_service.controllers.annotation_controller
+      x-accepts: application/json
+    get:
+      description: Retrieves an annotation
+      operationId: get_annotation
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id of the annotation (for information purposes only)
+        explode: false
+        in: path
+        name: annotation_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Annotation'
+          description: The retrieved annotation
+        "401":
+          description: Not logged in
+        "404":
+          description: Annotation not found
+      summary: Retrieves an annotation
+      tags:
+      - annotation
+      x-openapi-router-controller: leiaws_service.controllers.annotation_controller
+      x-accepts: application/json
+    patch:
+      description: Updates an annotation
+      operationId: update_annotation
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id of the annotation to modify
+        explode: false
+        in: path
+        name: annotation_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The new name of the annotation (won't change if not set)
+        explode: true
+        in: query
+        name: name
+        required: false
+        schema:
+          type: string
+        style: form
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+        description: The new prediction that should be associated to document in this
+          annotation, in free form json
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Annotation'
+          description: OK, annotation created
+        "401":
+          description: Not logged in
+        "404":
+          description: Annotation not found
+      summary: Updates an annotation
+      tags:
+      - annotation
+      x-openapi-router-controller: leiaws_service.controllers.annotation_controller
+      x-contentType: application/json
+      x-accepts: application/json
+  /annotation/{annotation_id}/tag/{tag}:
+    delete:
+      description: Untags an annotation
+      operationId: untag_annotation
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id of the annotation
+        explode: false
+        in: path
+        name: annotation_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The tag to delete from the annotation
+        explode: false
+        in: path
+        name: tag
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: The annotation without the deleted tag
+        "401":
+          description: Not logged in
+        "404":
+          description: Annotation not found
+      summary: Untags an annotation
+      tags:
+      - annotation
+      x-openapi-router-controller: leiaws_service.controllers.annotation_controller
+      x-accepts: application/json
+    post:
+      description: Tags an annotation
+      operationId: tag_annotation
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id of the annotation
+        explode: false
+        in: path
+        name: annotation_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The tag to add to the annotation
+        explode: false
+        in: path
+        name: tag
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Annotation'
+          description: The annotation with the new tag
+        "401":
+          description: Not logged in
+        "404":
+          description: Annotation not found
+      summary: Tags an annotation
+      tags:
+      - annotation
+      x-openapi-router-controller: leiaws_service.controllers.annotation_controller
+      x-accepts: application/json
+  /annotation/{document_id}:
+    post:
+      description: Creates an annotation
+      operationId: create_annotation
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id of the document to annotate
+        explode: false
+        in: path
+        name: document_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The type of the annotation
+        explode: true
+        in: query
+        name: annotation_type
+        required: true
+        schema:
+          $ref: '#/components/schemas/AnnotationTypes'
+        style: form
+      - description: The name of the annotation (for information purposes only)
+        explode: true
+        in: query
+        name: name
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The tags of the annotation
+        explode: true
+        in: query
+        name: tags
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+        description: The prediction that should be associated to document in this
+          annotation, in free form json
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Annotation'
+          description: OK, annotation created
+        "401":
+          description: Not logged in
+        "404":
+          description: Document not found
+      summary: Creates an annotation
+      tags:
+      - annotation
+      x-openapi-router-controller: leiaws_service.controllers.annotation_controller
+      x-contentType: application/json
+      x-accepts: application/json
+  /document:
+    get:
+      description: Retrieves documents which matches the query from Leia API as JSON
+        metadata
+      operationId: get_documents
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id the document to retrieve
+        explode: true
+        in: query
+        name: document_id
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The file name of the documents to retrieve
+        explode: true
+        in: query
+        name: filename
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The extension of the documents to retrieve
+        explode: true
+        in: query
+        name: extension
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Filters by MIME type
+        explode: true
+        in: query
+        name: mime_type
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Filters by original id
+        explode: true
+        in: query
+        name: original_id
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: If specified, filters the documents by tag
+        explode: true
+        in: query
+        name: tags
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+      - description: 'If specified, keeps only documents created after given UTC timestamp
+          (ISO 8601 format : yyyy-MM-ddThh:mm:ss)'
+        explode: true
+        in: query
+        name: created_after
+        required: false
+        schema:
+          format: date-time
+          type: string
+        style: form
+      - description: 'If specified, keeps only documents created before given UTC
+          timestamp (ISO 8601 format : yyyy-MM-ddThh:mm:ss)'
+        explode: true
+        in: query
+        name: created_before
+        required: false
+        schema:
+          format: date-time
+          type: string
+        style: form
+      - description: Atomically adds a tag to all retrieved values if specified. The
+          added tag will not be returned in the result
+        explode: true
+        in: query
+        name: tag_result
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: If specified, sorts the documents by a list of existing parameters
+          separated by commas. Can be 'application_id', 'filename', 'extension', 'mime_type',
+          'original_id', 'page', 'creation_time'. Sorts in ascending order by default.
+          If a parameter is preceded by '-', it is sorted in descending order.
+        explode: true
+        in: query
+        name: sort
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Number of the first document to send (pagination)
+        explode: true
+        in: query
+        name: offset
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: Maximum number of documents to send (pagination)
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Document'
+                type: array
+          description: |
+            The retrieved documents' metadata. Also contains pagination information in the headers:<br />
+            Content-Range: first-last/total<br />
+            Accept-Range: document max_limit
+        "401":
+          description: Not logged in
+        "403":
+          description: At least of filter must be applied
+        "404":
+          description: Document not found
+      summary: Retrieves documents from Leia API (paginated)
+      tags:
+      - document
+      x-openapi-router-controller: leiaws_service.controllers.document_controller
+      x-accepts: application/json
+    post:
+      description: |
+        Uploads a document to Leia API for future use
+      operationId: create_document
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The name of the file (if present, extension will be separated
+          from filename in metadata of the document)
+        explode: true
+        in: query
+        name: filename
+        required: true
+        schema:
+          type: string
+        style: form
+      - description: Set to true if the body is b64 encoded
+        explode: true
+        in: query
+        name: b64
+        required: false
+        schema:
+          type: boolean
+        style: form
+      - description: The TTL (in seconds, not less than 60) for the document (if present,
+          the document and any sub documents, annotations, or jobs linked to it will
+          be deleted after the TTL is expired)
+        explode: true
+        in: query
+        name: ttl
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: The tags of the document
+        explode: true
+        in: query
+        name: tags
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+      requestBody:
+        content:
+          application/octet-stream:
+            schema:
+              format: binary
+              type: string
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+          description: A description of the uploaded document
+        "401":
+          description: Not logged in
+      summary: Uploads a document to the Leia API
+      tags:
+      - document
+      x-openapi-router-controller: leiaws_service.controllers.document_controller
+      x-contentType: application/octet-stream
+      x-accepts: application/json
+  /document/tag:
+    get:
+      description: Retrieves tags from documents that the application can access.
+      operationId: get_documents_tags
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+              - tag1
+              - tag2
+              - tag3
+              schema:
+                items:
+                  type: string
+                type: array
+          description: |
+            The retrieved documents' tags
+        "401":
+          description: Not logged in
+        "404":
+          description: Tags not found
+      summary: Retrieves documents' tags from Leia API
+      tags:
+      - document
+      x-openapi-router-controller: leiaws_service.controllers.document_controller
+      x-accepts: application/json
+  /document/zip:
+    get:
+      description: Retrieves documents which matches the query from Leia API in a
+        zip file
+      operationId: get_documents_zip
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id the document to retrieve
+        explode: true
+        in: query
+        name: document_id
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The file name of the documents to retrieve
+        explode: true
+        in: query
+        name: filename
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The extension of the documents to retrieve
+        explode: true
+        in: query
+        name: extension
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Filters by MIME type
+        explode: true
+        in: query
+        name: mime_type
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Filters by original id
+        explode: true
+        in: query
+        name: original_id
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: If specified, filters the documents by tag
+        explode: true
+        in: query
+        name: tags
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+      - description: 'If specified, keeps only documents created after given UTC timestamp
+          (ISO 8601 format : yyyy-MM-ddThh:mm:ss)'
+        explode: true
+        in: query
+        name: created_after
+        required: false
+        schema:
+          format: date-time
+          type: string
+        style: form
+      - description: 'If specified, keeps only documents created before given UTC
+          timestamp (ISO 8601 format : yyyy-MM-ddThh:mm:ss)'
+        explode: true
+        in: query
+        name: created_before
+        required: false
+        schema:
+          format: date-time
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/octet-stream:
+              schema:
+                format: binary
+                type: string
+          description: The retrieved documents in a zip file
+        "401":
+          description: Not logged in
+        "403":
+          description: At least of filter must be applied
+        "404":
+          description: Document not found
+      summary: Retrieves documents from Leia API (paginated)
+      tags:
+      - document
+      x-openapi-router-controller: leiaws_service.controllers.document_controller
+      x-accepts: application/octet-stream
+  /document/{document_ids}/transform/{output_type}:
+    post:
+      description: Asynchronously transforms a document from its current type to the
+        output_type. May generate multiple new documents (for example converting a
+        PDF to image will generate one new image document for each page of the PDF).
+        Returns a Job, that will have to be polled to get the result.
+      operationId: transform_document_async
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Comma separated list of document ids to process
+        explode: true
+        in: path
+        name: document_ids
+        required: true
+        schema:
+          items:
+            type: string
+          type: array
+        style: simple
+      - description: |
+          The output type. May be:
+            * image (Extract any image from a PDF or a video)
+              * extract one image for each page in a PDF file
+              * extract one image for each frame in a video. By default only the first frame is returned, use "image_slice" in transform_params to specify any other frame range, view the "page_range" parameter for syntax of this option, use "output_quality" in transform_params to specify the quality of the images generated (between 1 and 100, default: 75)
+            * text (Use OCR on an image to get convert it to text)
+              * To use Google Vision OCR instead of normal LEIA OCR, add "use_google_vision":true in transform_params
+            * text_tree (text in the form of a JSON tree with information about text blocks and their position in the document)
+              * To use Google Vision OCR instead of normal LEIA OCR, add "use_google_vision":true in transform_params
+            * autorotate (Rotates an image that contains text so that it is in readable orientation)
+            * trim (Trims white space around a document)
+            * merge (Merge multiple text documents into a single one with a carriage return '\n' between them)
+            * split (Splits a text document into chunks of 1000 words and replaces all spacing characters by single spaces (this number can be changed by setting split_size to another value in transform_params))
+        explode: false
+        in: path
+        name: output_type
+        required: true
+        schema:
+          $ref: '#/components/schemas/TransformTypes'
+        style: simple
+      - description: The tag of the documents to process. If tag is present, document_ids
+          should contain a single value, and the documents processed will be those
+          where original_id=document_ids[0] and that contain the specified tag
+        explode: true
+        in: query
+        name: input_tag
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The tag to add to the documents resulting from the transformation
+        explode: false
+        in: query
+        name: output_tag
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The id of a job that must be in PROCESSED status before this
+          one can be started (used to chain jobs even before the first ones are terminated).
+          If the referenced job becomes FAILED or is CANCELED, this one will fail
+        explode: false
+        in: query
+        name: execute_after_id
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: |
+          The pages that should be used in previous job to process this one. Can only be used if execute_after_id is not null. Pages are indexed from 0. Syntax is the same as Python slices syntax (https://docs.python.org/3/whatsnew/2.3.html#extended-slices). Examples :
+            * Single positive integer : keep only this page (example 4 will keep only page 5 (Remember, pages are indexed from 0))
+            * Single negative integer : keep only this page, but starting from the end (example -4 will keep only page 7 if there are 10 total pages)
+            * Range (x:y) : keep only this range of pages (Including x but excluding y, indexed from 0)
+              Examples
+                * 2: will keep all pages starting from page 3
+                * :5 will keep only pages 1 to 5
+                * 2:5 will keep only pages 3, 4 and 5
+                * -4: will keep only pages 7 to 10 if there are 10 total pages)
+                * :-2 will keep only pages 1 to 8 if there are 10 total pages)
+                * -4:-2 will keep only pages 7 and 8 if there are 10 total pages)
+            * Stride (::w) : Keep 1 page every w pages starting at the first one (example 2 will keep only odd pages)
+            * Range and stride (x:y:w) : Keep 1 page every w pages within range (x:y) (example 1::2 will keep only even pages)
+          You can use multiple ranges of page at once, comma separated (For example, 0,2:5,-2:-1 keeps the 1st page, plus pages 3->5, plus the second to last page)
+        explode: false
+        in: query
+        name: page_range
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Callback URL that should be called when the job becomes PROCESSED/FAILED/CANCELED.
+          This URL will be called with a HTTP POST method, and the Job object as the
+          payload. Callback server must answer with either a 200 or 204 HTTP response,
+          to acknowledge the callback. Any other response code will be considered
+          as a failure to call the callback.
+        explode: false
+        in: query
+        name: callback_url
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Free form parameters for the transformation
+        explode: true
+        in: query
+        name: transform_params
+        required: false
+        schema:
+          type: object
+        style: form
+      - description: If true, blocks processing on the job until /job/{id}/start is
+          called. Default is false
+        explode: true
+        in: query
+        name: block_processing
+        required: false
+        schema:
+          type: boolean
+        style: form
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransformBody'
+        description: All the previous query parameters can also be passed as JSON
+          in the body of the request
+        required: false
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Job'
+          description: Document contents
+        "401":
+          description: Not logged in
+        "403":
+          description: Not the owner of the document
+        "404":
+          description: Document not found
+      summary: Asynchronously converts a document within Leia API
+      tags:
+      - document
+      x-openapi-router-controller: leiaws_service.controllers.document_controller
+      x-contentType: application/json
+      x-accepts: application/json
+  /document/{document_id}:
+    delete:
+      description: |
+        Deletes a document from Leia API
+      operationId: delete_document
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id of the document to delete
+        explode: false
+        in: path
+        name: document_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: The document was successfully deleted
+        "401":
+          description: Not logged in
+        "403":
+          description: Not the owner of the document
+        "404":
+          description: Document not found
+      summary: Deletes a document from Leia API
+      tags:
+      - document
+      x-openapi-router-controller: leiaws_service.controllers.document_controller
+      x-accepts: application/json
+    get:
+      description: |
+        Retrieves metadata for a document from Leia API
+      operationId: get_document
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id of the document to retrieve
+        explode: false
+        in: path
+        name: document_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+          description: The retrieved document's metadata
+        "401":
+          description: Not logged in
+        "403":
+          description: Not the owner of the document
+        "404":
+          description: Document not found
+      summary: Retrieves a document from Leia API
+      tags:
+      - document
+      x-openapi-router-controller: leiaws_service.controllers.document_controller
+      x-accepts: application/json
+    patch:
+      description: Updates metadata for a document
+      operationId: edit_document
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id of the document to update
+        explode: false
+        in: path
+        name: document_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The new file name of the document
+        explode: true
+        in: query
+        name: filename
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The new rotation angle of the document
+        explode: true
+        in: query
+        name: rotation_angle
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: The TTL (in seconds, not less than 60) for the document (if present,
+          the document and any sub documents, annotations, or jobs linked to it will
+          be deleted after the TTL is expired)
+        explode: true
+        in: query
+        name: ttl
+        required: false
+        schema:
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+          description: The documents' metadata, updated with new values
+        "401":
+          description: Not logged in
+        "404":
+          description: Document not found
+      summary: Updates a document in Leia API
+      tags:
+      - document
+      x-openapi-router-controller: leiaws_service.controllers.document_controller
+      x-accepts: application/json
+  /document/{document_id}/file_contents:
+    get:
+      description: |
+        Retrieves a document's binary content from Leia API
+      operationId: get_document_contents
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id of the document to retrieve
+        explode: false
+        in: path
+        name: document_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Restrict the size of the image to get (only applicable for documents
+          of type image). The largest dimension of the image will be capped to this
+          dimension
+        explode: true
+        in: query
+        name: max_size
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: JPEG compression rate, in percent (only applicable for documents
+          of type image)
+        explode: true
+        in: query
+        name: jpeg_compression
+        required: false
+        schema:
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/octet-stream:
+              schema:
+                format: binary
+                type: string
+          description: The retrieved document's binary contents
+        "401":
+          description: Not logged in
+        "403":
+          description: Not the owner of the document
+        "404":
+          description: Document not found
+      summary: Retrieves a document from Leia API
+      tags:
+      - document
+      x-openapi-router-controller: leiaws_service.controllers.document_controller
+      x-accepts: application/octet-stream
+  /document/{document_id}/tag/{tag}:
+    delete:
+      description: Untags a document
+      operationId: untag_document
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id of the document
+        explode: false
+        in: path
+        name: document_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The tag to delete from the document
+        explode: false
+        in: path
+        name: tag
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: The document without the deleted tag
+        "401":
+          description: Not logged in
+        "404":
+          description: Document not found
+      summary: Untags an document
+      tags:
+      - document
+      x-openapi-router-controller: leiaws_service.controllers.document_controller
+      x-accepts: application/json
+    post:
+      description: Tags a document
+      operationId: tag_document
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id of the document
+        explode: false
+        in: path
+        name: document_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The tag to add to the document
+        explode: false
+        in: path
+        name: tag
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+          description: The document with the new tag
+        "401":
+          description: Not logged in
+        "404":
+          description: Document not found
+      summary: Tags a document
+      tags:
+      - document
+      x-openapi-router-controller: leiaws_service.controllers.document_controller
+      x-accepts: application/json
+  /health:
+    get:
+      description: Health check for the application returns a 200 HTTP status when
+        everything is OK
+      operationId: health_check
+      responses:
+        "200":
+          description: Health is OK
+        "500":
+          description: Health is KO
+      summary: Checks Leia API health
+      tags:
+      - health
+      x-openapi-router-controller: leiaws_service.controllers.health_check_controller
+      x-accepts: application/json
+  /job:
+    get:
+      description: Get jobs from the system.
+      operationId: get_jobs
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id of the job
+        explode: true
+        in: query
+        name: job_id
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The id of the owner of the documents processed by this job
+        explode: true
+        in: query
+        name: application_id
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The type of the job (predict, pdf-images, image-text or transform)
+        explode: true
+        in: query
+        name: job_type
+        required: false
+        schema:
+          $ref: '#/components/schemas/JobTypes'
+        style: form
+      - description: The model used by the job (only for predict jobs)
+        explode: true
+        in: query
+        name: model_id
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The document that this the job is processing
+        explode: true
+        in: query
+        name: document_id
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The job that is a prerequisite for this job to run
+        explode: true
+        in: query
+        name: execute_after_id
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The job that is the parent of this job
+        explode: true
+        in: query
+        name: parent_job_id
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The status of the job
+        explode: true
+        in: query
+        name: status
+        required: false
+        schema:
+          $ref: '#/components/schemas/Statuses'
+        style: form
+      - description: 'If specified, keeps only jobs created after given UTC timestamp
+          (ISO 8601 format : yyyy-MM-ddThh:mm:ss)'
+        explode: true
+        in: query
+        name: created_after
+        required: false
+        schema:
+          format: date-time
+          type: string
+        style: form
+      - description: 'If specified, keeps only jobs created before given UTC timestamp
+          (ISO 8601 format : yyyy-MM-ddThh:mm:ss)'
+        explode: true
+        in: query
+        name: created_before
+        required: false
+        schema:
+          format: date-time
+          type: string
+        style: form
+      - description: If specified, sorts the jobs by a list of existing parameters
+          separated by commas. Can be 'submitter_id', 'application_id', 'creation_time',
+          'starting_time', 'finished_time', 'job_type', 'model_id', 'document_ids',
+          'status', 'parent_job_id'. Sorts in ascending order by default. If a parameter
+          is preceded by '-', it is sorted in descending order.
+        explode: true
+        in: query
+        name: sort
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Number of the first job to send (pagination)
+        explode: true
+        in: query
+        name: offset
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: Maximum number of jobs to send (pagination)
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Job'
+                type: array
+          description: |
+            The retrieved jobs. Also contains pagination information in the headers:<br />
+            Content-Range: first-last/total<br />
+            Accept-Range: job max_limit
+        "401":
+          description: Not logged in
+        "404":
+          description: No jobs found
+      summary: Retrieves jobs (paginated)
+      tags:
+      - job
+      x-openapi-router-controller: leiaws_service.controllers.job_controller
+      x-accepts: application/json
+  /job/conditional/{execute_after_id}:
+    post:
+      description: |
+        Asynchronously runs one or more list of jobs on accessible documents and returns a Job.<br /> The list of jobs to run and the documents on which they should be run will be chosen depending on the rules parameter that is set in the body of the request and the result of the execute_after_id job.<br /> Rules should be a map[string,object] where the key is a user chosen id and the value is a list of objects containing the same parameters as normal calls to /model/{model_id}/apply{document_ids} or /document/{document_ids}/transform/{output_type} and a conditions field.<br /> If all the field/values in the conditions of a rule are contained as is in the result of the execute_after_id job, then the list of jobs will be executed in order with the given parameters, each job depending on the previous one in the list, else it won't be executed at all<br /> Syntax for conditions is as follows:
+          * "field_name" : value In which case the field field_name must be equal to the value for the job to be executed. value can be any valid json type (int, float, string...)
+          * "field_name": {"operator" : value} Where operator is a [Mongo like comparison operator](https://docs.mongodb.com/manual/reference/operator/query-comparison/). In this case the comparison between field field_name's value must be true for the job to be executed. value can be any valid json type (int, float, string...)
+          * "field_name": [{"operator_1" : value_1}...{"operator_n" : value_n}] Where operator_i is a [Mongo like comparison operator](https://docs.mongodb.com/manual/reference/operator/query-comparison/). In this case the comparison between field field_name's value must be true for all items in the list for the job to be executed. value_i can be any valid json type (int, float, string...). {"$eq" : value_i} can be abbreviated as value_i in the list.
+
+        You can keep the document_ids field of any job empty apart for the first job of a rule. If it is, the job will use the results of previous job's as an input if no tag is set, or the document_ids of the execute_after_id job + tag if tag is set.<br /> If the conditions are not mutually exclusive, 2 or more models may be executed.<br /> The result will be sent back as a map of results where the key is the rule id, and containing one entry for list of jobs that was executed. This entry will contain all the results of the executed jobs, in execution order<br /> This is mostly but not necessarily meant to be used after a classifier model, so that an execution path can be chosen automatically depending on the result of the classification.
+      operationId: create_conditional_job
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id of a job that must be in PROCESSED status before this
+          one can be started (used to chain jobs even before the first ones are terminated).
+          If the referenced job becomes FAILED or is CANCELED, this one will fail
+        explode: false
+        in: path
+        name: execute_after_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Callback URL that should be called when the job becomes PROCESSED/FAILED/CANCELED.
+          This URL will be called with a HTTP POST method, and the Job object as the
+          payload. Callback server must answer with either a 200 or 204 HTTP response,
+          to acknowledge the callback. Any other response code will be considered
+          as a failure to call the callback.
+        explode: false
+        in: query
+        name: callback_url
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: If true, blocks processing on the job until /job/{id}/start is
+          called. Default is false
+        explode: true
+        in: query
+        name: block_processing
+        required: false
+        schema:
+          type: boolean
+        style: form
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConditionalBody'
+        description: Contains the rules to choose the model to apply. All the previous
+          query parameters can also be passed as JSON in the body of the request
+        required: false
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Job'
+          description: A JSON depending on the data that the model is able to output.
+            Might be converted to Classification if format_type was specified
+        "400":
+          description: The documents could not be processed by this model, or using
+            a tag with multiple document_ids
+        "401":
+          description: Not logged in
+        "403":
+          description: Not a classification model
+        "404":
+          description: Model or document not found
+      summary: Asynchronously and conditionaly applies model(s) on documents
+      tags:
+      - job
+      x-openapi-router-controller: leiaws_service.controllers.job_controller
+      x-contentType: application/json
+      x-accepts: application/json
+  /job/{job_ids}/status:
+    get:
+      description: |
+        Retrieves a list of job statuses from Leia API
+      operationId: get_job_statuses
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The ids of the jobs to retrieve, comma separated
+        explode: false
+        in: path
+        name: job_ids
+        required: true
+        schema:
+          items:
+            type: string
+          type: array
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                additionalProperties:
+                  $ref: '#/components/schemas/Statuses'
+                type: object
+          description: The retrieved job statuses, in a map indexed by job id
+        "401":
+          description: Not logged in
+        "403":
+          description: Not the owner of the job
+        "404":
+          description: Job not found
+      summary: Retrieves job statuses from Leia API
+      tags:
+      - job
+      x-openapi-router-controller: leiaws_service.controllers.job_controller
+      x-accepts: application/json
+  /job/{job_id}:
+    delete:
+      description: |
+        Cancels a job in Leia API (This will not really delete it, just mark it as cancelled, so dependent jobs will fail)
+      operationId: cancel_job
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id of the job to delete
+        explode: false
+        in: path
+        name: job_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: The job was successfully canceled
+        "401":
+          description: Not logged in
+        "403":
+          description: Not the owner of the job
+        "404":
+          description: Job not found (or already canceled)
+      summary: Cancels a job in Leia API
+      tags:
+      - job
+      x-openapi-router-controller: leiaws_service.controllers.job_controller
+      x-accepts: application/json
+    get:
+      description: |
+        Retrieves a job from Leia API
+      operationId: get_job
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id of the job to retrieve
+        explode: false
+        in: path
+        name: job_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Job'
+          description: The retrieved job
+        "401":
+          description: Not logged in
+        "403":
+          description: Not the owner of the job
+        "404":
+          description: Job not found
+      summary: Retrieves a job from Leia API
+      tags:
+      - job
+      x-openapi-router-controller: leiaws_service.controllers.job_controller
+      x-accepts: application/json
+  /job/{job_id}/start:
+    post:
+      description: |
+        Triggers a job in BLOCKED status
+      operationId: start_job
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id of the job to start
+        explode: false
+        in: path
+        name: job_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Job'
+          description: The started job
+        "401":
+          description: Not logged in
+        "403":
+          description: Not the owner of the job
+        "404":
+          description: Job not found
+      summary: Starts a job in BLOCKED status within Leia API
+      tags:
+      - job
+      x-openapi-router-controller: leiaws_service.controllers.job_controller
+      x-accepts: application/json
+  /login:
+    post:
+      description: |
+        Logs an application into Leia API using its API key. Returns a token that will have to be set in all subsequent requests, to identify the logged in application
+      operationId: login_application_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginBody'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginToken'
+          description: A token for future requests
+        "403":
+          description: Bad API key
+      summary: Logs into Leia API
+      tags:
+      - application
+      x-openapi-router-controller: leiaws_service.controllers.application_controller
+      x-contentType: application/json
+      x-accepts: application/json
+  /login/{api_key}:
+    get:
+      description: |
+        /!\ DEPRECATED, use POST /login instead. Logs an application into Leia API using its API key. Returns a token that will have to be set in all subsequent requests, to identify the logged in application
+      operationId: login_application
+      parameters:
+      - description: The API key
+        explode: false
+        in: path
+        name: api_key
+        required: true
+        schema:
+          format: password
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginToken'
+          description: A token for future requests
+        "403":
+          description: Bad API key
+      summary: (DEPRECATED) Logs into Leia API
+      tags:
+      - application
+      x-openapi-router-controller: leiaws_service.controllers.application_controller
+      x-accepts: application/json
+  /logout:
+    get:
+      description: |
+        Logs a connected application out of Leia API using its token
+      operationId: logout_application
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: Logout OK
+        "401":
+          description: Not logged in
+      summary: Logs out from Leia API
+      tags:
+      - application
+      x-openapi-router-controller: leiaws_service.controllers.application_controller
+      x-accepts: application/json
+  /model:
+    get:
+      description: Lists models corresponding to the filters that the application
+        can access
+      operationId: get_models
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Filter by id
+        explode: true
+        in: query
+        name: model_id
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Filter by type
+        explode: true
+        in: query
+        name: model_type
+        required: false
+        schema:
+          $ref: '#/components/schemas/ModelTypes'
+        style: form
+      - description: Filter by name
+        explode: true
+        in: query
+        name: name
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Filter by short name
+        explode: true
+        in: query
+        name: short_name
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Gets models that contain this string in their description
+        explode: true
+        in: query
+        name: description
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Filter by input type
+        explode: true
+        in: query
+        name: input_types
+        required: false
+        schema:
+          items:
+            $ref: '#/components/schemas/ModelInputTypes'
+          type: array
+        style: form
+      - description: If specified, filters the models by tag
+        explode: true
+        in: query
+        name: tags
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+      - description: 'If specified, keeps only models created after given UTC timestamp
+          (ISO 8601 format : yyyy-MM-ddThh:mm:ss)'
+        explode: true
+        in: query
+        name: created_after
+        required: false
+        schema:
+          format: date-time
+          type: string
+        style: form
+      - description: 'If specified, keeps only models created before given UTC timestamp
+          (ISO 8601 format : yyyy-MM-ddThh:mm:ss)'
+        explode: true
+        in: query
+        name: created_before
+        required: false
+        schema:
+          format: date-time
+          type: string
+        style: form
+      - description: If true, will list only models that strictly belong to logged
+          in application (and not all the models that it can use) (false by default)
+        explode: true
+        in: query
+        name: only_mine
+        required: false
+        schema:
+          type: boolean
+        style: form
+      - description: If specified, sorts the models by a list of existing parameters
+          separated by commas. Can be 'application_id', 'creation_time', 'name', 'description',
+          'model_type'. Sorts in ascending order by default. If a parameter is preceded
+          by '-', it is sorted in descending order.
+        explode: true
+        in: query
+        name: sort
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Number of the first model to send (pagination)
+        explode: true
+        in: query
+        name: offset
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: Maximum number of models to send (pagination)
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Model'
+                type: array
+          description: |
+            Model list. Also contains pagination information in the headers:<br />
+            Content-Range: first-last/total<br />
+            Accept-Range: model max_limit
+        "401":
+          description: Not logged in
+      summary: Lists models (paginated)
+      tags:
+      - model
+      x-openapi-router-controller: leiaws_service.controllers.model_controller
+      x-accepts: application/json
+  /model/{model_id}:
+    get:
+      description: Get a model in the system that the application can access
+      operationId: get_model
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id or the short name of the model to get
+        explode: false
+        in: path
+        name: model_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model'
+          description: A model
+        "401":
+          description: Not logged in
+        "404":
+          description: Model not found
+      summary: Get a model
+      tags:
+      - model
+      x-openapi-router-controller: leiaws_service.controllers.model_controller
+      x-accepts: application/json
+  /model/{model_id}/apply/{document_ids}:
+    post:
+      description: Asynchronously applies an accessible model on accessible documents
+        and returns a Job, that will have to be polled to get the result
+      operationId: apply_model_async
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id or the short name of the model to apply on the document
+        explode: false
+        in: path
+        name: model_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Comma separated list of document ids to process
+        explode: true
+        in: path
+        name: document_ids
+        required: true
+        schema:
+          items:
+            type: string
+          type: array
+        style: simple
+      - description: The tag of the documents to process. If tag is present, document_ids
+          should contain a single value, and the documents processed will be those
+          where original_id=document_ids[0] and that contain the specified tag
+        explode: true
+        in: query
+        name: tag
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The format in which the data should be returned. If empty, will
+          return an array of key-value items. If it is classification, the result
+          will be a Classification object.
+        explode: true
+        in: query
+        name: format_type
+        required: false
+        schema:
+          $ref: '#/components/schemas/FormatTypes'
+        style: form
+      - description: The id of a job that must be in PROCESSED status before this
+          one can be started (used to chain jobs even before the first ones are terminated).
+          If the referenced job becomes FAILED or is CANCELED, this one will fail
+        explode: false
+        in: query
+        name: execute_after_id
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: |
+          The pages that should be used in previous job to process this one. Can only be used if execute_after_id is not null. Pages are indexed from 0. Syntax is the same as Python slices syntax (https://docs.python.org/3/whatsnew/2.3.html#extended-slices). Examples :
+            * Single positive integer : keep only this page (example 4 will keep only page 5 (Remember, pages are indexed from 0))
+            * Single negative integer : keep only this page, but starting from the end (example -4 will keep only page 7 if there are 10 total pages)
+            * Range (x:y) : keep only this range of pages (Including x but excluding y, indexed from 0)
+              Examples
+                * 2: will keep all pages starting from page 3
+                * :5 will keep only pages 1 to 5
+                * 2:5 will keep only pages 3, 4 and 5
+                * -4: will keep only pages 7 to 10 if there are 10 total pages)
+                * :-2 will keep only pages 1 to 8 if there are 10 total pages)
+                * -4:-2 will keep only pages 7 and 8 if there are 10 total pages)
+            * Stride (::w) : Keep 1 page every w pages starting at the first one (example ::2 will keep only odd pages)
+            * Range and stride (x:y:w) : Keep 1 page every w pages within range (x:y) (example 1::2 will keep only even pages)
+
+          You can use multiple ranges of page at once, comma separated (For example, 0,2:5,-2:-1 keeps the 1st page, plus pages 3->5, plus the second to last page)
+        explode: false
+        in: query
+        name: page_range
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Callback URL that should be called when the job becomes PROCESSED/FAILED/CANCELED.
+          This URL will be called with a HTTP POST method, and the Job object as the
+          payload. Callback server must answer with either a 200 or 204 HTTP response,
+          to acknowledge the callback. Any other response code will be considered
+          as a failure to call the callback.
+        explode: false
+        in: query
+        name: callback_url
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Additional parameters that will be passed as is to the model
+        explode: true
+        in: query
+        name: model_params
+        required: false
+        schema:
+          type: object
+        style: form
+      - description: If true, blocks processing on the job until /job/{id}/start is
+          called. Default is false
+        explode: true
+        in: query
+        name: block_processing
+        required: false
+        schema:
+          type: boolean
+        style: form
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApplyBody'
+        description: All the previous query parameters can also be passed as JSON
+          in the body of the request
+        required: false
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Job'
+          description: A JSON depending on the data that the model is able to output.
+            Might be converted to Classification if format_type was specified
+        "400":
+          description: The documents could not be processed by this model, or using
+            a tag with multiple document_ids
+        "401":
+          description: Not logged in
+        "403":
+          description: Not a classification model
+        "404":
+          description: Model or document not found
+      summary: Asynchronously applies a model on documents
+      tags:
+      - model
+      x-openapi-router-controller: leiaws_service.controllers.model_controller
+      x-contentType: application/json
+      x-accepts: application/json
+  /model/{model_id}/tag/{tag}:
+    delete:
+      description: Untags a model
+      operationId: untag_model
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id of the model
+        explode: false
+        in: path
+        name: model_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The tag to delete from the model
+        explode: false
+        in: path
+        name: tag
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: The model without the deleted tag
+        "401":
+          description: Not logged in
+        "404":
+          description: Model not found
+      summary: Untags a model
+      tags:
+      - model
+      x-openapi-router-controller: leiaws_service.controllers.model_controller
+      x-accepts: application/json
+    post:
+      description: Tags a model
+      operationId: tag_model
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The id of the model
+        explode: false
+        in: path
+        name: model_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The tag to add to the model
+        explode: false
+        in: path
+        name: tag
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model'
+          description: The model with the new tag
+        "401":
+          description: Not logged in
+        "404":
+          description: Model not found
+      summary: Tags a model
+      tags:
+      - model
+      x-openapi-router-controller: leiaws_service.controllers.model_controller
+      x-accepts: application/json
+  /model/{model_module}/train/{documents_tag}:
+    post:
+      description: Asynchronously trains a model on accessible documents and returns
+        a Job, that will have to be polled to get the result. This method is only
+        accessible to admins
+      operationId: train_model_async
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The module name of the model to train on documents
+        explode: false
+        in: path
+        name: model_module
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The tag of the documents to train with
+        explode: true
+        in: path
+        name: documents_tag
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The future name of the model in database
+        explode: false
+        in: query
+        name: model_name
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The new short name of the model
+        explode: true
+        in: query
+        name: short_name
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The description of the model
+        explode: true
+        in: query
+        name: description
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The TTL of the model in seconds, if running in worker mode (negative
+          for infinite TTL, default is 200)
+        explode: true
+        in: query
+        name: ttl
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: The applications allowed to use this model
+        explode: true
+        in: query
+        name: allowed_application_ids
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+      - description: Is this model allowed for everyone ?
+        explode: true
+        in: query
+        name: allow_all_applications
+        required: false
+        schema:
+          type: boolean
+        style: form
+      - description: The tags of the model
+        explode: true
+        in: query
+        name: tags
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+      - description: The job that is a prerequisite for this job to run
+        explode: true
+        in: query
+        name: execute_after_id
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Callback URL that should be called when the job becomes PROCESSED/FAILED/CANCELED.
+          This URL will be called with a HTTP POST method, and the Job object as the
+          payload. Callback server must answer with either a 200 or 204 HTTP response,
+          to acknowledge the callback. Any other response code will be considered
+          as a failure to call the callback.
+        explode: false
+        in: query
+        name: callback_url
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Additional parameters that will be passed as is to the train
+          method
+        explode: true
+        in: query
+        name: model_params
+        required: false
+        schema:
+          type: object
+        style: form
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrainBody'
+        description: All the previous query parameters can also be passed as JSON
+          in the body of the request
+        required: false
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Job'
+          description: A JSON depending on the data that the model is able to output.
+        "400":
+          description: The documents could not be processed by this model
+        "401":
+          description: Not logged in
+        "403":
+          description: Not a trainable model
+        "404":
+          description: Training documents not found
+      summary: Asynchronously trains a model on documents (admin only)
+      tags:
+      - model
+      x-openapi-router-controller: leiaws_service.controllers.model_controller
+      x-contentType: application/json
+      x-accepts: application/json
+  /whoami:
+    get:
+      description: |
+        Gets the currently connected application. Also use this method to reset token timeout
+      operationId: who_am_i
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application'
+          description: The currently connected application
+        "401":
+          description: Not logged in
+      summary: Gets the currently connected application
+      tags:
+      - application
+      x-openapi-router-controller: leiaws_service.controllers.application_controller
+      x-accepts: application/json
+  /worker:
+    get:
+      description: |
+        Retrieves worker information from Leia API
+      operationId: get_workers
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Worker'
+                type: array
+          description: The retrieved worker information
+        "400":
+          description: Not running in worker mode
+        "401":
+          description: Not logged in
+        "404":
+          description: No worker running
+      summary: Retrieves worker information from Leia API
+      tags:
+      - worker
+      x-openapi-router-controller: leiaws_service.controllers.worker_controller
+      x-accepts: application/json
+  /worker/{job_type}:
+    delete:
+      description: |
+        Kills a worker for a given job_type. This method is only accessible to admins
+      operationId: kill_worker
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The job_type for which to kill a worker
+        explode: false
+        in: path
+        name: job_type
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: A worker kill switch has been sent to the job queue
+        "400":
+          description: Not running in worker mode
+        "401":
+          description: Not logged in or not an admin
+        "404":
+          description: No worker running
+      summary: Kills a worker (admin only)
+      tags:
+      - worker_admin
+      x-openapi-router-controller: leiaws_service.controllers.worker_controller
+      x-accepts: application/json
+    get:
+      description: |
+        Retrieves worker information from Leia API
+      operationId: get_worker
+      parameters:
+      - description: The login token obtained via GET /login/{api_key}
+        explode: false
+        in: header
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The job_type for which to get worker info
+        explode: false
+        in: path
+        name: job_type
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Worker'
+          description: The retrieved worker information
+        "400":
+          description: Not running in worker mode
+        "401":
+          description: Not logged in
+        "404":
+          description: No worker running
+      summary: Retrieves worker information from Leia API
+      tags:
+      - worker
+      x-openapi-router-controller: leiaws_service.controllers.worker_controller
+      x-accepts: application/json
+components:
+  schemas:
+    Annotation:
+      example:
+        annotation_type: TYPING
+        application_id: example_id
+        creation_time: 2018-11-07T16:02:29.761Z
+        document_id: example_id
+        id: example_id
+        name: My annotation
+        prediction: '{}'
+        tags:
+        - aaa
+        - bbb
+      properties:
+        annotation_type:
+          $ref: '#/components/schemas/AnnotationTypes'
+        application_id:
+          example: example_id
+          format: uid
+          type: string
+        creation_time:
+          example: 2018-11-07T16:02:29.761Z
+          format: date-time
+          type: string
+        document_id:
+          format: uid
+          type: string
+        id:
+          example: example_id
+          format: uid
+          type: string
+        name:
+          example: My annotation
+          format: uid
+          type: string
+        prediction:
+          type: object
+        tags:
+          items:
+            type: string
+          type: array
+      required:
+      - annotation_type
+      - application_id
+      - creation_time
+      - document_id
+      - id
+      type: object
+    AnnotationTypes:
+      enum:
+      - BOX
+      - TEXT
+      - TYPING
+      type: string
+    Application:
+      example:
+        api_key: ghsrt6j94u6nbdw148j6t41nxf65bnwdt
+        application_name: Example application
+        application_type: developer
+        creation_time: 2018-11-07T16:02:29.761Z
+        dedicated_workers: false
+        dedicated_workers_max_models: 4
+        dedicated_workers_ttl: 200
+        email: contact@leia.io
+        first_name: Firstname
+        id: example_id
+        job_counts:
+          example_id1: 10
+          example_id2: 456
+          example_id3: 27
+        last_name: Lastname
+      properties:
+        api_key:
+          example: ghsrt6j94u6nbdw148j6t41nxf65bnwdt
+          type: string
+        application_name:
+          example: Example application
+          type: string
+        application_type:
+          $ref: '#/components/schemas/ApplicationTypes'
+        creation_time:
+          example: 2018-11-07T16:02:29.761Z
+          format: date-time
+          type: string
+        dedicated_workers:
+          example: false
+          type: boolean
+        dedicated_workers_max_models:
+          example: 4
+          format: int32
+          type: integer
+        dedicated_workers_ttl:
+          example: 200
+          format: int32
+          type: integer
+        default_job_callback_url:
+          example: https://callback.example.com/leia_callback
+          type: string
+        email:
+          example: contact@leia.io
+          format: email
+          type: string
+        first_name:
+          example: Firstname
+          type: string
+        id:
+          example: example_id
+          format: uid
+          type: string
+        job_counts:
+          type: object
+        last_name:
+          example: Lastname
+          type: string
+      required:
+      - application_type
+      - email
+      - first_name
+      - last_name
+      type: object
+    ApplicationTypes:
+      enum:
+      - developer
+      - admin
+      type: string
+    ApplyBody:
+      example:
+        block_processing: false
+        callback_headers:
+          header_1: header_value_1
+          header_2: header_value_2
+        callback_url: http://www.example.com/callback_url
+        execute_after_id: example_id
+        format_type: classification
+        model_params:
+          model_param_1: model_param_value_1
+          model_param_2: model_param_value_2
+        page_range: 3:5
+        tag: tag
+      properties:
+        block_processing:
+          example: false
+          type: boolean
+        callback_headers:
+          example:
+            header_1: header_value_1
+            header_2: header_value_2
+          type: object
+        callback_url:
+          example: http://www.example.com/callback_url
+          type: string
+        execute_after_id:
+          example: example_id
+          type: string
+        format_type:
+          $ref: '#/components/schemas/FormatTypes'
+        model_params:
+          example:
+            model_param_1: model_param_value_1
+            model_param_2: model_param_value_2
+          type: object
+        page_range:
+          example: 3:5
+          type: string
+        tag:
+          example: tag
+          type: string
+      type: object
+    Classification:
+      properties:
+        accuracy:
+          example: 0.999
+          format: double
+          maximum: 1
+          minimum: 0
+          type: number
+        category:
+          example: my_class_1
+          type: string
+        score:
+          example: 0.999
+          format: double
+          maximum: 1
+          minimum: 0
+          type: number
+      required:
+      - accuracy
+      - category
+      - score
+      type: object
+    ConditionalBody:
+      example:
+        block_processing: false
+        callback_headers:
+          header_1: header_value_1
+          header_2: header_value_2
+        callback_url: http://www.example.com/callback_url
+        rules:
+          rule_name_1:
+            conditions:
+              field_1: value_1
+              field_2: value_2
+            jobs:
+            - document_ids:
+              - example_id_1
+              format_type: classification
+              job_type: apply_model
+              model_id: example_id_1
+              model_params:
+                model_param_1: model_param_value_1
+                model_param_2: model_param_value_2
+              page_range: 3:5
+              tag: tag
+            rule_name_2:
+              conditions:
+                field_1: value_3
+                field_3: value_4
+              jobs:
+              - document_ids:
+                - example_id_1
+                job_type: transform
+                output_type: text
+                page_range: 4:6
+                tag: tag
+                transform_params:
+                  model_param_3: model_param_value_3
+                  model_param_4: model_param_value_4
+              - document_ids:
+                - example_id_1
+                format_type: classification
+                job_type: apply_model
+                model_id: example_id_2
+                model_params:
+                  model_param_3: model_param_value_3
+                  model_param_4: model_param_value_4
+                page_range: 4:6
+                tag: tag
+      properties:
+        block_processing:
+          example: false
+          type: boolean
+        callback_headers:
+          example:
+            header_1: header_value_1
+            header_2: header_value_2
+          type: object
+        callback_url:
+          example: http://www.example.com/callback_url
+          type: string
+        rules:
+          example:
+            rule_name_1:
+              conditions:
+                field_1: value_1
+                field_2: value_2
+              jobs:
+              - document_ids:
+                - example_id_1
+                format_type: classification
+                job_type: apply_model
+                model_id: example_id_1
+                model_params:
+                  model_param_1: model_param_value_1
+                  model_param_2: model_param_value_2
+                page_range: 3:5
+                tag: tag
+            rule_name_2:
+              conditions:
+                field_1: value_3
+                field_3: value_4
+              jobs:
+              - document_ids:
+                - example_id_1
+                job_type: transform
+                output_type: text
+                page_range: 4:6
+                tag: tag
+                transform_params:
+                  model_param_3: model_param_value_3
+                  model_param_4: model_param_value_4
+              - document_ids:
+                - example_id_1
+                format_type: classification
+                job_type: apply_model
+                model_id: example_id_2
+                model_params:
+                  model_param_3: model_param_value_3
+                  model_param_4: model_param_value_4
+                page_range: 4:6
+                tag: tag
+          type: object
+      type: object
+    Document:
+      example:
+        application_id: example_id
+        creation_time: 2018-11-07T16:02:29.761Z
+        expiration_time: 2018-11-08T16:02:29.761Z
+        extension: jpg
+        filename: mydoc
+        id: example_id
+        md5sum: a02506b31c1cd46c2e0b6380fb94eb3d
+        mime_type: image/jpeg
+        original_id: example_id
+        page: 0
+        rotation_angle: 0
+        size: 1000000
+        tags:
+        - aaa
+        - bbb
+      properties:
+        application_id:
+          example: example_id
+          format: uid
+          type: string
+        creation_time:
+          example: 2018-11-07T16:02:29.761Z
+          format: date-time
+          type: string
+        expiration_time:
+          example: 2018-11-08T16:02:29.761Z
+          format: date-time
+          type: string
+        extension:
+          example: jpg
+          type: string
+        filename:
+          example: mydoc
+          type: string
+        id:
+          example: example_id
+          format: uid
+          type: string
+        md5sum:
+          description: The MD5 sum of the document
+          type: string
+        mime_type:
+          example: image/jpeg
+          format: mimetype
+          type: string
+        original_id:
+          description: If this document is the result of a conversion, will contain
+            the id of the original document
+          type: string
+        page:
+          description: The page represented by this document (only if it is a sub
+            document of a multi page document such as a PDF)
+          example: 0
+          format: int32
+          type: integer
+        rotation_angle:
+          description: The rotation angle in degrees to apply to the document to present
+            it in a human readable orientation
+          example: 0
+          format: int32
+          maximum: 359
+          minimum: 0
+          type: integer
+        size:
+          description: The size of the document in bytes
+          example: 1000000
+          format: int32
+          type: integer
+        tags:
+          items:
+            type: string
+          type: array
+      required:
+      - application_id
+      - creation_time
+      - filename
+      - id
+      type: object
+    FormatTypes:
+      enum:
+      - classification
+      type: string
+    Job:
+      example:
+        application_id: example_id
+        creation_time: 2018-11-07T16:02:29.761Z
+        document_ids:
+        - example_id
+        execute_after_id: example_id
+        finished_time: 2018-11-07T16:02:29.761Z
+        id: example_id
+        job_type: image-text
+        parent_job_id: example_id
+        result:
+          application_id: example_id
+          creation_time: 2018-11-07T16:02:29.761Z
+          extension: txt
+          filename: mydoc
+          id: example_id
+          mime_type: text/plain
+          original_id: example_id
+          page: 0
+          rotation_angle: 0
+          size: 1000000
+        result_type: document
+        starting_time: 2018-11-07T16:02:29.761Z
+        status: PROCESSED
+      properties:
+        application_id:
+          example: example_id
+          type: string
+        callback_url:
+          example: https://callback.example.com/leia_callback
+          type: string
+        creation_time:
+          example: 2018-11-07T16:02:29.761Z
+          format: date-time
+          type: string
+        document_ids:
+          example:
+          - example_id
+          items:
+            type: string
+          type: array
+        execute_after_id:
+          example: example_id
+          type: string
+        finished_time:
+          example: 2018-11-07T16:02:29.761Z
+          format: date-time
+          type: string
+        id:
+          example: example_id
+          type: string
+        job_type:
+          example: image-text
+          type: string
+        model_id:
+          example: example_id
+          type: string
+        parent_job_id:
+          example: example_id
+          type: string
+        reason:
+          example: This is a reason
+          type: string
+        result:
+          example: {}
+          oneOf:
+          - $ref: '#/components/schemas/Document'
+          - items:
+              $ref: '#/components/schemas/Document'
+            type: array
+          - $ref: '#/components/schemas/Classification'
+          - {}
+        result_type:
+          $ref: '#/components/schemas/ResultTypes'
+        starting_time:
+          example: 2018-11-07T16:02:29.761Z
+          format: date-time
+          type: string
+        status:
+          $ref: '#/components/schemas/Statuses'
+      required:
+      - application_id
+      - creation_time
+      - document_ids
+      - id
+      - job_type
+      - status
+      type: object
+    JobTypes:
+      enum:
+      - predict
+      - pdf-images
+      - image-text
+      - transform
+      type: string
+    LoginBody:
+      example:
+        api_key: example_api_key
+      properties:
+        api_key:
+          example: example_api_key
+          type: string
+      required:
+      - api_key
+      type: object
+    LoginToken:
+      example:
+        application:
+          application_type: developer
+          creation_time: 2018-11-07T16:02:29.761Z
+          email: contact@leia.io
+          first_name: Firstname
+          id: example_id
+          last_name: Lastname
+        token: example_id
+      properties:
+        application:
+          $ref: '#/components/schemas/Application'
+        token:
+          example: example_id
+          type: string
+      required:
+      - application
+      - token
+      type: object
+    Model:
+      example:
+        allow_all_applications: false
+        allowed_application_ids:
+        - example_id1
+        - example_id2
+        application_id: example_id
+        creation_time: 2018-11-07T16:02:29.761Z
+        description: This is a description of my model
+        documentation: Documentation of the model
+        id: example_id
+        input_types:
+        - image
+        - text
+        md5sum: a02506b31c1cd46c2e0b6380fb94eb3d
+        model_clazz: Model
+        model_module: leiamodels.models.image.classifier.densenet.v1
+        model_type: classification
+        name: my_classification_model
+        output_format:
+        - string
+        short_name: classif
+        size: 123456
+        speed: FAST
+        tags:
+        - aaa
+        - bbb
+        ttl: 10
+      properties:
+        allow_all_applications:
+          example: false
+          type: boolean
+        allowed_application_ids:
+          items:
+            type: string
+          type: array
+        application_id:
+          example: example_id
+          format: uid
+          type: string
+        creation_time:
+          example: 2018-11-07T16:02:29.761Z
+          format: date-time
+          type: string
+        description:
+          example: This is a description of my model
+          type: string
+        documentation:
+          example: Documentation of the model
+          type: string
+        id:
+          example: example_id
+          format: uid
+          type: string
+        input_types:
+          items:
+            $ref: '#/components/schemas/ModelInputTypes'
+          type: array
+        md5sum:
+          description: The MD5 sum of the model
+          type: string
+        model_clazz:
+          description: The Python class name of the model
+          type: string
+        model_module:
+          description: The Python module ghosting the code for the model
+          type: string
+        model_type:
+          $ref: '#/components/schemas/ModelTypes'
+        name:
+          example: my_classification_model
+          type: string
+        output_format:
+          example:
+          - string
+          type: object
+        short_name:
+          example: classif
+          type: string
+        size:
+          format: int32
+          type: number
+        speed:
+          $ref: '#/components/schemas/Speed'
+        tags:
+          items:
+            type: string
+          type: array
+        ttl:
+          description: The TTL of the workers hosting this model
+          format: int32
+          type: number
+      required:
+      - creation_time
+      - id
+      - input_types
+      - model_clazz
+      - model_module
+      - model_type
+      - name
+      - size
+      type: object
+    ModelInputTypes:
+      enum:
+      - image
+      - text
+      - text_tree
+      - video
+      - list[image]
+      - list[text]
+      - list[text_tree]
+      - list[video]
+      type: string
+    ModelTypes:
+      enum:
+      - classification
+      - image_extraction
+      - key_value_extraction
+      type: string
+    ResultTypes:
+      enum:
+      - document
+      - list[document]
+      - object
+      - classification
+      - dict[object]
+      - dict[classification]
+      - model
+      - conditional
+      type: string
+    Speed:
+      enum:
+      - VERYFAST
+      - FAST
+      - SLOW
+      - VERYSLOW
+      type: string
+    Statuses:
+      description: |
+        Description of statuses
+          * WAITING: Job is waiting for another job to finish before it can start
+          * READY: The job is ready to start, a worker might be provisioning to run it, or it is waiting for a slot on an existing worker
+          * STARTING: The job has been picked up by a worker
+          * LOADING_MODEL: The job is loading the necessary IA model
+          * PROCESSING: The job is processing the document(s)
+          * PROCESSED: The job is done, user can find the result in the result field
+          * FAILED: The job failed, reason can be found in the reason field. This could be caused by an error in LEIA (http_code == 5000 in this case) or by a problem with data (http_code == 400 in this case)
+          * CANCELED: The job was canceled by user
+      enum:
+      - BLOCKED
+      - WAITING
+      - READY
+      - STARTING
+      - LOADING_MODEL
+      - PROCESSING
+      - PROCESSED
+      - FAILED
+      - CANCELED
+      type: string
+    TrainBody:
+      example:
+        callback_url: http://www.example.com/callback_url
+        documents_tag: tag
+        model_module: leia.models.text.classifier.fasttext.v1
+        model_params:
+          model_param_1: model_param_value_1
+          model_param_2: model_param_value_2
+      properties:
+        callback_headers:
+          example:
+            header_1: header_value_1
+            header_2: header_value_2
+          type: object
+        callback_url:
+          example: http://www.example.com/callback_url
+          type: string
+        documents_tag:
+          example: tag
+          type: string
+        execute_after_id:
+          example: example_id
+          type: string
+        model_module:
+          example: leia.models.text.classifier.fasttext.v1
+          type: string
+        model_name:
+          example: test.model
+          type: string
+        model_params:
+          example:
+            model_param_1: model_param_value_1
+            model_param_2: model_param_value_2
+          type: object
+      type: object
+    TransformBody:
+      example:
+        block_processing: false
+        callback_headers:
+          header_1: header_value_1
+          header_2: header_value_2
+        callback_url: http://www.example.com/callback_url
+        execute_after_id: example_id
+        input_tag: tag
+        output_tag: tag2
+        page_range: 3:5
+        transform_params:
+          transform_param_1: transform_param_value_1
+          transform_param_2: transform_param_value_2
+      properties:
+        block_processing:
+          example: false
+          type: boolean
+        callback_headers:
+          example:
+            header_1: header_value_1
+            header_2: header_value_2
+          type: object
+        callback_url:
+          example: http://www.example.com/callback_url
+          type: string
+        execute_after_id:
+          example: example_id
+          type: string
+        input_tag:
+          example: tag
+          type: string
+        output_tag:
+          example: tag2
+          type: string
+        page_range:
+          example: 3:5
+          type: string
+        transform_params:
+          example:
+            transform_param_1: transform_param_value_1
+            transform_param_2: transform_param_value_2
+          type: object
+      type: object
+    TransformTypes:
+      enum:
+      - text
+      - text_tree
+      - image
+      - autorotate
+      - trim
+      - merge
+      - split
+      - transcode
+      type: string
+    Worker:
+      example:
+        job_type: predict-example_id
+        number: 3
+        statuses:
+        - RUNNING
+        - RUNNING
+        - STARTING
+      properties:
+        job_type:
+          example: predict-example_id
+          type: string
+        number:
+          example: 3
+          type: integer
+        statuses:
+          example:
+          - RUNNING
+          - RUNNING
+          - STARTING
+          items:
+            type: string
+          type: array
+      required:
+      - job_type
+      - number
+      - statuses
+      type: object
+

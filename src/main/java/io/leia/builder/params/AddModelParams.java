@@ -6,6 +6,7 @@ import java.util.List;
 public class AddModelParams {
     private String applicationId;
     private String name;
+    private String shortname;
     private byte[] file;
     private String description;
     private Integer ttl;
@@ -75,5 +76,13 @@ public class AddModelParams {
 
     public void setTags(List<String> tags) {
         this.tags = tags;
+    }
+
+    public String getShortname() {
+        return shortname;
+    }
+
+    public void setShortname(String shortname) {
+        this.shortname = shortname;
     }
 }

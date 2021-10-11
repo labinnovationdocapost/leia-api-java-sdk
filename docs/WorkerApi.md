@@ -1,6 +1,6 @@
 # WorkerApi
 
-All URIs are relative to *http://localhost/leia/1.0.0*
+All URIs are relative to *http://127.0.0.1:9000/leia/1.0.0*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -28,7 +28,7 @@ import io.leia.client.api.WorkerApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://localhost/leia/1.0.0");
+    defaultClient.setBasePath("http://127.0.0.1:9000/leia/1.0.0");
 
     WorkerApi apiInstance = new WorkerApi(defaultClient);
     String token = "token_example"; // String | The login token obtained via GET /login/{api_key}
@@ -72,7 +72,7 @@ No authorization required
 |-------------|-------------|------------------|
 **200** | The retrieved worker information |  -  |
 **400** | Not running in worker mode |  -  |
-**401** | Bad token |  -  |
+**401** | Not logged in |  -  |
 **404** | No worker running |  -  |
 
 <a name="getWorkers"></a>
@@ -95,7 +95,7 @@ import io.leia.client.api.WorkerApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://localhost/leia/1.0.0");
+    defaultClient.setBasePath("http://127.0.0.1:9000/leia/1.0.0");
 
     WorkerApi apiInstance = new WorkerApi(defaultClient);
     String token = "token_example"; // String | The login token obtained via GET /login/{api_key}
@@ -137,6 +137,6 @@ No authorization required
 |-------------|-------------|------------------|
 **200** | The retrieved worker information |  -  |
 **400** | Not running in worker mode |  -  |
-**401** | Bad token |  -  |
+**401** | Not logged in |  -  |
 **404** | No worker running |  -  |
 

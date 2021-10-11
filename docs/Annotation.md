@@ -2,17 +2,18 @@
 
 # Annotation
 
+
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**annotationType** | **String** |  | 
+**annotationType** | **AnnotationTypes** |  | 
 **applicationId** | **String** |  | 
-**creationTime** | [**OffsetDateTime**](OffsetDateTime.md) |  | 
-**documentIds** | **String** |  |  [optional]
+**creationTime** | **OffsetDateTime** |  | 
+**documentId** | **String** |  | 
 **id** | **String** |  | 
 **name** | **String** |  |  [optional]
-**prediction** | [**Object**](.md) |  |  [optional]
+**prediction** | **Object** |  |  [optional]
 **tags** | **List&lt;String&gt;** |  |  [optional]
 
 
