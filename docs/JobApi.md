@@ -1,6 +1,6 @@
 # JobApi
 
-All URIs are relative to *http://127.0.0.1:9000/leia/1.0.0*
+All URIs are relative to *https://api.leia.io/leia/1.0.0*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -32,7 +32,7 @@ import io.leia.client.api.JobApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://127.0.0.1:9000/leia/1.0.0");
+    defaultClient.setBasePath("https://api.leia.io/leia/1.0.0");
 
     JobApi apiInstance = new JobApi(defaultClient);
     String token = "token_example"; // String | The login token obtained via GET /login/{api_key}
@@ -98,7 +98,7 @@ import io.leia.client.api.JobApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://127.0.0.1:9000/leia/1.0.0");
+    defaultClient.setBasePath("https://api.leia.io/leia/1.0.0");
 
     JobApi apiInstance = new JobApi(defaultClient);
     String token = "token_example"; // String | The login token obtained via GET /login/{api_key}
@@ -172,7 +172,7 @@ import io.leia.client.api.JobApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://127.0.0.1:9000/leia/1.0.0");
+    defaultClient.setBasePath("https://api.leia.io/leia/1.0.0");
 
     JobApi apiInstance = new JobApi(defaultClient);
     String token = "token_example"; // String | The login token obtained via GET /login/{api_key}
@@ -239,7 +239,7 @@ import io.leia.client.api.JobApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://127.0.0.1:9000/leia/1.0.0");
+    defaultClient.setBasePath("https://api.leia.io/leia/1.0.0");
 
     JobApi apiInstance = new JobApi(defaultClient);
     String token = "token_example"; // String | The login token obtained via GET /login/{api_key}
@@ -306,7 +306,7 @@ import io.leia.client.api.JobApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://127.0.0.1:9000/leia/1.0.0");
+    defaultClient.setBasePath("https://api.leia.io/leia/1.0.0");
 
     JobApi apiInstance = new JobApi(defaultClient);
     String token = "token_example"; // String | The login token obtained via GET /login/{api_key}
@@ -396,7 +396,7 @@ import io.leia.client.api.JobApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://127.0.0.1:9000/leia/1.0.0");
+    defaultClient.setBasePath("https://api.leia.io/leia/1.0.0");
 
     JobApi apiInstance = new JobApi(defaultClient);
     String token = "token_example"; // String | The login token obtained via GET /login/{api_key}

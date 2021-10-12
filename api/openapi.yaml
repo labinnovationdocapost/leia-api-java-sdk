@@ -6,7 +6,7 @@ info:
   title: LEIA RESTful API for AI
   version: 1.0.0
 servers:
-- url: http://127.0.0.1:9000/leia/1.0.0
+- url: https://api.leia.io/leia/1.0.0
 tags:
 - description: Application management
   name: application

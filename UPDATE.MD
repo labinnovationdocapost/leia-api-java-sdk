@@ -7,7 +7,7 @@
 
 ## Command to run
 ```shell
-java -jar openapi-generator-cli-5.2.1.jar generate -i http://127.0.0.1:9000/leia/1.0.0/openapi.json -g java -o leia-api-java-sdk --model-package "io.leia.client.model" --api-package "io.leia.client.api" --artifact-id "leia-api-java-sdk" --additional-properties=dateLibrary=java8,java8=True
+java -jar openapi-generator-cli-5.2.1.jar generate -i https://api.leia.io/leia/1.0.0/openapi.json -g java -o leia-api-java-sdk --model-package "io.leia.client.model" --api-package "io.leia.client.api" --artifact-id "leia-api-java-sdk" --additional-properties=dateLibrary=java8,java8=True
 ```
 
 ## Update bindings

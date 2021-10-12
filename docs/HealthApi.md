@@ -1,6 +1,6 @@
 # HealthApi
 
-All URIs are relative to *http://127.0.0.1:9000/leia/1.0.0*
+All URIs are relative to *https://api.leia.io/leia/1.0.0*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -27,7 +27,7 @@ import io.leia.client.api.HealthApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://127.0.0.1:9000/leia/1.0.0");
+    defaultClient.setBasePath("https://api.leia.io/leia/1.0.0");
 
     HealthApi apiInstance = new HealthApi(defaultClient);
     try {
