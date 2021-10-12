@@ -36,3 +36,14 @@ else if (obj instanceof InputStream) {
  }
 ```
 - Change File by InputStream whenever you want, follow the errors in each sub method to correct all methods
+
+## Publish
+Add config to `gradle.properties`
+- on Windows: `%HOMEPATH%\.gradle\gradle.properties`
+- on Linux / macOS: `~/.gradle/gradle.properties`
+
+Put in the file:
+```groovy
+leia_api_java_sdk_username = ctisserand
+leia_api_java_sdk_password = xxxxxxxxxxxxxxxxxxxxxx
+```

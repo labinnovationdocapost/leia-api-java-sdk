@@ -1,9 +1,32 @@
 apply plugin: 'idea'
 apply plugin: 'eclipse'
 apply plugin: 'java'
+apply plugin: 'maven-publish'
 
-group = 'org.openapitools'
+group = 'io.leia'
 version = '1.0.4'
+
+publishing {
+    publications {
+        gpr(MavenPublication) {
+            groupId = group
+            artifactId = 'leia-api-sdk'
+
+            from components.java
+        }
+    }
+
+    repositories {
+        maven {
+            credentials {
+                username = "$leia_api_java_sdk_username"
+                password = "$leia_api_java_sdk_password"
+            }
+
+            url = "https://maven.pkg.github.com/labinnovationdocapost/leia-api-java-sdk"
+        }
+    }
+}
 
 buildscript {
     repositories {
@@ -87,7 +110,7 @@ if(hasProperty('target') && target == 'android') {
 
     install {
         repositories.mavenInstaller {
-            pom.artifactId = 'leia-api-java-sdk'
+            pom.artifactId = 'leia-api-sdk'
         }
     }
 
