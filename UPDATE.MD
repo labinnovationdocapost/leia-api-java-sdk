@@ -44,6 +44,6 @@ Add config to `gradle.properties`
 
 Put in the file:
 ```groovy
-leia_api_java_sdk_username = ctisserand
-leia_api_java_sdk_password = xxxxxxxxxxxxxxxxxxxxxx
+leia_api_java_sdk_username = yyyyyyyyyyyyyyyyyyyyyyyyyyyy
+leia_api_java_sdk_password = xxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
