@@ -110,7 +110,7 @@ public class Leia {
         }
         try {
             counterLock.lock();
-            setToken(applicationApi.loginApplication(apiKey));
+            setToken(applicationApi.loginApplicationPost(new LoginBody().apiKey(apiKey)));
             counterLock.unlock();
             return getToken();
         } catch (ApiException e) {

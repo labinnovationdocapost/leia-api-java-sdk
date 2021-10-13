@@ -21,7 +21,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 public class LeiaTest {
 
-    public String serverUrl = "https://api.leia.io/leia/1.0.0";
+    public String serverUrl = "http://127.0.0.1:9000/leia/1.0.0";
     public String apiKey = "xxxxxxxxxxxxxxxxxxxx";
     public String applicationId = "5dceca1246eac2df484031de";
 
