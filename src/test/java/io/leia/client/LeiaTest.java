@@ -21,9 +21,12 @@ import org.apache.commons.lang3.tuple.Pair;
 
 public class LeiaTest {
 
-    public String serverUrl = "http://127.0.0.1:9000/leia/1.0.0";
-    public String apiKey = "xxxxxxxxxxxxxxxxxxxx";
-    public String applicationId = "5dceca1246eac2df484031de";
+    public String serverUrl = Optional.ofNullable(System.getenv("LEIA_API_URL"))
+            .orElseThrow(() -> new IllegalArgumentException("LEIA_API_URL must be specified"));
+    public String apiKey = Optional.ofNullable(System.getenv("LEIA_API_KEY"))
+            .orElseThrow(() -> new IllegalArgumentException("LEIA_API_KEY must be specified"));
+    public String applicationId = Optional.ofNullable(System.getenv("LEIA_API_APPLICATION_ID"))
+            .orElseThrow(() -> new IllegalArgumentException("LEIA_API_APPLICATION_ID must be specified"));
 
     public Model getOrCreateModel(Leia api) throws LeiaException, IOException {
         List<Model> models = api.getModels(GetModelsParamsBuilder.create().build());
