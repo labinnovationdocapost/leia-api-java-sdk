@@ -39,6 +39,11 @@ public final class GetModelsParamsBuilder {
         return this;
     }
 
+    public GetModelsParamsBuilder withShortName(String shortName) {
+        getModelsParams.setShortName(shortName);
+        return this;
+    }
+
     public GetModelsParamsBuilder withDescription(String description) {
         getModelsParams.setDescription(description);
         return this;

@@ -4,7 +4,7 @@ apply plugin: 'java'
 apply plugin: 'maven-publish'
 
 group = 'io.leia'
-version = '1.0.5'
+version = '1.0.6'
 
 publishing {
     publications {

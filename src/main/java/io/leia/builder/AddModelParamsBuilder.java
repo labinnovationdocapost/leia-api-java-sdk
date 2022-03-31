@@ -56,6 +56,12 @@ public final class AddModelParamsBuilder {
         return this;
     }
 
+    public AddModelParamsBuilder withShortName(String shortName)
+    {
+        addModelParams.setShortname(shortName);
+        return this;
+    }
+
     public AddModelParams build() {
         return addModelParams;
     }

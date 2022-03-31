@@ -47,3 +47,5 @@ Put in the file:
 leia_api_java_sdk_username = yyyyyyyyyyyyyyyyyyyyyyyyyyyy
 leia_api_java_sdk_password = xxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
+
+Run `./gradlew publish` in the root folder

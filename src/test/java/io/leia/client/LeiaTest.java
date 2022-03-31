@@ -48,16 +48,19 @@ public class LeiaTest {
                     .create(applicationId,
                             "[TEST] Classification demo.leia.io",
                             ByteStreams.toByteArray(this.getClass().getClassLoader().getResourceAsStream("mobilenet.model")))
+                    .withShortName("test")
                     .build());
         }
         return model;
     }
 
     @Test
-    public void TestFetOrCreateModel() throws LeiaException, IOException {
+    public void TestFetchOrCreateModel() throws LeiaException, IOException {
         Leia api = new Leia(serverUrl, apiKey);
         Model model = getOrCreateModel(api);
         assert model != null;
+        List<Model> models = api.getModels(GetModelsParamsBuilder.create().withShortName("test").build());
+        assert models.size() > 0;
     }
 
     @Test
